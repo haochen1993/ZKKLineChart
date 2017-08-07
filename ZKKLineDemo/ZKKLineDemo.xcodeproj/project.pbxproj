@@ -12,6 +12,30 @@
 		58F978B01F38182000C756E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58F978AF1F38182000C756E4 /* Assets.xcassets */; };
 		58F978B31F38182000C756E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58F978B11F38182000C756E4 /* LaunchScreen.storyboard */; };
 		58F978BC1F38186800C756E4 /* ZKRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F978BB1F38186800C756E4 /* ZKRootViewController.m */; };
+		58F9795E1F38304000C756E4 /* KLineListManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9791F1F38304000C756E4 /* KLineListManager.m */; };
+		58F9795F1F38304000C756E4 /* UIBezierPath+curved.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979231F38304000C756E4 /* UIBezierPath+curved.m */; };
+		58F979601F38304000C756E4 /* NSArray+NetWorkingMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979291F38304000C756E4 /* NSArray+NetWorkingMethods.m */; };
+		58F979611F38304000C756E4 /* NSDictionary+NetWorkingMehods.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9792B1F38304000C756E4 /* NSDictionary+NetWorkingMehods.m */; };
+		58F979621F38304000C756E4 /* NSString+md5.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9792D1F38304000C756E4 /* NSString+md5.m */; };
+		58F979631F38304000C756E4 /* GApiAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9792F1F38304000C756E4 /* GApiAgent.m */; };
+		58F979641F38304000C756E4 /* GApiBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979311F38304000C756E4 /* GApiBaseManager.m */; };
+		58F979651F38304000C756E4 /* GApiCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979341F38304000C756E4 /* GApiCache.m */; };
+		58F979661F38304000C756E4 /* GApiCachedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979361F38304000C756E4 /* GApiCachedObject.m */; };
+		58F979671F38304000C756E4 /* GApiConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979381F38304000C756E4 /* GApiConfig.m */; };
+		58F979681F38304000C756E4 /* GApiLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9793B1F38304000C756E4 /* GApiLogger.m */; };
+		58F979691F38304000C756E4 /* GApiResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9793D1F38304000C756E4 /* GApiResponse.m */; };
+		58F9796A1F38304000C756E4 /* Global+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979401F38304000C756E4 /* Global+Helper.m */; };
+		58F9796B1F38304000C756E4 /* data.plist in Resources */ = {isa = PBXBuildFile; fileRef = 58F979411F38304000C756E4 /* data.plist */; };
+		58F9796C1F38304000C756E4 /* KLineListTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979451F38304000C756E4 /* KLineListTransformer.m */; };
+		58F9796D1F38304000C756E4 /* ZKKLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979471F38304000C756E4 /* ZKKLineItem.m */; };
+		58F9796E1F38304000C756E4 /* KLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9794B1F38304000C756E4 /* KLineChartView.m */; };
+		58F9796F1F38304000C756E4 /* KLineTipBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9794D1F38304000C756E4 /* KLineTipBoardView.m */; };
+		58F979701F38304000C756E4 /* MATipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9794F1F38304000C756E4 /* MATipView.m */; };
+		58F979711F38304000C756E4 /* StatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979521F38304000C756E4 /* StatusView.m */; };
+		58F979721F38304000C756E4 /* TipBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979551F38304000C756E4 /* TipBoardView.m */; };
+		58F979731F38304000C756E4 /* TLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979581F38304000C756E4 /* TLineChartView.m */; };
+		58F979741F38304000C756E4 /* TLineTipBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9795A1F38304000C756E4 /* TLineTipBoardView.m */; };
+		58F979751F38304000C756E4 /* VolumnView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9795D1F38304000C756E4 /* VolumnView.m */; };
 		AB26E2B785F6FE5E3AED116D /* libPods-ZKKLineDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B09A0CC9BE963C75FB1DC0 /* libPods-ZKKLineDemo.a */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +51,54 @@
 		58F978B41F38182000C756E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		58F978BA1F38186800C756E4 /* ZKRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKRootViewController.h; sourceTree = "<group>"; };
 		58F978BB1F38186800C756E4 /* ZKRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKRootViewController.m; sourceTree = "<group>"; };
+		58F9791C1F38304000C756E4 /* ACMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACMacros.h; sourceTree = "<group>"; };
+		58F9791E1F38304000C756E4 /* KLineListManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLineListManager.h; sourceTree = "<group>"; };
+		58F9791F1F38304000C756E4 /* KLineListManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLineListManager.m; sourceTree = "<group>"; };
+		58F979221F38304000C756E4 /* UIBezierPath+curved.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+curved.h"; sourceTree = "<group>"; };
+		58F979231F38304000C756E4 /* UIBezierPath+curved.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+curved.m"; sourceTree = "<group>"; };
+		58F979281F38304000C756E4 /* NSArray+NetWorkingMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+NetWorkingMethods.h"; sourceTree = "<group>"; };
+		58F979291F38304000C756E4 /* NSArray+NetWorkingMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+NetWorkingMethods.m"; sourceTree = "<group>"; };
+		58F9792A1F38304000C756E4 /* NSDictionary+NetWorkingMehods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+NetWorkingMehods.h"; sourceTree = "<group>"; };
+		58F9792B1F38304000C756E4 /* NSDictionary+NetWorkingMehods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+NetWorkingMehods.m"; sourceTree = "<group>"; };
+		58F9792C1F38304000C756E4 /* NSString+md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+md5.h"; sourceTree = "<group>"; };
+		58F9792D1F38304000C756E4 /* NSString+md5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+md5.m"; sourceTree = "<group>"; };
+		58F9792E1F38304000C756E4 /* GApiAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GApiAgent.h; sourceTree = "<group>"; };
+		58F9792F1F38304000C756E4 /* GApiAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GApiAgent.m; sourceTree = "<group>"; };
+		58F979301F38304000C756E4 /* GApiBaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GApiBaseManager.h; sourceTree = "<group>"; };
+		58F979311F38304000C756E4 /* GApiBaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GApiBaseManager.m; sourceTree = "<group>"; };
+		58F979331F38304000C756E4 /* GApiCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GApiCache.h; sourceTree = "<group>"; };
+		58F979341F38304000C756E4 /* GApiCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GApiCache.m; sourceTree = "<group>"; };
+		58F979351F38304000C756E4 /* GApiCachedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GApiCachedObject.h; sourceTree = "<group>"; };
+		58F979361F38304000C756E4 /* GApiCachedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GApiCachedObject.m; sourceTree = "<group>"; };
+		58F979371F38304000C756E4 /* GApiConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GApiConfig.h; sourceTree = "<group>"; };
+		58F979381F38304000C756E4 /* GApiConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GApiConfig.m; sourceTree = "<group>"; };
+		58F9793A1F38304000C756E4 /* GApiLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GApiLogger.h; sourceTree = "<group>"; };
+		58F9793B1F38304000C756E4 /* GApiLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GApiLogger.m; sourceTree = "<group>"; };
+		58F9793C1F38304000C756E4 /* GApiResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GApiResponse.h; sourceTree = "<group>"; };
+		58F9793D1F38304000C756E4 /* GApiResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GApiResponse.m; sourceTree = "<group>"; };
+		58F9793F1F38304000C756E4 /* Global+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Global+Helper.h"; sourceTree = "<group>"; };
+		58F979401F38304000C756E4 /* Global+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Global+Helper.m"; sourceTree = "<group>"; };
+		58F979411F38304000C756E4 /* data.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = data.plist; sourceTree = "<group>"; };
+		58F979441F38304000C756E4 /* KLineListTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLineListTransformer.h; sourceTree = "<group>"; };
+		58F979451F38304000C756E4 /* KLineListTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLineListTransformer.m; sourceTree = "<group>"; };
+		58F979461F38304000C756E4 /* ZKKLineItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKKLineItem.h; sourceTree = "<group>"; };
+		58F979471F38304000C756E4 /* ZKKLineItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKKLineItem.m; sourceTree = "<group>"; };
+		58F9794A1F38304000C756E4 /* KLineChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLineChartView.h; sourceTree = "<group>"; };
+		58F9794B1F38304000C756E4 /* KLineChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLineChartView.m; sourceTree = "<group>"; };
+		58F9794C1F38304000C756E4 /* KLineTipBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLineTipBoardView.h; sourceTree = "<group>"; };
+		58F9794D1F38304000C756E4 /* KLineTipBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLineTipBoardView.m; sourceTree = "<group>"; };
+		58F9794E1F38304000C756E4 /* MATipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MATipView.h; sourceTree = "<group>"; };
+		58F9794F1F38304000C756E4 /* MATipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MATipView.m; sourceTree = "<group>"; };
+		58F979511F38304000C756E4 /* StatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusView.h; sourceTree = "<group>"; };
+		58F979521F38304000C756E4 /* StatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusView.m; sourceTree = "<group>"; };
+		58F979541F38304000C756E4 /* TipBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TipBoardView.h; sourceTree = "<group>"; };
+		58F979551F38304000C756E4 /* TipBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TipBoardView.m; sourceTree = "<group>"; };
+		58F979571F38304000C756E4 /* TLineChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLineChartView.h; sourceTree = "<group>"; };
+		58F979581F38304000C756E4 /* TLineChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLineChartView.m; sourceTree = "<group>"; };
+		58F979591F38304000C756E4 /* TLineTipBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLineTipBoardView.h; sourceTree = "<group>"; };
+		58F9795A1F38304000C756E4 /* TLineTipBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLineTipBoardView.m; sourceTree = "<group>"; };
+		58F9795C1F38304000C756E4 /* VolumnView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VolumnView.h; sourceTree = "<group>"; };
+		58F9795D1F38304000C756E4 /* VolumnView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VolumnView.m; sourceTree = "<group>"; };
 		ED8965BAFB928DF0A7BF814B /* Pods-ZKKLineDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZKKLineDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZKKLineDemo/Pods-ZKKLineDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -76,6 +148,7 @@
 				58F978A71F38182000C756E4 /* AppDelegate.m */,
 				58F978BA1F38186800C756E4 /* ZKRootViewController.h */,
 				58F978BB1F38186800C756E4 /* ZKRootViewController.m */,
+				58F9791B1F38302800C756E4 /* ZKKLineChart */,
 				58F978A31F38182000C756E4 /* Supporting Files */,
 			);
 			path = ZKKLineDemo;
@@ -90,6 +163,205 @@
 				58F978A41F38182000C756E4 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		58F9791B1F38302800C756E4 /* ZKKLineChart */ = {
+			isa = PBXGroup;
+			children = (
+				58F9791C1F38304000C756E4 /* ACMacros.h */,
+				58F9791D1F38304000C756E4 /* APIs */,
+				58F979201F38304000C756E4 /* Categories */,
+				58F979241F38304000C756E4 /* Components */,
+				58F979411F38304000C756E4 /* data.plist */,
+				58F979421F38304000C756E4 /* Models */,
+				58F979481F38304000C756E4 /* Views */,
+			);
+			path = ZKKLineChart;
+			sourceTree = "<group>";
+		};
+		58F9791D1F38304000C756E4 /* APIs */ = {
+			isa = PBXGroup;
+			children = (
+				58F9791E1F38304000C756E4 /* KLineListManager.h */,
+				58F9791F1F38304000C756E4 /* KLineListManager.m */,
+			);
+			path = APIs;
+			sourceTree = "<group>";
+		};
+		58F979201F38304000C756E4 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				58F979211F38304000C756E4 /* UIBezierPath+curved */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		58F979211F38304000C756E4 /* UIBezierPath+curved */ = {
+			isa = PBXGroup;
+			children = (
+				58F979221F38304000C756E4 /* UIBezierPath+curved.h */,
+				58F979231F38304000C756E4 /* UIBezierPath+curved.m */,
+			);
+			path = "UIBezierPath+curved";
+			sourceTree = "<group>";
+		};
+		58F979241F38304000C756E4 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				58F979251F38304000C756E4 /* Networking */,
+				58F9793E1F38304000C756E4 /* Utils */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		58F979251F38304000C756E4 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				58F979261F38304000C756E4 /* GNetwoking */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		58F979261F38304000C756E4 /* GNetwoking */ = {
+			isa = PBXGroup;
+			children = (
+				58F979271F38304000C756E4 /* Categories */,
+				58F9792E1F38304000C756E4 /* GApiAgent.h */,
+				58F9792F1F38304000C756E4 /* GApiAgent.m */,
+				58F979301F38304000C756E4 /* GApiBaseManager.h */,
+				58F979311F38304000C756E4 /* GApiBaseManager.m */,
+				58F979321F38304000C756E4 /* GApiCache */,
+				58F979371F38304000C756E4 /* GApiConfig.h */,
+				58F979381F38304000C756E4 /* GApiConfig.m */,
+				58F979391F38304000C756E4 /* GApiLogger */,
+				58F9793C1F38304000C756E4 /* GApiResponse.h */,
+				58F9793D1F38304000C756E4 /* GApiResponse.m */,
+			);
+			path = GNetwoking;
+			sourceTree = "<group>";
+		};
+		58F979271F38304000C756E4 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				58F979281F38304000C756E4 /* NSArray+NetWorkingMethods.h */,
+				58F979291F38304000C756E4 /* NSArray+NetWorkingMethods.m */,
+				58F9792A1F38304000C756E4 /* NSDictionary+NetWorkingMehods.h */,
+				58F9792B1F38304000C756E4 /* NSDictionary+NetWorkingMehods.m */,
+				58F9792C1F38304000C756E4 /* NSString+md5.h */,
+				58F9792D1F38304000C756E4 /* NSString+md5.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		58F979321F38304000C756E4 /* GApiCache */ = {
+			isa = PBXGroup;
+			children = (
+				58F979331F38304000C756E4 /* GApiCache.h */,
+				58F979341F38304000C756E4 /* GApiCache.m */,
+				58F979351F38304000C756E4 /* GApiCachedObject.h */,
+				58F979361F38304000C756E4 /* GApiCachedObject.m */,
+			);
+			path = GApiCache;
+			sourceTree = "<group>";
+		};
+		58F979391F38304000C756E4 /* GApiLogger */ = {
+			isa = PBXGroup;
+			children = (
+				58F9793A1F38304000C756E4 /* GApiLogger.h */,
+				58F9793B1F38304000C756E4 /* GApiLogger.m */,
+			);
+			path = GApiLogger;
+			sourceTree = "<group>";
+		};
+		58F9793E1F38304000C756E4 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				58F9793F1F38304000C756E4 /* Global+Helper.h */,
+				58F979401F38304000C756E4 /* Global+Helper.m */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		58F979421F38304000C756E4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				58F979431F38304000C756E4 /* DataTransformers */,
+				58F979461F38304000C756E4 /* ZKKLineItem.h */,
+				58F979471F38304000C756E4 /* ZKKLineItem.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		58F979431F38304000C756E4 /* DataTransformers */ = {
+			isa = PBXGroup;
+			children = (
+				58F979441F38304000C756E4 /* KLineListTransformer.h */,
+				58F979451F38304000C756E4 /* KLineListTransformer.m */,
+			);
+			path = DataTransformers;
+			sourceTree = "<group>";
+		};
+		58F979481F38304000C756E4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				58F979491F38304000C756E4 /* KLine */,
+				58F979501F38304000C756E4 /* StatusView */,
+				58F979531F38304000C756E4 /* TipViews */,
+				58F979561F38304000C756E4 /* TLine */,
+				58F9795B1F38304000C756E4 /* VolumnView */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		58F979491F38304000C756E4 /* KLine */ = {
+			isa = PBXGroup;
+			children = (
+				58F9794A1F38304000C756E4 /* KLineChartView.h */,
+				58F9794B1F38304000C756E4 /* KLineChartView.m */,
+				58F9794C1F38304000C756E4 /* KLineTipBoardView.h */,
+				58F9794D1F38304000C756E4 /* KLineTipBoardView.m */,
+				58F9794E1F38304000C756E4 /* MATipView.h */,
+				58F9794F1F38304000C756E4 /* MATipView.m */,
+			);
+			path = KLine;
+			sourceTree = "<group>";
+		};
+		58F979501F38304000C756E4 /* StatusView */ = {
+			isa = PBXGroup;
+			children = (
+				58F979511F38304000C756E4 /* StatusView.h */,
+				58F979521F38304000C756E4 /* StatusView.m */,
+			);
+			path = StatusView;
+			sourceTree = "<group>";
+		};
+		58F979531F38304000C756E4 /* TipViews */ = {
+			isa = PBXGroup;
+			children = (
+				58F979541F38304000C756E4 /* TipBoardView.h */,
+				58F979551F38304000C756E4 /* TipBoardView.m */,
+			);
+			path = TipViews;
+			sourceTree = "<group>";
+		};
+		58F979561F38304000C756E4 /* TLine */ = {
+			isa = PBXGroup;
+			children = (
+				58F979571F38304000C756E4 /* TLineChartView.h */,
+				58F979581F38304000C756E4 /* TLineChartView.m */,
+				58F979591F38304000C756E4 /* TLineTipBoardView.h */,
+				58F9795A1F38304000C756E4 /* TLineTipBoardView.m */,
+			);
+			path = TLine;
+			sourceTree = "<group>";
+		};
+		58F9795B1F38304000C756E4 /* VolumnView */ = {
+			isa = PBXGroup;
+			children = (
+				58F9795C1F38304000C756E4 /* VolumnView.h */,
+				58F9795D1F38304000C756E4 /* VolumnView.m */,
+			);
+			path = VolumnView;
 			sourceTree = "<group>";
 		};
 		DF6D40ECEC8A0C111C54ED9F /* Frameworks */ = {
@@ -162,6 +434,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58F9796B1F38304000C756E4 /* data.plist in Resources */,
 				58F978B31F38182000C756E4 /* LaunchScreen.storyboard in Resources */,
 				58F978B01F38182000C756E4 /* Assets.xcassets in Resources */,
 			);
@@ -223,8 +496,31 @@
 			buildActionMask = 2147483647;
 			files = (
 				58F978A81F38182000C756E4 /* AppDelegate.m in Sources */,
+				58F979641F38304000C756E4 /* GApiBaseManager.m in Sources */,
+				58F979631F38304000C756E4 /* GApiAgent.m in Sources */,
 				58F978BC1F38186800C756E4 /* ZKRootViewController.m in Sources */,
+				58F979711F38304000C756E4 /* StatusView.m in Sources */,
+				58F979651F38304000C756E4 /* GApiCache.m in Sources */,
+				58F979671F38304000C756E4 /* GApiConfig.m in Sources */,
+				58F9796A1F38304000C756E4 /* Global+Helper.m in Sources */,
+				58F979661F38304000C756E4 /* GApiCachedObject.m in Sources */,
+				58F979751F38304000C756E4 /* VolumnView.m in Sources */,
+				58F9796E1F38304000C756E4 /* KLineChartView.m in Sources */,
+				58F979621F38304000C756E4 /* NSString+md5.m in Sources */,
+				58F979611F38304000C756E4 /* NSDictionary+NetWorkingMehods.m in Sources */,
+				58F979731F38304000C756E4 /* TLineChartView.m in Sources */,
+				58F979691F38304000C756E4 /* GApiResponse.m in Sources */,
+				58F979721F38304000C756E4 /* TipBoardView.m in Sources */,
+				58F979701F38304000C756E4 /* MATipView.m in Sources */,
+				58F979741F38304000C756E4 /* TLineTipBoardView.m in Sources */,
+				58F9796C1F38304000C756E4 /* KLineListTransformer.m in Sources */,
+				58F9796D1F38304000C756E4 /* ZKKLineItem.m in Sources */,
 				58F978A51F38182000C756E4 /* main.m in Sources */,
+				58F979681F38304000C756E4 /* GApiLogger.m in Sources */,
+				58F9795E1F38304000C756E4 /* KLineListManager.m in Sources */,
+				58F9796F1F38304000C756E4 /* KLineTipBoardView.m in Sources */,
+				58F9795F1F38304000C756E4 /* UIBezierPath+curved.m in Sources */,
+				58F979601F38304000C756E4 /* NSArray+NetWorkingMethods.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

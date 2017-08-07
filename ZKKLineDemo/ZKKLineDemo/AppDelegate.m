@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "ZKRootViewController.h"
+#import "GApiConfig.h"
+#import "AFNetworking.h"
 
 @interface AppDelegate ()
 
@@ -15,9 +17,58 @@
 
 @implementation AppDelegate
 
+- (void)apiConfig {
+    GApiConfig *_config = [GApiConfig sharedInstance];
+    _config.baseUrl = @"http://www.ftamt.com";
+    //根据需求设置
+    _config.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json", @"text/plain", @"text/html",@"text/csv", nil];
+    
+    // 缓存时间
+    _config.cacheTimeInterval = -1;
+    
+    // 请求超时时间
+    _config.requestTimeoutInterval = 15.0f;
+    
+    // HTTP报头
+    [_config setApiRequestHeaderFieldValueDictionary:@{@"Content-Type":@"application/x-www-form-urlencoded", @"Accept-Language":@"en-US;q=1"}];
+}
+
+- (void)networkMonitor {
+    AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
+    
+    [manager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        switch (status) {
+            case AFNetworkReachabilityStatusUnknown: {
+                NSLog(@"unknown networking");
+                break;
+            }
+            case AFNetworkReachabilityStatusNotReachable: {
+                NSLog(@"no network");
+                break;
+            }
+            case AFNetworkReachabilityStatusReachableViaWWAN: {
+                NSLog(@"wwan");
+                break;
+            }
+            case AFNetworkReachabilityStatusReachableViaWiFi: {
+                NSLog(@"wifi");
+                break;
+            }
+        }
+    }];
+    [manager startMonitoring];
+}
+
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [self setupWindow];
+    
+    // 网络配置
+    [self apiConfig];
+    
+    //网络监听
+    [self networkMonitor];
     
     return YES;
 }
