@@ -243,7 +243,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
 }
 
 - (void)drawSetting {
-    NSAttributedString *attString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.2f", self.highItem.highestPrice.floatValue] attributes:@{ NSFontAttributeName:self.yAxisTitleFont, NSForegroundColorAttributeName:self.yAxisTitleColor }];
+    NSAttributedString *attString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.2f", self.highItem.highestPrice] attributes:@{ NSFontAttributeName:self.yAxisTitleFont, NSForegroundColorAttributeName:self.yAxisTitleColor }];
     CGSize size = [attString boundingRectWithSize:CGSizeMake(MAXFLOAT, self.yAxisTitleFont.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
     self.leftMargin = size.width + 4.0f;
     
@@ -256,19 +256,19 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
 
 #pragma mark - public methods
 
-- (void)updateChartWithOpen:(NSNumber *)open
-                      close:(NSNumber *)close
-                       high:(NSNumber *)high
-                        low:(NSNumber *)low
+- (void)updateChartWithOpen:(CGFloat)open
+                      close:(CGFloat)close
+                       high:(CGFloat)high
+                        low:(CGFloat)low
                        date:(NSString *)date
                       isNew:(BOOL)isNew {
     [self updateChartWithOpen:open close:close high:high low:low date:date mas:nil isNew:isNew];
 }
 
-- (void)updateChartWithOpen:(NSNumber *)open
-                      close:(NSNumber *)close
-                       high:(NSNumber *)high
-                        low:(NSNumber *)low
+- (void)updateChartWithOpen:(CGFloat)open
+                      close:(CGFloat)close
+                       high:(CGFloat)high
+                        low:(CGFloat)low
                        date:(NSString *)date
                         mas:(NSArray *)mas
                       isNew:(BOOL)isNew {
@@ -282,7 +282,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     if (isNew) {
         self.chartValues = self.chartValues.count != 0 ? [self.chartValues arrayByAddingObject:item] : @[item];
     } else {
-        if ([item.closingPrice floatValue] == [self.chartValues.lastObject.closingPrice floatValue]) {
+        if (item.closingPrice == self.chartValues.lastObject.closingPrice) {
             return;
         }
         NSMutableArray *copy = [self.chartValues mutableCopy];
@@ -400,15 +400,15 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
             NSInteger index = [indexObject integerValue];
             // 获取对应的k线数据
             ZKKLineItem *item = self.chartValues[index];
-            CGFloat open = [item.openingPrice floatValue];
-            CGFloat close = [item.closingPrice floatValue];
+            CGFloat open = item.openingPrice;
+            CGFloat close = item.closingPrice;
             CGFloat scale = (self.maxHighValue - self.minLowValue) / self.yAxisHeight;
             scale = scale == 0 ? 1.0 : scale;
             
             CGFloat xAxis = [xAxisKey floatValue] - _kLineWidth / 2.0 + (self.fullScreen ? 0 : self.leftMargin);
             CGFloat yAxis = self.yAxisHeight - (open - self.minLowValue)/scale + self.topMargin;
             
-            if ([item.highestPrice floatValue] > [item.lowestPrice floatValue]) {
+            if (item.highestPrice > item.lowestPrice) {
                 yAxis = self.yAxisHeight - (close - self.minLowValue)/scale + self.topMargin;
             }
             
@@ -457,7 +457,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
         point.y -= self.tipBoard.frame.size.height / 2.0;
     }
     
-    NSAttributedString *maxText = [Global_Helper attributeText:[NSString stringWithFormat:@"最高价：%@", [self dealDecimalWithNum:@(self.maxHighValue)]] textColor:HexRGB(0xffffff) font:self.tipBoard.font];
+    NSAttributedString *maxText = [Global_Helper attributeText:[NSString stringWithFormat:@"最高价：%@", [self dealDecimalWithNum:self.maxHighValue]] textColor:HexRGB(0xffffff) font:self.tipBoard.font];
     CGSize size = [Global_Helper attributeString:maxText boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     
     frame = self.tipBoard.frame;
@@ -469,7 +469,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     
     //时间，价额
     self.priceLabel.hidden = NO;
-    self.priceLabel.text = [item.openingPrice floatValue] > [item.closingPrice floatValue] ? [self dealDecimalWithNum:item.openingPrice] :[self dealDecimalWithNum:item.closingPrice] ;
+    self.priceLabel.text = item.openingPrice > item.closingPrice ? [self dealDecimalWithNum:item.openingPrice] : [self dealDecimalWithNum:item.closingPrice] ;
     self.priceLabel.frame = CGRectMake(0.5, MIN(self.horizontalCrossLine.frame.origin.y - (self.timeAxisHeight*2/3.0 - self.separatorWidth*2)/2.0, self.topMargin + self.yAxisHeight - self.timeAxisHeight), (self.fullScreen ? self.leftMargin + Adaptor_Value(6.0f) : self.leftMargin - self.separatorWidth), self.timeAxisHeight*2/3.0 - self.separatorWidth*2);
     [self bringSubviewToFront:self.priceLabel];
     
@@ -545,7 +545,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     for (int i = 0; i < 6; i ++) {
         float yAxisValue = i == 5 ? self.minLowValue : self.maxHighValue - avgValue*i;
         
-        NSAttributedString *attString = [Global_Helper attributeText:[self dealDecimalWithNum:@(yAxisValue)] textColor:self.yAxisTitleColor font:self.yAxisTitleFont];
+        NSAttributedString *attString = [Global_Helper attributeText:[self dealDecimalWithNum:yAxisValue] textColor:self.yAxisTitleColor font:self.yAxisTitleFont];
         CGSize size = [attString boundingRectWithSize:CGSizeMake((self.fullScreen ? 0 : self.leftMargin), self.yAxisTitleFont.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
         
         CGFloat diffHeight = 0;
@@ -622,8 +622,8 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     for (ZKKLineItem *item in items) {
         self.xAxisMapper[@(xAxis + _kLineWidth)] = @([self.chartValues indexOfObject:item]);
         //通过开盘价、收盘价判断颜色
-        CGFloat open = [item.openingPrice floatValue];
-        CGFloat close = [item.closingPrice floatValue];
+        CGFloat open = item.openingPrice;
+        CGFloat close = item.closingPrice;
         UIColor *fillColor = open > close ? self.positiveLineColor : self.negativeLineColor;
         CGContextSetFillColorWithColor(context, fillColor.CGColor);
         
@@ -638,8 +638,8 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
         CGContextFillPath(context);
         
         //上、下影线
-        CGFloat highYAxis = self.yAxisHeight - ([item.highestPrice floatValue] - self.minLowValue)/scale;
-        CGFloat lowYAxis = self.yAxisHeight - ([item.lowestPrice floatValue] - self.minLowValue)/scale;
+        CGFloat highYAxis = self.yAxisHeight - (item.highestPrice - self.minLowValue)/scale;
+        CGFloat lowYAxis = self.yAxisHeight - (item.lowestPrice - self.minLowValue)/scale;
         CGPoint highPoint = CGPointMake(xAxis + width/2.0 + (self.fullScreen ? 0 : self.leftMargin), highYAxis + self.topMargin);
         CGPoint lowPoint = CGPointMake(xAxis + width/2.0 + (self.fullScreen ? 0 : self.leftMargin), lowYAxis + self.topMargin);
         CGContextSetStrokeColorWithColor(context, fillColor.CGColor);
@@ -648,23 +648,23 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
         CGContextAddLineToPoint(context, lowPoint.x, lowPoint.y);   //终点坐标
         CGContextStrokePath(context);
         
-        if ([item.highestPrice floatValue] == self.maxHighValue) {
+        if (item.highestPrice == self.maxHighValue) {
             maxPoint = highPoint;
         }
         
-        if ([item.lowestPrice floatValue] == self.minLowValue) {
+        if (item.lowestPrice == self.minLowValue) {
             minPoint = lowPoint;
         }
         
         xAxis += width + _kLinePadding;
     }
     
-    NSAttributedString *attString = [Global_Helper attributeText:[self dealDecimalWithNum:@(self.maxHighValue)] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
+    NSAttributedString *attString = [Global_Helper attributeText:[self dealDecimalWithNum:self.maxHighValue] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
     CGSize size = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(100, 100)];
     float originX = maxPoint.x - size.width - self.kLineWidth - 2 < (self.fullScreen ? 0 : self.leftMargin) + self.kLineWidth + 2.0 ?  maxPoint.x + self.kLineWidth : maxPoint.x - size.width - self.kLineWidth;
     [attString drawInRect:CGRectMake(originX, maxPoint.y, size.width, size.height)];
     
-    attString = [Global_Helper attributeText:[self dealDecimalWithNum:@(self.minLowValue)] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
+    attString = [Global_Helper attributeText:[self dealDecimalWithNum:self.minLowValue] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
     size = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(100, 100)];
     originX = minPoint.x - size.width - self.kLineWidth - 2 < (self.fullScreen ? 0 : self.leftMargin) + self.kLineWidth + 2.0 ?  minPoint.x + self.kLineWidth : minPoint.x - size.width - self.kLineWidth;
     [attString drawInRect:CGRectMake(originX, self.yAxisHeight - size.height + self.topMargin, size.width, size.height)];
@@ -755,7 +755,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     
     NSMutableArray *mas = [NSMutableArray new];
     for (int i = 0; i < rangeData.count; i ++) {
-        [mas addObject:rangeData[i].closingPrice];
+        [mas addObject:@(rangeData[i].closingPrice)];
     }
     
     return mas;
@@ -794,25 +794,25 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     for (int i = 0; i < drawContext.count; i++) {
         ZKKLineItem *item = drawContext[i];
         
-        self.maxHighValue = MAX([item.highestPrice floatValue], self.maxHighValue);
-        self.minLowValue = MIN([item.lowestPrice floatValue], self.minLowValue);
+        self.maxHighValue = MAX(item.highestPrice, self.maxHighValue);
+        self.minLowValue = MIN(item.lowestPrice, self.minLowValue);
     }
 }
 
-- (NSString *)dealDecimalWithNum:(NSNumber *)num {
+- (NSString *)dealDecimalWithNum:(CGFloat)num {
     NSString *dealString;
     
     switch (self.saveDecimalPlaces) {
         case 0: {
-            dealString = [NSString stringWithFormat:@"%ld", lroundf(num.doubleValue)];
+            dealString = [NSString stringWithFormat:@"%ld", lroundf(num)];
         }
             break;
         case 1: {
-            dealString = [NSString stringWithFormat:@"%.1f", num.doubleValue];
+            dealString = [NSString stringWithFormat:@"%.1f", num];
         }
             break;
         case 2: {
-            dealString = [NSString stringWithFormat:@"%.2f", num.doubleValue];
+            dealString = [NSString stringWithFormat:@"%.2f", num];
         }
             break;
         default:
@@ -987,8 +987,8 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     
     CGFloat maxHigh = -MAXFLOAT;
     for (ZKKLineItem *item in self.chartValues) {
-        if (item.highestPrice.floatValue > maxHigh) {
-            maxHigh = item.highestPrice.floatValue;
+        if (item.highestPrice > maxHigh) {
+            maxHigh = item.highestPrice;
             self.highItem = item;
         }
     }

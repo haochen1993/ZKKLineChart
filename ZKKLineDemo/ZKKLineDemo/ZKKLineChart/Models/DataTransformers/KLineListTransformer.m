@@ -43,11 +43,11 @@ NSString *const kCandlestickChartsBIAS = @"kCandlestickChartsBIAS";
         
         ZKKLineItem *item = [ZKKLineItem new];
         item.date = dic[@"date"];
-        item.openingPrice = @([dic[@"open_px"] doubleValue]);
-        item.highestPrice = @([dic[@"high_px"] doubleValue]);
-        item.lowestPrice = @([dic[@"low_px"] doubleValue]);
-        item.closingPrice = @([dic[@"close_px"] doubleValue]);
-        item.vol = @([dic[@"total_volume_trade"] doubleValue]/10000.00);
+        item.openingPrice = [dic[@"open_px"] floatValue];
+        item.highestPrice = [dic[@"high_px"] floatValue];
+        item.lowestPrice = [dic[@"low_px"] floatValue];
+        item.closingPrice = [dic[@"close_px"] floatValue];
+        item.vol = [dic[@"total_volume_trade"] floatValue] / 10000.f;
         
         [items addObject:item];
     }

@@ -65,12 +65,12 @@
         case CandlerstickChartsVolStyleDefault: {
             NSArray *volums = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
             for (ZKKLineItem *item in volums) {
-                if (self.maxValue < [item.vol floatValue]) {
-                    self.maxValue = [item.vol floatValue];
+                if (self.maxValue < item.vol) {
+                    self.maxValue = item.vol;
                 }
                 
-                if (self.minValue > [item.vol floatValue]) {
-                    self.minValue = [item.vol floatValue];
+                if (self.minValue > item.vol) {
+                    self.minValue = item.vol;
                 }
             }
             break;
@@ -152,12 +152,12 @@
     
     NSArray *contentValues = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
     for (ZKKLineItem *item in contentValues) {
-        CGFloat open = [item.openingPrice floatValue];
-        CGFloat close = [item.closingPrice floatValue];
+        CGFloat open = item.openingPrice;
+        CGFloat close = item.closingPrice;
         UIColor *fillColor = open > close ? self.positiveVolColor : self.negativeVolColor;
         CGContextSetFillColorWithColor(context, fillColor.CGColor);
         
-        CGFloat height = [item.vol floatValue]/scale == 0 ? 1.0 : [item.vol floatValue]/scale;
+        CGFloat height = item.vol/scale == 0 ? 1.0 : item.vol/scale;
         CGRect pathRect = CGRectMake(xAxis, boxOriginY + boxHeight - height, self.kLineWidth, height - self.axisShadowWidth);
         CGContextAddRect(context, pathRect);
         CGContextFillPath(context);

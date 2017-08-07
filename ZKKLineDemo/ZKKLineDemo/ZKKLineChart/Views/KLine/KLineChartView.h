@@ -123,17 +123,17 @@
 - (void)drawChartWithData:(NSArray *)data; //!< self.data 的格式为 @[@KLineItem, @KLineItem, ...]
 
 // 更新数据
-- (void)updateChartWithOpen:(NSNumber *)open
-                      close:(NSNumber *)close
-                       high:(NSNumber *)high
-                        low:(NSNumber *)low
+- (void)updateChartWithOpen:(CGFloat)open
+                      close:(CGFloat)close
+                       high:(CGFloat)high
+                        low:(CGFloat)low
                        date:(NSString *)date
                       isNew:(BOOL)isNew;
 
-- (void)updateChartWithOpen:(NSNumber *)open
-                      close:(NSNumber *)close
-                       high:(NSNumber *)high
-                        low:(NSNumber *)low
+- (void)updateChartWithOpen:(CGFloat)open
+                      close:(CGFloat)close
+                       high:(CGFloat)high
+                        low:(CGFloat)low
                        date:(NSString *)date
                         mas:(NSArray *)mas
                       isNew:(BOOL)isNew;

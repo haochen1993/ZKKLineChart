@@ -228,7 +228,7 @@ NSString *const TLineKeyEndOfUserInterfaceNotification = @"TLineKeyEndOfUserInte
             point.y = self.topMargin;
         }
         
-        self.tipBox.content = [NSString stringWithFormat:@"%@", [self dealDecimalWithNum:@([self.chartData[touchIndex].closingPrice floatValue])]];
+        self.tipBox.content = [NSString stringWithFormat:@"%@", [self dealDecimalWithNum:self.chartData[touchIndex].closingPrice]];
         [self.tipBox showWithTipPoint:point];
         [self bringSubviewToFront:self.tipBox];
         
@@ -272,7 +272,7 @@ NSString *const TLineKeyEndOfUserInterfaceNotification = @"TLineKeyEndOfUserInte
 }
 
 - (void)drawSetting {
-    NSAttributedString *attString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.2f", self.highItem.highestPrice.floatValue] attributes:@{NSFontAttributeName:self.yAxisTitleFont, NSForegroundColorAttributeName:self.yAxisTitleColor}];
+    NSAttributedString *attString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.2f", self.highItem.highestPrice] attributes:@{NSFontAttributeName:self.yAxisTitleFont, NSForegroundColorAttributeName:self.yAxisTitleColor}];
     CGSize size = [attString boundingRectWithSize:CGSizeMake(MAXFLOAT, self.yAxisTitleFont.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
     self.leftMargin = size.width + 4.0f;
     
@@ -399,7 +399,7 @@ NSString *const TLineKeyEndOfUserInterfaceNotification = @"TLineKeyEndOfUserInte
         NSArray *drawContexts = [self.chartData subarrayWithRange:NSMakeRange(self.startDrawIndex, self.kGraphDrawCount)];
         NSMutableDictionary *contentPoints = [NSMutableDictionary new];
         for (ZKKLineItem *item in drawContexts) {
-            CGFloat volValue = [item.closingPrice floatValue];
+            CGFloat volValue = item.closingPrice;
             CGFloat diffHeight = (volValue - self.minValue)/scale;
             
             CGFloat yAxis = self.yAxisHeight -  diffHeight + self.topMargin - (diffHeight == 0 ? 1.0 : 0);
@@ -474,7 +474,7 @@ NSString *const TLineKeyEndOfUserInterfaceNotification = @"TLineKeyEndOfUserInte
     CGFloat avgValue = (self.maxValue - self.minValue) / (self.separatorNum + 1);
     for (int i = 0; i < (self.separatorNum + 2); i ++) {
         float yAxisValue = self.maxValue - avgValue*i;
-        NSAttributedString *attString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@", [self dealDecimalWithNum:@(yAxisValue)]] attributes:@{NSFontAttributeName:self.yAxisTitleFont, NSForegroundColorAttributeName:self.yAxisTitleColor}];
+        NSAttributedString *attString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@", [self dealDecimalWithNum:yAxisValue]] attributes:@{NSFontAttributeName:self.yAxisTitleFont, NSForegroundColorAttributeName:self.yAxisTitleColor}];
         CGSize size = [attString boundingRectWithSize:CGSizeMake(self.leftMargin, self.yAxisTitleFont.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
         
         [attString drawInRect:CGRectMake((self.fullScreen ? 1.25 : self.leftMargin - size.width - 2.0f), self.topMargin + avgHeight*i - (i == (self.separatorNum  + 2 - 1) ? size.height - 1 : (i == 0 ? 0 : size.height/2.0)), size.width, size.height)];
@@ -489,28 +489,28 @@ NSString *const TLineKeyEndOfUserInterfaceNotification = @"TLineKeyEndOfUserInte
     for (int i = 0; i < drawContext.count; i++) {
         ZKKLineItem *item = drawContext[i];
         
-        self.maxValue = MAX([item.closingPrice floatValue], self.maxValue);
-        self.minValue = MIN([item.closingPrice floatValue], self.minValue);
+        self.maxValue = MAX(item.closingPrice, self.maxValue);
+        self.minValue = MIN(item.closingPrice, self.minValue);
     }
     
     CGFloat avgValue = (self.maxValue - self.minValue) / (self.separatorNum + 1);
-    self.minValue = MAX(MIN(self.minValue, self.maxValue - [[self dealDecimalWithNum:@(avgValue)] floatValue]*(self.separatorNum + 1)), 0);
+    self.minValue = MAX(MIN(self.minValue, self.maxValue - [[self dealDecimalWithNum:avgValue] floatValue]*(self.separatorNum + 1)), 0);
 }
 
-- (NSString *)dealDecimalWithNum:(NSNumber *)num {
+- (NSString *)dealDecimalWithNum:(CGFloat)num {
     NSString *dealString;
     
     switch (self.saveDecimalPlaces) {
         case 0: {
-            dealString = [NSString stringWithFormat:@"%ld", lroundf(num.doubleValue)];
+            dealString = [NSString stringWithFormat:@"%ld", lroundf(num)];
         }
             break;
         case 1: {
-            dealString = [NSString stringWithFormat:@"%.1f", num.doubleValue];
+            dealString = [NSString stringWithFormat:@"%.1f", num];
         }
             break;
         case 2: {
-            dealString = [NSString stringWithFormat:@"%.2f", num.doubleValue];
+            dealString = [NSString stringWithFormat:@"%.2f", num];
         }
             break;
         default:
@@ -607,8 +607,8 @@ NSString *const TLineKeyEndOfUserInterfaceNotification = @"TLineKeyEndOfUserInte
     
     CGFloat maxHigh = -MAXFLOAT;
     for (ZKKLineItem *item in self.chartData) {
-        if (item.highestPrice.floatValue > maxHigh) {
-            maxHigh = item.highestPrice.floatValue;
+        if (item.highestPrice > maxHigh) {
+            maxHigh = item.highestPrice;
             self.highItem = item;
         }
     }

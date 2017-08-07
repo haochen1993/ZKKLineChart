@@ -20,12 +20,12 @@
 }
 
 - (BOOL)modelCustomTransformFromDictionary:(NSDictionary *)dic {
-    _vol = @([dic[@"total_volume_trade"] doubleValue]/10000.00);
+    _vol = [dic[@"total_volume_trade"] floatValue] / 10000.f;
     return true;
 }
 
 - (NSString *)description {
-    NSString *desc = [[NSString alloc] initWithFormat:@"开盘价：%@\n 收盘价：%@\n 最高价：%@\n 最低价：%@\n 成交量：%@\n", self.openingPrice, self.closingPrice, self.highestPrice, self.lowestPrice, self.vol];
+    NSString *desc = [[NSString alloc] initWithFormat:@"开盘价：%f\n 收盘价：%f\n 最高价：%f\n 最低价：%f\n 成交量：%f\n", self.openingPrice, self.closingPrice, self.highestPrice, self.lowestPrice, self.vol];
     return desc;
 }
 
