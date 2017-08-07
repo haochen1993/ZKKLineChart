@@ -12,9 +12,12 @@
 		58F978B01F38182000C756E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58F978AF1F38182000C756E4 /* Assets.xcassets */; };
 		58F978B31F38182000C756E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58F978B11F38182000C756E4 /* LaunchScreen.storyboard */; };
 		58F978BC1F38186800C756E4 /* ZKRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F978BB1F38186800C756E4 /* ZKRootViewController.m */; };
+		AB26E2B785F6FE5E3AED116D /* libPods-ZKKLineDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B09A0CC9BE963C75FB1DC0 /* libPods-ZKKLineDemo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		07F17BE73EFFA96CC6DB34EA /* Pods-ZKKLineDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZKKLineDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZKKLineDemo/Pods-ZKKLineDemo.release.xcconfig"; sourceTree = "<group>"; };
+		52B09A0CC9BE963C75FB1DC0 /* libPods-ZKKLineDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ZKKLineDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		58F978A01F38182000C756E4 /* ZKKLineDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZKKLineDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58F978A41F38182000C756E4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		58F978A61F38182000C756E4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -24,6 +27,7 @@
 		58F978B41F38182000C756E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		58F978BA1F38186800C756E4 /* ZKRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKRootViewController.h; sourceTree = "<group>"; };
 		58F978BB1F38186800C756E4 /* ZKRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKRootViewController.m; sourceTree = "<group>"; };
+		ED8965BAFB928DF0A7BF814B /* Pods-ZKKLineDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZKKLineDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZKKLineDemo/Pods-ZKKLineDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +35,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB26E2B785F6FE5E3AED116D /* libPods-ZKKLineDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		10E9289B8A3D44BD596867EC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				ED8965BAFB928DF0A7BF814B /* Pods-ZKKLineDemo.debug.xcconfig */,
+				07F17BE73EFFA96CC6DB34EA /* Pods-ZKKLineDemo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		58F978971F38182000C756E4 = {
 			isa = PBXGroup;
 			children = (
 				58F978A21F38182000C756E4 /* ZKKLineDemo */,
 				58F978A11F38182000C756E4 /* Products */,
+				10E9289B8A3D44BD596867EC /* Pods */,
+				DF6D40ECEC8A0C111C54ED9F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -76,6 +92,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		DF6D40ECEC8A0C111C54ED9F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				52B09A0CC9BE963C75FB1DC0 /* libPods-ZKKLineDemo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -83,9 +107,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 58F978B71F38182000C756E4 /* Build configuration list for PBXNativeTarget "ZKKLineDemo" */;
 			buildPhases = (
+				67F4B18FF2A9D0C60926C60D /* [CP] Check Pods Manifest.lock */,
 				58F9789C1F38182000C756E4 /* Sources */,
 				58F9789D1F38182000C756E4 /* Frameworks */,
 				58F9789E1F38182000C756E4 /* Resources */,
+				AA5EE229C3B869FAF26C1C5A /* [CP] Embed Pods Frameworks */,
+				3F5F847B5E94FA3DFC39785E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -141,6 +168,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3F5F847B5E94FA3DFC39785E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZKKLineDemo/Pods-ZKKLineDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		67F4B18FF2A9D0C60926C60D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AA5EE229C3B869FAF26C1C5A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZKKLineDemo/Pods-ZKKLineDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		58F9789C1F38182000C756E4 /* Sources */ = {
@@ -259,6 +334,7 @@
 		};
 		58F978B81F38182000C756E4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ED8965BAFB928DF0A7BF814B /* Pods-ZKKLineDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = TE2958KSXV;
@@ -272,6 +348,7 @@
 		};
 		58F978B91F38182000C756E4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 07F17BE73EFFA96CC6DB34EA /* Pods-ZKKLineDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = TE2958KSXV;
@@ -302,6 +379,7 @@
 				58F978B91F38182000C756E4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
