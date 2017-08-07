@@ -717,8 +717,10 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
                 xAxis += self.kLineWidth + self.kLinePadding;
                 continue;
             }
-            NSArray *mas = [self maWithData:self.chartValues subInRange:NSMakeRange([self.chartValues indexOfObject:item] - maLength + 1, maLength)];
-            CGFloat yAxis = self.yAxisHeight - (([[mas valueForKeyPath:@"@avg.floatValue"] floatValue] - self.lowestPriceOfAll)/scale == 0 ? 1.0 : ([[mas valueForKeyPath:@"@avg.floatValue"] floatValue] - self.lowestPriceOfAll)/scale) + self.topMargin;
+            NSRange subRange = NSMakeRange([self.chartValues indexOfObject:item] - maLength + 1, maLength);
+            NSArray *mas = [self maWithData:self.chartValues subInRange:subRange];
+            CGFloat deltaOfAvg = ([[mas valueForKeyPath:@"@avg.floatValue"] floatValue] - self.lowestPriceOfAll)/scale;
+            CGFloat yAxis = self.yAxisHeight - (deltaOfAvg == 0 ? 1.0 : deltaOfAvg) + self.topMargin;
             
             CGPoint maPoint = CGPointMake(xAxis, yAxis);
             

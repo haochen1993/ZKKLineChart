@@ -22,15 +22,6 @@
 
 @implementation MATipView
 
-- (id)init {
-    if (self = [super init]) {
-        [self setup];
-        [self addPageSubviews];
-        [self layoutPageSubviews];
-    }
-    return self;
-}
-
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         [self setup];

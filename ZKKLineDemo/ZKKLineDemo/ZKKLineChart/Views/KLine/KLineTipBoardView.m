@@ -12,28 +12,21 @@
 
 #pragma mark - life cycle
 
-- (id)init {
-    if (self = [super init]) {
-        [self _setup];
-    }
-    return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        [self _setup];
+        [self setup];
     }
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self _setup];
+        [self setup];
     }
     return self;
 }
 
-- (void)_setup {
+- (void)setup {
     self.strockColor = [UIColor redColor];
     self.triangleWidth = 5.0;
     self.radius = 4.0;
@@ -54,20 +47,27 @@
 
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
-    
     [self drawInContext];
-    
     [self drawText];
 }
 
 - (void)drawText {
-    NSArray *titles = @[[@"开盘价：" stringByAppendingString:self.openingPrice], [@"收盘价：" stringByAppendingString:self.close], [@"最高价：" stringByAppendingString:self.high], [@"最低价：" stringByAppendingString:self.low]];
-    NSArray<UIColor *> *colors = @[self.openColor, self.closeColor, self.highColor, self.lowColor];
+    NSArray *titles = @[ [@"开盘价：" stringByAppendingString:self.openingPrice],
+                         [@"收盘价：" stringByAppendingString:self.close],
+                         [@"最高价：" stringByAppendingString:self.high],
+                         [@"最低价：" stringByAppendingString:self.low] ];
+    NSArray<UIColor *> *colors = @[ self.openColor,
+                                    self.closeColor,
+                                    self.highColor,
+                                    self.lowColor ];
     
     for (int i = 0; i < titles.count; i ++) {
-        NSAttributedString *attString = [[NSAttributedString alloc] initWithString:titles[i] attributes:@{NSFontAttributeName:self.font, NSForegroundColorAttributeName:colors[i]}];
+        NSAttributedString *attString = [[NSAttributedString alloc]
+                                         initWithString:titles[i] attributes:@{NSFontAttributeName:self.font, NSForegroundColorAttributeName:colors[i]}];
         CGFloat originY = 6 + (4 + self.font.lineHeight) * i;
-        [attString drawInRect:CGRectMake(self.arrowInLeft ? self.triangleWidth + 2.5 : self.triangleWidth + 5.5, originY, self.frame.size.width, self.font.lineHeight)];
+        
+        CGFloat textX = self.arrowInLeft ? self.triangleWidth + 2.5 : self.triangleWidth + 5.5;
+        [attString drawInRect:CGRectMake(textX, originY, self.frame.size.width, self.font.lineHeight)];
     }
 }
 

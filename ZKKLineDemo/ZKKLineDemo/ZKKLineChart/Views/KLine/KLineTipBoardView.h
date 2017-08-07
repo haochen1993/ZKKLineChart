@@ -10,49 +10,25 @@
 
 @interface KLineTipBoardView : TipBoardView
 
-/**
- *  开盘价
- */
-@property (nonatomic, copy) NSString *openingPrice;
+@property (nonatomic, copy) NSString *openingPrice; //!< 开盘价
 
-/**
- *  收盘价
- */
-@property (nonatomic, copy) NSString *close;
+@property (nonatomic, copy) NSString *close; //!< 收盘价
 
-/**
- *  最高价
- */
-@property (nonatomic, copy) NSString *high;
+@property (nonatomic, copy) NSString *high; //!< 最高价
 
-/**
- *  最低价
- */
-@property (nonatomic, copy) NSString *low;
+@property (nonatomic, copy) NSString *low; //!< 最低价
 
 /**************************************************/
 /*                     字体颜色                    */
 /**************************************************/
 //提供不一样的字体颜色可供选择， 默认都｛白色｝
 
-/**
- *  开盘价颜色
- */
-@property (nonatomic, strong) UIColor *openColor;
+@property (nonatomic, strong) UIColor *openColor; //!< 开盘价颜色
 
-/**
- *  收盘价颜色
- */
-@property (nonatomic, strong) UIColor *closeColor;
+@property (nonatomic, strong) UIColor *closeColor; //!< 收盘价颜色
 
-/**
- *  最高价颜色
- */
-@property (nonatomic, strong) UIColor *highColor;
+@property (nonatomic, strong) UIColor *highColor; //!< 最高价颜色
 
-/**
- *  最低价颜色
- */
-@property (nonatomic, strong) UIColor *lowColor;
+@property (nonatomic, strong) UIColor *lowColor; //!< 最低价颜色
 
 @end

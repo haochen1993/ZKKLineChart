@@ -75,22 +75,27 @@
     
     if (point.x > rect.origin.x && point.x < rect.origin.x + frame.size.width + 20.0f + 2) {
         frame.origin.x = point.x + 2;
-    } else if (point.x > rect.origin.x + rect.size.width - frame.size.width - 20.0f - 2) {
+    }
+    else if (point.x > rect.origin.x + rect.size.width - frame.size.width - 20.0f - 2) {
         frame.origin.x = point.x - frame.size.width - 2;
         self.arrowInLeft = YES;
-    }else if (point.x < (rect.origin.x + rect.size.width - frame.size.width - 20 - 2) && point.x > (rect.origin.x + frame.size.width + 20 + 2)) {
+    }
+    else if (point.x < (rect.origin.x + rect.size.width - frame.size.width - 20 - 2) && point.x > (rect.origin.x + frame.size.width + 20 + 2)) {
         if (CGPointEqualToPoint(self.tipPoint, CGPointZero)) {
             if (point.x - rect.origin.x > rect.size.width/2.0) {
                 frame.origin.x = point.x - frame.size.width - 2;
                 self.arrowInLeft = YES;
-            } else {
+            }
+            else {
                 frame.origin.x = point.x + 2;
             }
-        } else {
+        }
+        else {
             if (self.tipPoint.x < point.x) {
                 frame.origin.x = point.x - frame.size.width - 2;
                 self.arrowInLeft = YES;
-            } else {
+            }
+            else {
                 frame.origin.x = point.x + 2;
             }
         }
