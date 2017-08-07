@@ -16,8 +16,8 @@
 #import "VolumnView.h"
 #import "ZKKLineItem.h"
 
-NSString *const KLineKeyStartUserInterfaceNotification = @"KLineKeyStartUserInterfaceNotification";
-NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfUserInterfaceNotification";
+static NSString *const KLineKeyStartUserInterfaceNotification = @"KLineKeyStartUserInterfaceNotification";
+static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfUserInterfaceNotification";
 
 @interface KLineChartView ()
 
@@ -81,32 +81,21 @@ NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfUserInte
 
 #pragma mark - life cycle
 
-- (void)dealloc {
-    [self removeObserver];
-}
-
-- (id)init {
-    if (self = [super init]) {
-        [self _setup];
-    }
-    return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        [self _setup];
+        [self setup];
     }
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self _setup];
+        [self setup];
     }
     return self;
 }
 
-- (void)_setup {
+- (void)setup {
     self.fullScreen = YES;
     
     self.timeAxisHeight = 20.0;
@@ -1048,6 +1037,10 @@ NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfUserInte
 
 - (void)setBottomMargin:(CGFloat)bottomMargin {
     _bottomMargin = bottomMargin < _timeAxisHeight ? _timeAxisHeight : bottomMargin;
+}
+
+- (void)dealloc {
+    [self removeObserver];
 }
 
 @end

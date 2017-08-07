@@ -33,192 +33,80 @@
 /*                    |                                          |      |           */
 /*                    *------------------------------------------*      _           */
 /************************************************************************************/
-    
 
-/**
- *  内容距离父试图顶部高度
- */
-@property (nonatomic, assign) CGFloat topMargin;
+@property (nonatomic, assign) CGFloat topMargin; //!< 内容距离父试图顶部高度
 
-/**
- *  内容距离父试图左边距离
- */
-@property (nonatomic, assign) CGFloat leftMargin;
+@property (nonatomic, assign) CGFloat leftMargin; //!< 内容距离父试图左边距离
 
-/**
- *  内容距离父试图右边距离
- */
-@property (nonatomic, assign) CGFloat rightMargin;
+@property (nonatomic, assign) CGFloat rightMargin; //!< 内容距离父试图右边距离
 
-/**
- *  内容距离父试图底部距离
- */
-@property (nonatomic, assign) CGFloat bottomMargin;
+@property (nonatomic, assign) CGFloat bottomMargin; //!< 内容距离父试图底部距离
 
-/**
- *  k线图宽度
- */
-@property (nonatomic, assign) CGFloat kLineWidth;
+@property (nonatomic, assign) CGFloat kLineWidth; //!< k线图宽度
 
-/**
- *  k线图间距
- */
-@property (nonatomic, assign) CGFloat kLinePadding;
+@property (nonatomic, assign) CGFloat kLinePadding; //!< k线图间距
 
-/**
- *  均线宽度
- */
-@property (nonatomic, assign) CGFloat movingAvgLineWidth;
+@property (nonatomic, assign) CGFloat movingAvgLineWidth; //!< 均线宽度
 
-/**
- *  阳线颜色(negative line)
- */
-@property (nonatomic, strong) UIColor *positiveLineColor;
+@property (nonatomic, strong) UIColor *positiveLineColor; //!< 阳线颜色(negative line)
 
-/**
- *  阴线颜色
- */
-@property (nonatomic, strong) UIColor *negativeLineColor;
+@property (nonatomic, strong) UIColor *negativeLineColor; //!< 阴线颜色
 
-/**
- *  上影线
- */
-@property (nonatomic, strong) UIColor *upperShadowColor;
+@property (nonatomic, strong) UIColor *upperShadowColor; //!< 上影线
 
-/**
- *  下影线
- */
-@property (nonatomic, strong) UIColor *lowerShadowColor;
+@property (nonatomic, strong) UIColor *lowerShadowColor; //!< 下影线
 
-/**
- *  交易量阳线颜色
- */
-@property (nonatomic, strong) UIColor *positiveVolColor;
+@property (nonatomic, strong) UIColor *positiveVolColor; //!< 交易量阳线颜色
 
-/**
- *  交易量阴线颜色
- */
-@property (nonatomic, strong) UIColor *negativeVolColor;
+@property (nonatomic, strong) UIColor *negativeVolColor; //!< 交易量阴线颜色
 
-/**
- *  y坐标轴字体
- */
-@property (nonatomic, strong) UIFont *yAxisTitleFont;
+@property (nonatomic, strong) UIFont *yAxisTitleFont; //!< y坐标轴字体
 
-/**
- *  y坐标轴标题颜色
- */
-@property (nonatomic, strong) UIColor *yAxisTitleColor;
+@property (nonatomic, strong) UIColor *yAxisTitleColor; //!< y坐标轴标题颜色
 
-/**
- *  x坐标轴字体
- */
-@property (nonatomic, strong) UIFont *xAxisTitleFont;
+@property (nonatomic, strong) UIFont *xAxisTitleFont; //!< x坐标轴字体
 
-/**
- *  x坐标轴标题颜色
- */
-@property (nonatomic, strong) UIColor *xAxisTitleColor;
+@property (nonatomic, strong) UIColor *xAxisTitleColor; //!< x坐标轴标题颜色
 
-/**
- *   时间轴高度（默认20.0f）
- */
-@property (nonatomic, assign) CGFloat timeAxisHeight;
+@property (nonatomic, assign) CGFloat timeAxisHeight; //!< 时间轴高度（默认20.0f）
 
-/**
- *  坐标轴边框颜色
- */
-@property (nonatomic, strong) UIColor *axisShadowColor;
+@property (nonatomic, strong) UIColor *axisShadowColor; //!< 坐标轴边框颜色
 
-/**
- *  坐标轴边框宽度
- */
-@property (nonatomic, assign) CGFloat axisShadowWidth;
+@property (nonatomic, assign) CGFloat axisShadowWidth; //!< 坐标轴边框宽度
 
-/**
- *  分割线个数
- */
-@property (nonatomic, assign) NSInteger separatorNum;
+@property (nonatomic, assign) NSInteger separatorNum; //!< 分割线个数
 
-/**
- *  分割线大小
- */
-@property (nonatomic, assign) CGFloat separatorWidth;
+@property (nonatomic, assign) CGFloat separatorWidth; //!< 分割线大小
 
-/**
- *  分割线颜色
- */
-@property (nonatomic, strong) UIColor *separatorColor;
+@property (nonatomic, strong) UIColor *separatorColor; //!< 分割线颜色
 
-/**
- *  十字线颜色
- */
-@property (nonatomic, strong) UIColor *crossLineColor;
+@property (nonatomic, strong) UIColor *crossLineColor; //!< 十字线颜色
 
-/**
- *   默认可以放大缩小
- */
-@property (nonatomic, assign) BOOL zoomEnable;
+@property (nonatomic, assign) BOOL zoomEnable; //!< 默认可以放大缩小
 
-/**
- *  默认可以滑动
- */
-@property (nonatomic, assign) BOOL scrollEnable;
+@property (nonatomic, assign) BOOL scrollEnable; //!< 默认可以滑动
 
-/**
- *  默认显示均线
- */
-@property (nonatomic, assign) BOOL showAvgLine;
+@property (nonatomic, assign) BOOL showAvgLine; //!< 默认显示均线
 
-/**
- *  显示柱形图，默认显示
- */
-@property (nonatomic, assign) BOOL showBarChart;
+@property (nonatomic, assign) BOOL showBarChart; //!< 显示柱形图，默认显示
 
-/**
- *  YES表示：Y坐标的值根据视图中呈现的k线图的最大值最小值变化而变化；NO表示：Y坐标是所有数据中的最大值最小值，不管k线图呈现如何都不会变化。默认YES
- */
-@property (nonatomic, assign) BOOL yAxisTitleIsChange;
+@property (nonatomic, assign) BOOL yAxisTitleIsChange; //!< YES表示：Y坐标的值根据视图中呈现的k线图的最大值最小值变化而变化；NO表示：Y坐标是所有数据中的最大值最小值，不管k线图呈现如何都不会变化。默认YES
 
-/**
- *  保留小数点位数，默认保留两位(最多两位)
- */
-@property (nonatomic, assign) NSInteger  saveDecimalPlaces;
+@property (nonatomic, assign) NSInteger  saveDecimalPlaces; //!< 保留小数点位数，默认保留两位(最多两位)
 
-/**
- *  k线最大宽度
- */
-@property (nonatomic, assign) CGFloat maxKLineWidth;
+@property (nonatomic, assign) CGFloat maxKLineWidth; //!< k线最大宽度
 
-/**
- *  k线最小宽度
- */
-@property (nonatomic, assign) CGFloat minKLineWidth;
+@property (nonatomic, assign) CGFloat minKLineWidth; //!< k线最小宽度
 
-/**
- *  时间和价格提示的字体颜色
- */
-@property (nonatomic, strong) UIColor *timeAndPriceTextColor;
+@property (nonatomic, strong) UIColor *timeAndPriceTextColor; //!< 时间和价格提示的字体颜色
 
-/**
- *  时间和价格提示背景颜色
- */
-@property (nonatomic, strong) UIColor *timeAndPriceTipsBackgroundColor;
+@property (nonatomic, strong) UIColor *timeAndPriceTipsBackgroundColor; //!< 时间和价格提示背景颜色
 
-/**
- *  支持手势（默认支持）
- */
-@property (nonatomic, assign) BOOL supportGesture;
+@property (nonatomic, assign) BOOL supportGesture; //!< 支持手势（默认支持）
 
-/**
- *  均线个数（默认ma5, ma10, ma20）
- */
-@property (nonatomic, strong) NSArray *Mas;
+@property (nonatomic, strong) NSArray *Mas; //!< 均线个数（默认ma5, ma10, ma20）
 
-/*
- *  均线颜色值 (默认 HexRGB(0x019FFD)、HexRGB(0xFF9900)、HexRGB(0xFF00FF))
- */
-@property (nonatomic, strong) NSArray<UIColor *> *masColors;
+@property (nonatomic, strong) NSArray<UIColor *> *masColors; //!< 均线颜色值 (默认 HexRGB(0x019FFD)、HexRGB(0xFF9900)、HexRGB(0xFF00FF))
 
 /**
  *  动态更新显示最新, 默认不开启。
@@ -230,16 +118,9 @@
  */
 @property (nonatomic, assign) BOOL dynamicUpdateIsNew;
 
-/*
- *  全屏绘制时，topMargin无效
- */
-@property (nonatomic, assign) BOOL fullScreen;
+@property (nonatomic, assign) BOOL fullScreen; //!< 全屏绘制时，topMargin无效
 
-/*
- * self.data 的格式为 @[@ZKKLineItem, @ZKKLineItem, ...]
- */
-
-- (void)drawChartWithData:(NSArray *)data;
+- (void)drawChartWithData:(NSArray *)data; //!< self.data 的格式为 @[@KLineItem, @KLineItem, ...]
 
 // 更新数据
 - (void)updateChartWithOpen:(NSNumber *)open

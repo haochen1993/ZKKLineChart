@@ -25,7 +25,7 @@
 /**
  *  (模拟)实时测试
  */
-@property (nonatomic, strong) NSArray *data;
+@property (nonatomic, strong) NSArray *dataSource;
 @property (nonatomic, strong) NSTimer *timer;
 
 @end
@@ -33,11 +33,6 @@
 @implementation ZKRootViewController
 
 #pragma mark - life cycle
-
-- (void)dealloc {
-    [self stopTimer];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -49,7 +44,7 @@
     
     self.kLineChartView.Mas = @[@5, @10, @30];
     
-    [self drawChart];
+    [self requestData];
     /*[self.kLineChartView addSubview:self.kStatusView];
      
      __block typeof(self) weakSelf = self;
@@ -63,13 +58,13 @@
      [self.chartApi startRequest];*/
 }
 
-- (void)drawChart {
-    NSString * path =[[NSBundle mainBundle]pathForResource:@"data.plist" ofType:nil];
-    NSArray * sourceArray = [[NSDictionary dictionaryWithContentsOfFile:path] objectForKey:@"data"];
+- (void)requestData {
+    NSString *path = [[NSBundle mainBundle]pathForResource:@"data.plist" ofType:nil];
+    NSArray *sourceArray = [[NSDictionary dictionaryWithContentsOfFile:path] objectForKey:@"data"];
     
-    self.data = [self.lineListTransformer manager:nil transformData:sourceArray];
-    [self.kLineChartView drawChartWithData:self.data];
-    [self.tLineChartView drawChartWithData:self.data];
+    self.dataSource = [self.lineListTransformer manager:nil transformData:sourceArray];
+    [self.kLineChartView drawChartWithData:self.dataSource];
+    [self.tLineChartView drawChartWithData:self.dataSource];
 }
 
 #pragma mark - private methods
@@ -93,10 +88,10 @@
 #pragma mark - GAPIBaseManagerRequestCallBackDelegate
 
 - (void)managerApiCallBackDidSuccess:(__kindof GApiBaseManager *)manager {
-    self.data = [[self.chartApi fetchDataWithTransformer:self.lineListTransformer] mutableCopy];
+    self.dataSource = [[self.chartApi fetchDataWithTransformer:self.lineListTransformer] mutableCopy];
     
-    [self.kLineChartView drawChartWithData:self.data];
-    [self.tLineChartView drawChartWithData:self.data];
+    [self.kLineChartView drawChartWithData:self.dataSource];
+    [self.tLineChartView drawChartWithData:self.dataSource];
     
     self.kStatusView.status = StatusStyleSuccess;
     self.kStatusView.hidden = YES;
@@ -185,11 +180,9 @@
     return _lineListTransformer;
 }
 
-#pragma mark - memory manager
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)dealloc {
+    [self stopTimer];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

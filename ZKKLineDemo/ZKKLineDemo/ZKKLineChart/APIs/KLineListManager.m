@@ -22,9 +22,8 @@
 }
 
 - (NSDictionary *)paramsForApi {
-    return @{@"s":self.kLineID,
-             @"g":self.dateType
-             };
+    return @{ @"s":self.kLineID,
+              @"g":self.dateType };
 }
 
 @end
