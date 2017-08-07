@@ -6,8 +6,7 @@
 //  Copyright © 2016年 ZhouKang. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "GApiBaseManager.h"
+#import <UIKit/UIKit.h>
 
 // 数据
 extern NSString *const kCandlestickChartsContext;
@@ -56,6 +55,6 @@ extern NSString *const kCandlestickChartsBIAS;
 /**
  *  extern key 可修改为Entity
  */
-@interface KLineListTransformer : NSObject <GApiBaseManagerCallBackDataTransformer>
+@interface KLineListTransformer : NSObject 
 
 @end

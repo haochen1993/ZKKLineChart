@@ -31,7 +31,7 @@ NSString *const kCandlestickChartsBIAS = @"kCandlestickChartsBIAS";
     float sumOfMaxHigh;     // 最高价总和 
 }
 
-- (id)manager:(GApiBaseManager *)manager transformData:(id)data {
+- (id)manager:(void *)manager transformData:(id)data {
     // 截取的个数自己定义
     if (!data) {
         return nil;

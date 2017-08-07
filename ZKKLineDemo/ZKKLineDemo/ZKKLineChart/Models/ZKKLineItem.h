@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <YYModel.h>
 
-@interface ZKKLineItem : NSObject
+@interface ZKKLineItem : NSObject <YYModel>
 
 @property (nonatomic, copy) NSNumber *openingPrice; //!< 开盘价
 

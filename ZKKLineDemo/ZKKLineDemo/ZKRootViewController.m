@@ -9,13 +9,13 @@
 #import "ZKRootViewController.h"
 #import "KLineChartView.h"
 #import "TLineChartView.h"
-#import "KLineListManager.h"
 #import "KLineListTransformer.h"
 #import "StatusView.h"
+#import <YYModel.h>
+#import "ZKKLineItem.h"
 
-@interface ZKRootViewController () <GAPIBaseManagerRequestCallBackDelegate>
+@interface ZKRootViewController ()
 
-@property (nonatomic, strong) KLineListManager *chartApi;
 @property (nonatomic, strong) KLineListTransformer *lineListTransformer;
 @property (nonatomic, strong) KLineChartView *kLineChartView;
 @property (nonatomic, strong) TLineChartView *tLineChartView;
@@ -61,8 +61,7 @@
 - (void)requestData {
     NSString *path = [[NSBundle mainBundle]pathForResource:@"data.plist" ofType:nil];
     NSArray *sourceArray = [[NSDictionary dictionaryWithContentsOfFile:path] objectForKey:@"data"];
-    
-    self.dataSource = [self.lineListTransformer manager:nil transformData:sourceArray];
+    self.dataSource = [NSArray yy_modelArrayWithClass:[ZKKLineItem class] json:sourceArray];
     [self.kLineChartView drawChartWithData:self.dataSource];
     [self.tLineChartView drawChartWithData:self.dataSource];
 }
@@ -83,40 +82,6 @@
 }
 
 - (void)realTimeData:(id)timer {
-}
-
-#pragma mark - GAPIBaseManagerRequestCallBackDelegate
-
-- (void)managerApiCallBackDidSuccess:(__kindof GApiBaseManager *)manager {
-    self.dataSource = [[self.chartApi fetchDataWithTransformer:self.lineListTransformer] mutableCopy];
-    
-    [self.kLineChartView drawChartWithData:self.dataSource];
-    [self.tLineChartView drawChartWithData:self.dataSource];
-    
-    self.kStatusView.status = StatusStyleSuccess;
-    self.kStatusView.hidden = YES;
-    
-    //动态数据测试
-    //[self startTimer];
-}
-
-- (void)managerApiCallBackDidFailed:(__kindof GApiBaseManager *)manager {
-    self.kStatusView.hidden = NO;
-    switch (manager.requestHandleType) {
-        case GAPIManagerRequestHandlerTypeDefault:
-        case GAPIManagerRequestHandlerTypeFailure:
-        case GAPIManagerRequestHandlerTypeParamsError:
-        case GAPIManagerRequestHandlerTypeNoContent:
-        case GAPIManagerRequestHandlerTypeTimeout: {
-            self.kStatusView.status = StatusStyleFailed;
-            break;
-        }
-        case GAPIManagerRequestHandlerTypeNoNetWork: {
-            self.kStatusView.status = StatusStyleNoNetWork;
-            break;
-        }
-        default:break;
-    }
 }
 
 #pragma mark - getters
@@ -163,14 +128,6 @@
         _kStatusView = [[StatusView alloc] initWithFrame:_kLineChartView.bounds];
     }
     return _kStatusView;
-}
-
-- (KLineListManager *)chartApi {
-    if (!_chartApi) {
-        _chartApi = [KLineListManager new];
-        _chartApi.delegate = self;
-    }
-    return _chartApi;
 }
 
 - (KLineListTransformer *)lineListTransformer {
