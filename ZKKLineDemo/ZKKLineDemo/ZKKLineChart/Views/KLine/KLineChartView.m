@@ -25,7 +25,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
 
 @property (nonatomic, assign) CGFloat xAxisWidth;
 
-@property (nonatomic, strong) NSArray<ZKKLineItem *> *chartValues;
+@property (nonatomic, strong) NSArray <ZKKLineItem *> *chartValues;
 
 @property (nonatomic, assign) NSInteger startDrawIndex;
 
@@ -49,7 +49,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
 @property (nonatomic, assign) CGFloat lastPanScale;
 
 //坐标轴
-@property (nonatomic, strong) NSMutableDictionary *xAxisContext;
+@property (nonatomic, strong) NSMutableDictionary *xAxisMapper;
 
 //十字线
 @property (nonatomic, strong) UIView *verticalCrossLine;     //垂直十字线
@@ -65,9 +65,9 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
 @property (nonatomic, strong) VolumnView *volView;
 
 //时间
-@property (nonatomic, strong) UILabel *timeLbl;
+@property (nonatomic, strong) UILabel *timeLabel;
 //价格
-@property (nonatomic, strong) UILabel *priceLbl;
+@property (nonatomic, strong) UILabel *priceLabel;
 
 //实时数据提示按钮
 @property (nonatomic, strong) UIButton *realDataTipBtn;
@@ -152,7 +152,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     
     self.lastPanScale = 1.0;
     
-    self.xAxisContext = [NSMutableDictionary new];
+    self.xAxisMapper = [NSMutableDictionary dictionary];
     
     //添加手势
     [self addGestures];
@@ -167,13 +167,9 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     if (!self.supportGesture) {
         return;
     }
-    
     [self addGestureRecognizer:self.tapGesture];
-    
     [self addGestureRecognizer:self.panGesture];
-    
     [self addGestureRecognizer:self.pinchGesture];
-    
     [self addGestureRecognizer:self.longGesture];
 }
 
@@ -399,7 +395,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
 }
 
 - (void)showTipBoardWithTouchPoint:(CGPoint)touchPoint {
-    [self.xAxisContext enumerateKeysAndObjectsUsingBlock:^(NSNumber *xAxisKey, NSNumber *indexObject, BOOL *stop) {
+    [self.xAxisMapper enumerateKeysAndObjectsUsingBlock:^(NSNumber *xAxisKey, NSNumber *indexObject, BOOL *stop) {
         if (_kLinePadding+_kLineWidth >= ([xAxisKey floatValue] - touchPoint.x) && ([xAxisKey floatValue] - touchPoint.x) > 0) {
             NSInteger index = [indexObject integerValue];
             // 获取对应的k线数据
@@ -472,19 +468,19 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     [self.tipBoard showWithTipPoint:CGPointMake(point.x, point.y)];
     
     //时间，价额
-    self.priceLbl.hidden = NO;
-    self.priceLbl.text = [item.openingPrice floatValue] > [item.closingPrice floatValue] ? [self dealDecimalWithNum:item.openingPrice] :[self dealDecimalWithNum:item.closingPrice] ;
-    self.priceLbl.frame = CGRectMake(0.5, MIN(self.horizontalCrossLine.frame.origin.y - (self.timeAxisHeight*2/3.0 - self.separatorWidth*2)/2.0, self.topMargin + self.yAxisHeight - self.timeAxisHeight), (self.fullScreen ? self.leftMargin + Adaptor_Value(6.0f) : self.leftMargin - self.separatorWidth), self.timeAxisHeight*2/3.0 - self.separatorWidth*2);
-    [self bringSubviewToFront:self.priceLbl];
+    self.priceLabel.hidden = NO;
+    self.priceLabel.text = [item.openingPrice floatValue] > [item.closingPrice floatValue] ? [self dealDecimalWithNum:item.openingPrice] :[self dealDecimalWithNum:item.closingPrice] ;
+    self.priceLabel.frame = CGRectMake(0.5, MIN(self.horizontalCrossLine.frame.origin.y - (self.timeAxisHeight*2/3.0 - self.separatorWidth*2)/2.0, self.topMargin + self.yAxisHeight - self.timeAxisHeight), (self.fullScreen ? self.leftMargin + Adaptor_Value(6.0f) : self.leftMargin - self.separatorWidth), self.timeAxisHeight*2/3.0 - self.separatorWidth*2);
+    [self bringSubviewToFront:self.priceLabel];
     
     NSString *date = item.date;
-    self.timeLbl.text = date;
-    self.timeLbl.hidden = date.length > 0 ? NO : YES;
-    [self bringSubviewToFront:self.timeLbl];
+    self.timeLabel.text = date;
+    self.timeLabel.hidden = date.length > 0 ? NO : YES;
+    [self bringSubviewToFront:self.timeLabel];
     if (date.length > 0) {
         CGSize size = [date boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.xAxisTitleFont} context:nil].size;
         CGFloat originX = MIN(MAX(0, point.x - size.width/2.0 - 2), self.frame.size.width - self.rightMargin - size.width - 4);
-        self.timeLbl.frame = CGRectMake(originX, self.topMargin + self.yAxisHeight + self.separatorWidth, size.width + 4, self.timeAxisHeight - self.separatorWidth*2);
+        self.timeLabel.frame = CGRectMake(originX, self.topMargin + self.yAxisHeight + self.separatorWidth, size.width + 4, self.timeAxisHeight - self.separatorWidth*2);
     }
 }
 
@@ -493,8 +489,8 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     self.verticalCrossLine.hidden = YES;
     self.barVerticalLine.hidden = YES;
     self.maTipView.hidden = YES;
-    self.priceLbl.hidden = YES;
-    self.timeLbl.hidden = YES;
+    self.priceLabel.hidden = YES;
+    self.timeLabel.hidden = YES;
     if (animated) {
         [self.tipBoard hide];
     } else {
@@ -579,8 +575,8 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
 - (void)drawTimeAxis {
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    CGFloat quarteredWidth = self.xAxisWidth/4.0;
-    NSInteger avgDrawCount = ceil(quarteredWidth/(_kLinePadding + _kLineWidth));
+    CGFloat quarteredWidth = self.xAxisWidth / 4.0;
+    NSInteger avgDrawCount = ceil(quarteredWidth / (_kLinePadding + _kLineWidth));
     
     CGFloat xAxis = (self.fullScreen ? 0 : self.leftMargin) + _kLineWidth/2.0 + _kLinePadding;
     //画4条虚线
@@ -618,12 +614,13 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     CGContextSetLineWidth(context, 0.5);
     
     CGFloat xAxis = _kLinePadding;
-    [self.xAxisContext removeAllObjects];
+    [self.xAxisMapper removeAllObjects];
     
     CGPoint maxPoint, minPoint;
     
-    for (ZKKLineItem *item in [self.chartValues subarrayWithRange:NSMakeRange(self.startDrawIndex, self.kLineDrawNum)]) {
-        [self.xAxisContext setObject:@([self.chartValues indexOfObject:item]) forKey:@(xAxis + _kLineWidth)];
+    NSArray *items = [self.chartValues subarrayWithRange:NSMakeRange(self.startDrawIndex, self.kLineDrawNum)];
+    for (ZKKLineItem *item in items) {
+        self.xAxisMapper[@(xAxis + _kLineWidth)] = @([self.chartValues indexOfObject:item]);
         //通过开盘价、收盘价判断颜色
         CGFloat open = [item.openingPrice floatValue];
         CGFloat close = [item.closingPrice floatValue];
@@ -930,29 +927,29 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     return _realDataTipBtn;
 }
 
-- (UILabel *)timeLbl {
-    if (!_timeLbl) {
-        _timeLbl = [UILabel new];
-        _timeLbl.backgroundColor = self.timeAndPriceTipsBackgroundColor;
-        _timeLbl.textAlignment = NSTextAlignmentCenter;
-        _timeLbl.font = self.yAxisTitleFont;
-        _timeLbl.textColor = self.timeAndPriceTextColor;
-        _timeLbl.numberOfLines = 0;
-        [self addSubview:_timeLbl];
+- (UILabel *)timeLabel {
+    if (!_timeLabel) {
+        _timeLabel = [UILabel new];
+        _timeLabel.backgroundColor = self.timeAndPriceTipsBackgroundColor;
+        _timeLabel.textAlignment = NSTextAlignmentCenter;
+        _timeLabel.font = self.yAxisTitleFont;
+        _timeLabel.textColor = self.timeAndPriceTextColor;
+        _timeLabel.numberOfLines = 0;
+        [self addSubview:_timeLabel];
     }
-    return _timeLbl;
+    return _timeLabel;
 }
 
-- (UILabel *)priceLbl {
-    if (!_priceLbl) {
-        _priceLbl = [UILabel new];
-        _priceLbl.backgroundColor = self.timeAndPriceTipsBackgroundColor;
-        _priceLbl.textAlignment = NSTextAlignmentCenter;
-        _priceLbl.font = [UIFont systemFontOfSize:self.xAxisTitleFont.pointSize + 2.0];
-        _priceLbl.textColor = self.timeAndPriceTextColor;
-        [self addSubview:_priceLbl];
+- (UILabel *)priceLabel {
+    if (!_priceLabel) {
+        _priceLabel = [UILabel new];
+        _priceLabel.backgroundColor = self.timeAndPriceTipsBackgroundColor;
+        _priceLabel.textAlignment = NSTextAlignmentCenter;
+        _priceLabel.font = [UIFont systemFontOfSize:self.xAxisTitleFont.pointSize + 2.0];
+        _priceLabel.textColor = self.timeAndPriceTextColor;
+        [self addSubview:_priceLabel];
     }
-    return _priceLbl;
+    return _priceLabel;
 }
 
 - (UITapGestureRecognizer *)tapGesture {
