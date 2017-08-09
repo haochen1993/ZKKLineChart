@@ -17,60 +17,41 @@
 
 static NSString *const KLineKeyStartUserInterfaceNotification = @"KLineKeyStartUserInterfaceNotification";
 static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfUserInterfaceNotification";
+static const CGFloat kBarChartHeight = 100.f;
 
 @interface KLineChartView ()
 
 @property (nonatomic, assign) CGFloat yAxisHeight;
-
 @property (nonatomic, assign) CGFloat xAxisWidth;
-
 @property (nonatomic, strong) NSArray <ZKKLineItem *> *chartValues;
-
 @property (nonatomic, assign) NSInteger startDrawIndex;
-
 @property (nonatomic, assign) NSInteger kLineDrawNum;
-
 @property (nonatomic, strong) ZKKLineItem *highestItem;
-
 @property (nonatomic, assign) CGFloat highestPriceOfAll;
-
 @property (nonatomic, assign) CGFloat lowestPriceOfAll;
-
 //手势
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
-
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
-
 @property (nonatomic, strong) UIPinchGestureRecognizer *pinchGesture;
-
 @property (nonatomic, strong) UILongPressGestureRecognizer *longGesture;
-
 @property (nonatomic, assign) CGFloat lastPanScale;
-
 //坐标轴
 @property (nonatomic, strong) NSMutableDictionary *xAxisMapper;
-
 //十字线
 @property (nonatomic, strong) UIView *verticalCrossLine;     //垂直十字线
 @property (nonatomic, strong) UIView *horizontalCrossLine;   //水平十字线
-
 @property (nonatomic, strong) UIView *barVerticalLine;
-
 @property (nonatomic, strong) KLineTipBoardView *tipBoard;
-
 @property (nonatomic, strong) MATipView * maTipView;
-
 // 成交量图
 @property (nonatomic, strong) VolumnView *volView;
-
+@property (nonatomic, strong) VolumnView *MACDView;
 //时间
 @property (nonatomic, strong) UILabel *timeLabel;
 //价格
 @property (nonatomic, strong) UILabel *priceLabel;
-
 //实时数据提示按钮
 @property (nonatomic, strong) UIButton *realDataTipBtn;
-
 //交互中， 默认NO
 @property (nonatomic, assign) BOOL interactive;
 
@@ -231,6 +212,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     
     if (self.showBarChart) {
         self.volView.data = dataSource;
+        self.MACDView.data = dataSource;
     }
     
     // 设置
@@ -774,15 +756,21 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     CGRect rect = self.bounds;
     
     CGFloat boxOriginY = self.topMargin + self.yAxisHeight + self.timeAxisHeight;
-    CGFloat boxHeight = rect.size.height - boxOriginY;
-    self.volView.frame = CGRectMake(0, boxOriginY, rect.size.width, boxHeight);
+    self.volView.frame = CGRectMake(0, boxOriginY, rect.size.width, kBarChartHeight);
     self.volView.kLineWidth = self.kLineWidth;
     self.volView.linePadding = self.kLinePadding;
     self.volView.boxOriginX = (self.fullScreen ? 0 : self.leftMargin);
-    
     self.volView.startDrawIndex = self.startDrawIndex;
     self.volView.numberOfDrawCount = self.kLineDrawNum;
     [self.volView update];
+    
+    self.MACDView.frame = CGRectMake(0, CGRectGetMaxY(self.volView.frame), rect.size.width, kBarChartHeight);
+    self.MACDView.kLineWidth = self.kLineWidth;
+    self.MACDView.linePadding = self.kLinePadding;
+    self.MACDView.boxOriginX = (self.fullScreen ? 0 : self.leftMargin);
+    self.MACDView.startDrawIndex = self.startDrawIndex;
+    self.MACDView.numberOfDrawCount = self.kLineDrawNum;
+    [self.MACDView update];
 }
 
 - (void)resetMaxAndMin {
@@ -860,6 +848,24 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
         [self addSubview:_volView];
     }
     return _volView;
+}
+
+- (VolumnView *)MACDView {
+    if (!_MACDView) {
+        _MACDView = [VolumnView new];
+        _MACDView.backgroundColor  = self.backgroundColor;
+        _MACDView.boxRightMargin = self.rightMargin;
+        _MACDView.axisShadowColor = self.axisShadowColor;
+        _MACDView.axisShadowWidth = self.axisShadowWidth;
+        _MACDView.negativeVolColor = self.negativeVolColor;
+        _MACDView.positiveVolColor = self.positiveVolColor;
+        _MACDView.yAxisTitleFont = self.yAxisTitleFont;
+        _MACDView.yAxisTitleColor = self.yAxisTitleColor;
+        _MACDView.separatorWidth = self.separatorWidth;
+        _MACDView.separatorColor = self.separatorColor;
+        [self addSubview:_MACDView];
+    }
+    return _MACDView;
 }
 
 - (UIView *)verticalCrossLine {

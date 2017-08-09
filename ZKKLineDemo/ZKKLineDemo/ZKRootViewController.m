@@ -47,7 +47,7 @@
     _kLineChartView.backgroundColor = HexRGB(0x292c34);
     _kLineChartView.topMargin = 20.0f;
     _kLineChartView.rightMargin = 1.0;
-    _kLineChartView.bottomMargin = 80.0f;
+    _kLineChartView.bottomMargin = 250.0f;
     _kLineChartView.leftMargin = 25.0f;
     _kLineChartView.yAxisTitleIsChange = true;
     
