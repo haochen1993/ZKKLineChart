@@ -115,7 +115,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     self.axisShadowColor = [UIColor colorWithRed:223/255.0f green:223/255.0f blue:223/255.0f alpha:1.0];
     self.axisShadowWidth = 0.8;
     
-    self.separatorColor = [UIColor colorWithRed:230/255.0f green:230/255.0f blue:230/255.0f alpha:1.0];
+    self.separatorColor = HexRGB(0x535d69);
     self.separatorWidth = 0.5;
     
     self.yAxisTitleFont = [UIFont systemFontOfSize:8.0];
