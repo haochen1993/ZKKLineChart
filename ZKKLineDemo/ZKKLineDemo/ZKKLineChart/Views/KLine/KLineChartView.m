@@ -86,7 +86,7 @@ static const CGFloat kBarChartHeight = 100.f;
     self.upperShadowColor = self.positiveLineColor;
     self.lowerShadowColor = self.negativeLineColor;
     
-    self.movingAvgLineWidth = 0.8;
+    self.movingAvgLineWidth = 1.f;
     
     self.masColors = @[HexRGB(0x019FFD), HexRGB(0xFF9900), HexRGB(0xFF00FF)];
     
@@ -623,6 +623,7 @@ static const CGFloat kBarChartHeight = 100.f;
         CGPoint highPoint = CGPointMake(xAxis + _kLineWidth/2.0 + (self.fullScreen ? 0 : self.leftMargin), highYAxis + self.topMargin);
         CGPoint lowPoint = CGPointMake(xAxis + _kLineWidth/2.0 + (self.fullScreen ? 0 : self.leftMargin), lowYAxis + self.topMargin);
         CGContextSetStrokeColorWithColor(context, fillColor.CGColor);
+        CGContextSetLineWidth(context, 1.f);
         CGContextBeginPath(context);
         CGContextMoveToPoint(context, highPoint.x, highPoint.y);  //起点坐标
         CGContextAddLineToPoint(context, lowPoint.x, lowPoint.y);   //终点坐标
