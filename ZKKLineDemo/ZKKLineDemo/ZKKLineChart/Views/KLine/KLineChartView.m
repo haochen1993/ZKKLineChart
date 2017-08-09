@@ -321,7 +321,8 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     
     if (touchPoint.x > 0) {
         self.startDrawIndex = self.startDrawIndex - offsetIndex < 0 ? 0 : self.startDrawIndex - offsetIndex;
-    } else {
+    }
+    else {
         self.startDrawIndex = self.startDrawIndex + offsetIndex + self.kLineDrawNum > self.chartValues.count ? self.chartValues.count - self.kLineDrawNum : self.startDrawIndex + offsetIndex;
     }
     
