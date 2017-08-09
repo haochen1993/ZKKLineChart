@@ -422,9 +422,8 @@ NSString *const TLineKeyEndOfUserInterfaceNotification = @"TLineKeyEndOfUserInte
         
         [self startFlashAnimation];
     }
-    
     if (self.smoothPath) {
-        self.bPath = [self.bPath smoothedPathWithGranularity:15];
+        self.bPath = [self.bPath mc_smoothedPathWithGranularity:15];
     }
 }
 

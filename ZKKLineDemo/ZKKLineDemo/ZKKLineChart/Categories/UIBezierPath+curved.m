@@ -41,7 +41,7 @@ NSArray *pointsFromBezierPath(UIBezierPath *bpath) {
     return points;
 }
 
-- (UIBezierPath*)smoothedPathWithGranularity:(NSInteger)granularity {
+- (UIBezierPath*)mc_smoothedPathWithGranularity:(NSInteger)granularity {
     NSMutableArray *points = [pointsFromBezierPath(self) mutableCopy];
     
     if (points.count < 4) return [self copy];

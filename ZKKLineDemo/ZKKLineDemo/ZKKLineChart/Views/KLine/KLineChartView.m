@@ -14,6 +14,7 @@
 #import "ACMacros.h"
 #import "Global+Helper.h"
 #import "VolumnView.h"
+#import "UIView+Addition.h"
 
 static NSString *const KLineKeyStartUserInterfaceNotification = @"KLineKeyStartUserInterfaceNotification";
 static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfUserInterfaceNotification";
@@ -428,20 +429,15 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
 - (void)configUIWithLineItem:(ZKKLineItem *)item atPoint:(CGPoint)point {
     //十字线
     self.verticalCrossLine.hidden = NO;
-    CGRect frame = self.verticalCrossLine.frame;
-    frame.origin.x = point.x;
-    frame.size.height = self.showBarChart ? self.frame.size.height - self.topMargin : frame.size.height;
-    self.verticalCrossLine.frame = frame;
+    self.verticalCrossLine.us_height = self.showBarChart ? self.frame.size.height - self.topMargin : self.verticalCrossLine.us_height;
+    self.verticalCrossLine.us_left = point.x;
     
     self.horizontalCrossLine.hidden = NO;
-    frame = self.horizontalCrossLine.frame;
-    frame.origin.y = point.y;
-    self.horizontalCrossLine.frame = frame;
+    self.horizontalCrossLine.us_top = point.y;
     
     self.barVerticalLine.hidden = NO;
-    frame = self.barVerticalLine.frame;
-    frame.origin.x = point.x;
-    self.barVerticalLine.frame = frame;
+    self.barVerticalLine.us_left = point.x;
+
     //均值
     self.maTipView.hidden = !self.showAvgLine;
     if (self.showAvgLine) {
@@ -466,10 +462,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     NSAttributedString *maxText = [Global_Helper attributeText:[NSString stringWithFormat:@"最高价：%@", [self dealDecimalWithNum:self.highestPriceOfAll]] textColor:HexRGB(0xffffff) font:self.tipBoard.font];
     CGSize size = [Global_Helper attributeString:maxText boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     
-    frame = self.tipBoard.frame;
-    frame.size.width = size.width + Adaptor_Value(20.0f);
-
-    self.tipBoard.frame = frame;
+    self.tipBoard.us_width = size.width + Adaptor_Value(20.0f);
     
     [self.tipBoard showWithTipPoint:CGPointMake(point.x, point.y)];
     
@@ -751,7 +744,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     }
     
     //圆滑
-    path = [path smoothedPathWithGranularity:15];
+    path = [path mc_smoothedPathWithGranularity:15];
     
     return path.CGPath;
 }

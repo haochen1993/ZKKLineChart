@@ -7,12 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		58B5F5BB1F3AE544008DED7E /* UIBezierPath+curved.m in Sources */ = {isa = PBXBuildFile; fileRef = 58B5F5AE1F3AE289008DED7E /* UIBezierPath+curved.m */; };
+		58B5F5BC1F3AE546008DED7E /* UIView+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 58B5F5B01F3AE28A008DED7E /* UIView+Addition.m */; };
 		58F978A51F38182000C756E4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F978A41F38182000C756E4 /* main.m */; };
 		58F978A81F38182000C756E4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F978A71F38182000C756E4 /* AppDelegate.m */; };
 		58F978B01F38182000C756E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58F978AF1F38182000C756E4 /* Assets.xcassets */; };
 		58F978B31F38182000C756E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58F978B11F38182000C756E4 /* LaunchScreen.storyboard */; };
 		58F978BC1F38186800C756E4 /* ZKRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F978BB1F38186800C756E4 /* ZKRootViewController.m */; };
-		58F9795F1F38304000C756E4 /* UIBezierPath+curved.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979231F38304000C756E4 /* UIBezierPath+curved.m */; };
 		58F9796A1F38304000C756E4 /* Global+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979401F38304000C756E4 /* Global+Helper.m */; };
 		58F9796B1F38304000C756E4 /* data.plist in Resources */ = {isa = PBXBuildFile; fileRef = 58F979411F38304000C756E4 /* data.plist */; };
 		58F9796C1F38304000C756E4 /* KLineListTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979451F38304000C756E4 /* KLineListTransformer.m */; };
@@ -31,6 +32,10 @@
 /* Begin PBXFileReference section */
 		07F17BE73EFFA96CC6DB34EA /* Pods-ZKKLineDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZKKLineDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZKKLineDemo/Pods-ZKKLineDemo.release.xcconfig"; sourceTree = "<group>"; };
 		52B09A0CC9BE963C75FB1DC0 /* libPods-ZKKLineDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ZKKLineDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		58B5F5AE1F3AE289008DED7E /* UIBezierPath+curved.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+curved.m"; sourceTree = "<group>"; };
+		58B5F5AF1F3AE28A008DED7E /* UIView+Addition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Addition.h"; sourceTree = "<group>"; };
+		58B5F5B01F3AE28A008DED7E /* UIView+Addition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Addition.m"; sourceTree = "<group>"; };
+		58B5F5B11F3AE28A008DED7E /* UIBezierPath+curved.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+curved.h"; sourceTree = "<group>"; };
 		58F978A01F38182000C756E4 /* ZKKLineDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZKKLineDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58F978A41F38182000C756E4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		58F978A61F38182000C756E4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -41,8 +46,6 @@
 		58F978BA1F38186800C756E4 /* ZKRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKRootViewController.h; sourceTree = "<group>"; };
 		58F978BB1F38186800C756E4 /* ZKRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKRootViewController.m; sourceTree = "<group>"; };
 		58F9791C1F38304000C756E4 /* ACMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACMacros.h; sourceTree = "<group>"; };
-		58F979221F38304000C756E4 /* UIBezierPath+curved.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+curved.h"; sourceTree = "<group>"; };
-		58F979231F38304000C756E4 /* UIBezierPath+curved.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+curved.m"; sourceTree = "<group>"; };
 		58F9793F1F38304000C756E4 /* Global+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Global+Helper.h"; sourceTree = "<group>"; };
 		58F979401F38304000C756E4 /* Global+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Global+Helper.m"; sourceTree = "<group>"; };
 		58F979411F38304000C756E4 /* data.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = data.plist; sourceTree = "<group>"; };
@@ -90,6 +93,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		58B5F5A71F3ADBB9008DED7E /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				58B5F5B11F3AE28A008DED7E /* UIBezierPath+curved.h */,
+				58B5F5AE1F3AE289008DED7E /* UIBezierPath+curved.m */,
+				58B5F5AF1F3AE28A008DED7E /* UIView+Addition.h */,
+				58B5F5B01F3AE28A008DED7E /* UIView+Addition.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
 		58F978971F38182000C756E4 = {
 			isa = PBXGroup;
 			children = (
@@ -135,31 +149,14 @@
 		58F9791B1F38302800C756E4 /* ZKKLineChart */ = {
 			isa = PBXGroup;
 			children = (
+				58B5F5A71F3ADBB9008DED7E /* Categories */,
 				58F9791C1F38304000C756E4 /* ACMacros.h */,
-				58F979201F38304000C756E4 /* Categories */,
 				58F979241F38304000C756E4 /* Components */,
 				58F979411F38304000C756E4 /* data.plist */,
 				58F979421F38304000C756E4 /* Models */,
 				58F979481F38304000C756E4 /* Views */,
 			);
 			path = ZKKLineChart;
-			sourceTree = "<group>";
-		};
-		58F979201F38304000C756E4 /* Categories */ = {
-			isa = PBXGroup;
-			children = (
-				58F979211F38304000C756E4 /* UIBezierPath+curved */,
-			);
-			path = Categories;
-			sourceTree = "<group>";
-		};
-		58F979211F38304000C756E4 /* UIBezierPath+curved */ = {
-			isa = PBXGroup;
-			children = (
-				58F979221F38304000C756E4 /* UIBezierPath+curved.h */,
-				58F979231F38304000C756E4 /* UIBezierPath+curved.m */,
-			);
-			path = "UIBezierPath+curved";
 			sourceTree = "<group>";
 		};
 		58F979241F38304000C756E4 /* Components */ = {
@@ -404,9 +401,10 @@
 				58F979741F38304000C756E4 /* TLineTipBoardView.m in Sources */,
 				58F9796C1F38304000C756E4 /* KLineListTransformer.m in Sources */,
 				58F9796D1F38304000C756E4 /* ZKKLineItem.m in Sources */,
+				58B5F5BC1F3AE546008DED7E /* UIView+Addition.m in Sources */,
 				58F978A51F38182000C756E4 /* main.m in Sources */,
 				58F9796F1F38304000C756E4 /* KLineTipBoardView.m in Sources */,
-				58F9795F1F38304000C756E4 /* UIBezierPath+curved.m in Sources */,
+				58B5F5BB1F3AE544008DED7E /* UIBezierPath+curved.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
