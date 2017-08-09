@@ -25,19 +25,19 @@
 
 #pragma mark - life cycle
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self _setup];
-        [self addGestureRecognizer:self.switchGesture];
+        [self setup];
     }
     return self;
 }
 
-- (void)_setup {
+- (void)setup {
     self.volStyle = CandlerstickChartsVolStyleDefault;
     
     _maxValue = -MAXFLOAT;
     _minValue = MAXFLOAT;
+    [self addGestureRecognizer:self.switchGesture];
 }
 
 // overrite
@@ -93,7 +93,7 @@
     switch (_volStyle) {
         case CandlerstickChartsVolStyleDefault: {
             [self showYAxisTitleWithTitles:@[[NSString stringWithFormat:@"%.f", self.maxValue], [NSString stringWithFormat:@"%.f", self.maxValue/2.0], @"万"]];
-            [self drawVol];
+            [self drawVolView];
             break;
         }
         case CandlerstickChartsVolStyleRSV9: {
@@ -138,7 +138,7 @@
 /**
  *  交易量
  */
-- (void)drawVol {
+- (void)drawVolView {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, self.kLineWidth);
     

@@ -93,7 +93,7 @@
 
 @property (nonatomic, assign) BOOL yAxisTitleIsChange; //!< YES表示：Y坐标的值根据视图中呈现的k线图的最大值最小值变化而变化；NO表示：Y坐标是所有数据中的最大值最小值，不管k线图呈现如何都不会变化。默认YES
 
-@property (nonatomic, assign) NSInteger  saveDecimalPlaces; //!< 保留小数点位数，默认保留两位(最多两位)
+@property (nonatomic, assign) NSInteger saveDecimalPlaces; //!< 保留小数点位数，默认保留两位(最多两位)
 
 @property (nonatomic, assign) CGFloat maxKLineWidth; //!< k线最大宽度
 
