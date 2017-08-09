@@ -148,7 +148,7 @@
     
     CGFloat boxOriginY = self.axisShadowWidth;
     CGFloat boxHeight = rect.size.height - boxOriginY;
-    CGFloat scale = self.maxValue/boxHeight;
+    CGFloat volumePerUnit = self.maxValue/boxHeight;
     
     NSArray *contentValues = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
     for (ZKKLineItem *item in contentValues) {
@@ -157,7 +157,7 @@
         UIColor *fillColor = open > close ? self.positiveVolColor : self.negativeVolColor;
         CGContextSetFillColorWithColor(context, fillColor.CGColor);
         
-        CGFloat height = item.vol/scale == 0 ? 1.0 : item.vol/scale;
+        CGFloat height = item.vol/volumePerUnit ?: 1.f;
         CGRect pathRect = CGRectMake(xAxis, boxOriginY + boxHeight - height, self.kLineWidth, height - self.axisShadowWidth);
         CGContextAddRect(context, pathRect);
         CGContextFillPath(context);

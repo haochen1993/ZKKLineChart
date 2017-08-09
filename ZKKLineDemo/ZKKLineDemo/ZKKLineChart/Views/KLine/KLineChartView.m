@@ -768,7 +768,6 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     if (!self.showBarChart) {
         return;
     }
-    
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, self.kLineWidth);
     
