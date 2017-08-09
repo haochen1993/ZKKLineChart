@@ -66,8 +66,10 @@
 }
 
 - (void)requestData {
-    NSString *path = [[NSBundle mainBundle]pathForResource:@"data.plist" ofType:nil];
-    NSArray *sourceArray = [[NSDictionary dictionaryWithContentsOfFile:path] objectForKey:@"data"];
+    NSString *path = [[NSBundle mainBundle]pathForResource:@"source.json" ofType:nil];
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:path] options:NSJSONReadingMutableContainers error:nil];
+    NSArray *sourceArray = dict[@"data"];
+    
     self.dataSource = [NSArray yy_modelArrayWithClass:[ZKKLineItem class] json:sourceArray];
     [self.kLineChartView drawChartWithDataSource:self.dataSource];
     [self.tLineChartView drawChartWithData:self.dataSource];
