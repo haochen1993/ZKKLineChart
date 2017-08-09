@@ -8,7 +8,6 @@
 
 #import "ZKRootViewController.h"
 #import "KLineChartView.h"
-#import "TLineChartView.h"
 #import "KLineListTransformer.h"
 #import "StatusView.h"
 #import <YYModel.h>
@@ -18,7 +17,6 @@
 
 @property (nonatomic, strong) KLineListTransformer *lineListTransformer;
 @property (nonatomic, strong) KLineChartView *kLineChartView;
-@property (nonatomic, strong) TLineChartView *tLineChartView;
 
 @property (nonatomic, strong) StatusView *kStatusView;
 
@@ -38,7 +36,6 @@
     [super viewDidLoad];
     
     [self.view addSubview:self.kLineChartView];
-    [self.view addSubview:self.tLineChartView];
     
     // 绘制均线
     
@@ -72,7 +69,6 @@
     
     self.dataSource = [NSArray yy_modelArrayWithClass:[ZKKLineItem class] json:sourceArray];
     [self.kLineChartView drawChartWithDataSource:self.dataSource];
-    [self.tLineChartView drawChartWithData:self.dataSource];
 }
 
 #pragma mark - private methods
@@ -103,7 +99,7 @@
         _kLineChartView.rightMargin = 1.0;
         _kLineChartView.bottomMargin = 80.0f;
         _kLineChartView.leftMargin = 25.0f;
-        _kLineChartView.yAxisTitleIsChange = false;
+        _kLineChartView.yAxisTitleIsChange = true;
         // YES表示：Y坐标的值根据视图中呈现的k线图的最大值最小值变化而变化；NO表示：Y坐标是所有数据中的最大值最小值，不管k线图呈现如何都不会变化。默认YES
         //_kLineChartView.yAxisTitleIsChange = NO;
         
@@ -114,22 +110,6 @@
         //_kLineChartView.supportGesture = NO;
     }
     return _kLineChartView;
-}
-
-- (TLineChartView *)tLineChartView {
-    if (!_tLineChartView) {
-        _tLineChartView = [[TLineChartView alloc] initWithFrame:CGRectMake(20, 380.0f, self.view.frame.size.width - 40.0f, 180.0f)];
-        _tLineChartView.backgroundColor = [UIColor whiteColor];
-        _tLineChartView.topMargin = 5.0f;
-        _tLineChartView.leftMargin = 50.0;
-        _tLineChartView.bottomMargin = 0.5;
-        _tLineChartView.rightMargin = 1.0;
-        _tLineChartView.pointPadding = 30.0f;
-        _tLineChartView.separatorNum = 4;
-        _tLineChartView.flashPoint = YES;
-        //_tLineChartView.smoothPath = NO;
-    }
-    return _tLineChartView;
 }
 
 - (StatusView *)kStatusView {
