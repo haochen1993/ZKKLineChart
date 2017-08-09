@@ -31,7 +31,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
 
 @property (nonatomic, assign) NSInteger kLineDrawNum;
 
-@property (nonatomic, strong) ZKKLineItem *highItem;
+@property (nonatomic, strong) ZKKLineItem *highestItem;
 
 @property (nonatomic, assign) CGFloat highestPriceOfAll;
 
@@ -243,7 +243,13 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
 }
 
 - (void)drawSetting {
-    NSAttributedString *attString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.2f", self.highItem.highestPrice] attributes:@{ NSFontAttributeName:self.yAxisTitleFont, NSForegroundColorAttributeName:self.yAxisTitleColor }];
+    NSDictionary *attributes = @{ NSFontAttributeName:self.yAxisTitleFont,
+                                  NSForegroundColorAttributeName:self.yAxisTitleColor };
+    NSString *priceTitle = [NSString stringWithFormat:@"%.2f", self.highestItem.highestPrice];
+    
+    NSAttributedString *attString =
+    [[NSAttributedString alloc] initWithString:priceTitle
+                                    attributes:attributes];
     CGSize size = [attString boundingRectWithSize:CGSizeMake(MAXFLOAT, self.yAxisTitleFont.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
     self.leftMargin = size.width + 4.0f;
     
@@ -992,7 +998,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     for (ZKKLineItem *item in self.chartValues) {
         if (item.highestPrice > maxHigh) {
             maxHigh = item.highestPrice;
-            self.highItem = item;
+            self.highestItem = item;
         }
     }
 }

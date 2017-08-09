@@ -42,7 +42,14 @@
     
     // 绘制均线
     
-    self.kLineChartView.Mas = @[@5, @10, @30];
+    self.kLineChartView.Mas = @[ @5, @10, @30, @60 ];
+    
+    self.kLineChartView.masColors = @[
+                                      [UIColor grayColor],
+                                      [UIColor yellowColor],
+                                      [UIColor purpleColor],
+                                      [UIColor greenColor],
+                                      ];
     
     [self requestData];
     /*[self.kLineChartView addSubview:self.kStatusView];
