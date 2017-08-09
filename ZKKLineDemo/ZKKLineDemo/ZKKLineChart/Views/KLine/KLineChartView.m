@@ -14,7 +14,6 @@
 #import "ACMacros.h"
 #import "Global+Helper.h"
 #import "VolumnView.h"
-#import "UIView+Addition.h"
 
 static NSString *const KLineKeyStartUserInterfaceNotification = @"KLineKeyStartUserInterfaceNotification";
 static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfUserInterfaceNotification";

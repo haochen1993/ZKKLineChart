@@ -22,9 +22,11 @@
 
 - (void)setupWindow {
     ZKRootViewController *rootVC = [ZKRootViewController new];
+    UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:rootVC];
+    navc.navigationBar.barStyle = UIBarStyleBlackOpaque;
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
-    self.window.rootViewController = rootVC;
+    self.window.rootViewController = navc;
     [self.window makeKeyAndVisible];
 }
 

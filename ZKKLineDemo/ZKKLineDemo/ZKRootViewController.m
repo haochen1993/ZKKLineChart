@@ -12,6 +12,7 @@
 #import "StatusView.h"
 #import <YYModel.h>
 #import "ZKKLineItem.h"
+#import "ACMacros.h"
 
 @interface ZKRootViewController ()
 
@@ -34,8 +35,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.title = @"币柒网";
+    [self setupKLineView];
+    [self requestData];
+}
+
+- (void)setupKLineView {
+    _kLineChartView = [[KLineChartView alloc] initWithFrame:CGRectMake(0, 64, self.view.us_width, self.view.us_height - 64)];
     [self.view addSubview:self.kLineChartView];
+    
+    _kLineChartView.backgroundColor = HexRGB(0x292c34);
+    _kLineChartView.topMargin = 20.0f;
+    _kLineChartView.rightMargin = 1.0;
+    _kLineChartView.bottomMargin = 80.0f;
+    _kLineChartView.leftMargin = 25.0f;
+    _kLineChartView.yAxisTitleIsChange = true;
     
     // 绘制均线
     
@@ -47,19 +61,6 @@
                                       [UIColor purpleColor],
                                       [UIColor greenColor],
                                       ];
-    
-    [self requestData];
-    /*[self.kLineChartView addSubview:self.kStatusView];
-     
-     __block typeof(self) weakSelf = self;
-     self.kStatusView.reloadBlock = ^(){
-     [weakSelf.chartApi startRequest];
-     };
-     
-     //发起请求
-     self.chartApi.dateType = @"d";
-     self.chartApi.kLineID = @"601888.SS";
-     [self.chartApi startRequest];*/
 }
 
 - (void)requestData {
@@ -90,27 +91,6 @@
 }
 
 #pragma mark - getters
-
-- (KLineChartView *)kLineChartView {
-    if (!_kLineChartView) {
-        _kLineChartView = [[KLineChartView alloc] initWithFrame:CGRectMake(20, 50, self.view.frame.size.width - 40.0f, 300.0f)];
-        _kLineChartView.backgroundColor = [UIColor whiteColor];
-        _kLineChartView.topMargin = 20.0f;
-        _kLineChartView.rightMargin = 1.0;
-        _kLineChartView.bottomMargin = 80.0f;
-        _kLineChartView.leftMargin = 25.0f;
-        _kLineChartView.yAxisTitleIsChange = true;
-        // YES表示：Y坐标的值根据视图中呈现的k线图的最大值最小值变化而变化；NO表示：Y坐标是所有数据中的最大值最小值，不管k线图呈现如何都不会变化。默认YES
-        //_kLineChartView.yAxisTitleIsChange = NO;
-        
-        // 及时更新k线图
-        //_kLineChartView.dynamicUpdateIsNew = YES;
-        
-        //是否支持手势
-        //_kLineChartView.supportGesture = NO;
-    }
-    return _kLineChartView;
-}
 
 - (StatusView *)kStatusView {
     if (!_kStatusView) {

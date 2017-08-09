@@ -7,6 +7,7 @@
 #define ACMacros_h
 
 #import "Global+Helper.h"
+#import "UIView+Addition.h"
 
 //** 沙盒路径 ***********************************************************************************
 #define PATH_OF_APP_HOME    NSHomeDirectory()
