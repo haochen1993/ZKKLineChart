@@ -33,9 +33,9 @@
     self.hideDuration = 2.5;
     
     self.openingPrice = @"0.0";
-    self.close = @"0.0";
-    self.high = @"0.0";
-    self.low = @"0.0";
+    self.closingPrice = @"0.0";
+    self.highestPrice = @"0.0";
+    self.lowestPrice = @"0.0";
     
     self.openColor = [UIColor colorWithWhite:0.15 alpha:1.0];
     self.closeColor = [UIColor colorWithWhite:0.15 alpha:1.0];
@@ -53,9 +53,9 @@
 
 - (void)drawText {
     NSArray *titles = @[ [@"开盘价：" stringByAppendingString:self.openingPrice],
-                         [@"收盘价：" stringByAppendingString:self.close],
-                         [@"最高价：" stringByAppendingString:self.high],
-                         [@"最低价：" stringByAppendingString:self.low] ];
+                         [@"收盘价：" stringByAppendingString:self.closingPrice],
+                         [@"最高价：" stringByAppendingString:self.highestPrice],
+                         [@"最低价：" stringByAppendingString:self.lowestPrice] ];
     NSArray<UIColor *> *colors = @[ self.openColor,
                                     self.closeColor,
                                     self.highColor,

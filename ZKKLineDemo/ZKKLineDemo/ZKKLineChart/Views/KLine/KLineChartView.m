@@ -447,9 +447,9 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     }
     //提示版
     self.tipBoard.openingPrice = [self dealDecimalWithNum:item.openingPrice];
-    self.tipBoard.close = [self dealDecimalWithNum:item.closingPrice];
-    self.tipBoard.high = [self dealDecimalWithNum:item.highestPrice];
-    self.tipBoard.low = [self dealDecimalWithNum:item.lowestPrice];
+    self.tipBoard.closingPrice = [self dealDecimalWithNum:item.closingPrice];
+    self.tipBoard.highestPrice = [self dealDecimalWithNum:item.highestPrice];
+    self.tipBoard.lowestPrice = [self dealDecimalWithNum:item.lowestPrice];
     
     if (point.y - self.topMargin - self.tipBoard.frame.size.height/2.0 < 0) {
         point.y = self.topMargin;

@@ -12,11 +12,11 @@
 
 @property (nonatomic, copy) NSString *openingPrice; //!< 开盘价
 
-@property (nonatomic, copy) NSString *close; //!< 收盘价
+@property (nonatomic, copy) NSString *closingPrice; //!< 收盘价
 
-@property (nonatomic, copy) NSString *high; //!< 最高价
+@property (nonatomic, copy) NSString *highestPrice; //!< 最高价
 
-@property (nonatomic, copy) NSString *low; //!< 最低价
+@property (nonatomic, copy) NSString *lowestPrice; //!< 最低价
 
 /**************************************************/
 /*                     字体颜色                    */
