@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZKKLineItem.h"
 
 @interface KLineChartView : UIView
 
@@ -120,7 +121,7 @@
 
 @property (nonatomic, assign) BOOL fullScreen; //!< 全屏绘制时，topMargin无效
 
-- (void)drawChartWithData:(NSArray *)data; //!< self.data 的格式为 @[@KLineItem, @KLineItem, ...]
+- (void)drawChartWithDataSource:(NSArray<ZKKLineItem *> *)dataSource;
 
 // 更新数据
 - (void)updateChartWithOpen:(CGFloat)open

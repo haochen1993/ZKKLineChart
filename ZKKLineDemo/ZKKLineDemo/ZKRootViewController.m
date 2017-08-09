@@ -25,7 +25,7 @@
 /**
  *  (模拟)实时测试
  */
-@property (nonatomic, strong) NSArray *dataSource;
+@property (nonatomic, strong) NSArray <ZKKLineItem *> *dataSource;
 @property (nonatomic, strong) NSTimer *timer;
 
 @end
@@ -69,7 +69,7 @@
     NSString *path = [[NSBundle mainBundle]pathForResource:@"data.plist" ofType:nil];
     NSArray *sourceArray = [[NSDictionary dictionaryWithContentsOfFile:path] objectForKey:@"data"];
     self.dataSource = [NSArray yy_modelArrayWithClass:[ZKKLineItem class] json:sourceArray];
-    [self.kLineChartView drawChartWithData:self.dataSource];
+    [self.kLineChartView drawChartWithDataSource:self.dataSource];
     [self.tLineChartView drawChartWithData:self.dataSource];
 }
 

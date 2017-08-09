@@ -14,7 +14,6 @@
 #import "ACMacros.h"
 #import "Global+Helper.h"
 #import "VolumnView.h"
-#import "ZKKLineItem.h"
 
 static NSString *const KLineKeyStartUserInterfaceNotification = @"KLineKeyStartUserInterfaceNotification";
 static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfUserInterfaceNotification";
@@ -227,11 +226,11 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
 
 #pragma mark - render UI
 
-- (void)drawChartWithData:(NSArray *)data {
-    self.chartValues = data;
+- (void)drawChartWithDataSource:(NSArray<ZKKLineItem *> *)dataSource {
+    self.chartValues = dataSource;
     
     if (self.showBarChart) {
-        self.volView.data = data;
+        self.volView.data = dataSource;
     }
     
     // 设置
@@ -287,7 +286,8 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
     
     if (isNew) {
         self.chartValues = self.chartValues.count != 0 ? [self.chartValues arrayByAddingObject:item] : @[item];
-    } else {
+    }
+    else {
         if (item.closingPrice == self.chartValues.lastObject.closingPrice) {
             return;
         }
@@ -296,8 +296,7 @@ static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfU
         [copy addObject:item];
         self.chartValues = copy;
     }
-    
-    [self drawChartWithData:self.chartValues];
+    [self drawChartWithDataSource:self.chartValues];
 }
 
 #pragma mark - event reponse
