@@ -677,41 +677,41 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
  *  均线path
  */
 - (CGPathRef)movingAvgGraphPathForContextAtIndex:(NSInteger)index {
-    UIBezierPath *path;
+    UIBezierPath *path = nil;
     
-    CGFloat xAxis = (self.fullScreen ? 0 : self.leftMargin) + 1/2.0*_kLineWidth + _kLinePadding;
-    CGFloat scale = (self.highestPriceOfAll - self.lowestPriceOfAll) / self.yAxisHeight;
-    if (scale == 0) {
-        scale = 1.0f;
+    CGFloat xAxisValue = (self.fullScreen ? 0 : self.leftMargin) + 1/2.0*_kLineWidth + _kLinePadding;
+    CGFloat pricePerHeightUnit = (self.highestPriceOfAll - self.lowestPriceOfAll) / self.yAxisHeight;
+    if (pricePerHeightUnit == 0) {
+        pricePerHeightUnit = 1.0f;
     }
     
     // 均线个数
     NSInteger maLength = [self.Mas[index] integerValue];
     
     // 均线个数达不到三个以上也不绘制
-    if (scale != 0 || maLength + 2 < self.chartValues.count) {
+    if (pricePerHeightUnit != 0 || maLength + 2 < self.chartValues.count) {
         NSArray *drawArrays = [self.chartValues subarrayWithRange:NSMakeRange(self.startDrawIndex, self.kLineDrawNum)];
         for (int i = 0; i < drawArrays.count; i ++) {
             ZKKLineItem *item = drawArrays[i];
             
             // 不足均线个数，则不需要获取该段均线数据(例如: 均5，个数小于5个，则不需要绘制前四均线，...)
             if ([self.chartValues indexOfObject:item] < maLength - 1) {
-                xAxis += self.kLineWidth + self.kLinePadding;
+                xAxisValue += self.kLineWidth + self.kLinePadding;
                 continue;
             }
             NSRange subRange = NSMakeRange([self.chartValues indexOfObject:item] - maLength + 1, maLength);
             NSArray *mas = [self maWithData:self.chartValues subInRange:subRange];
-            CGFloat deltaOfAvg = ([[mas valueForKeyPath:@"@avg.floatValue"] floatValue] - self.lowestPriceOfAll)/scale;
+            CGFloat deltaOfAvg = ([[mas valueForKeyPath:@"@avg.floatValue"] floatValue] - self.lowestPriceOfAll)/pricePerHeightUnit;
             CGFloat yAxis = self.yAxisHeight - (deltaOfAvg == 0 ? 1.0 : deltaOfAvg) + self.topMargin;
             
-            CGPoint maPoint = CGPointMake(xAxis, yAxis);
+            CGPoint maPoint = CGPointMake(xAxisValue, yAxis);
             
             if (yAxis < self.topMargin) {
                 continue;
             }
             
             if (yAxis > self.frame.size.height - self.bottomMargin) {
-                xAxis += self.kLineWidth + self.kLinePadding;
+                xAxisValue += self.kLineWidth + self.kLinePadding;
                 continue;
             }
             
@@ -722,7 +722,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
                 [path addLineToPoint:maPoint];
             }
             
-            xAxis += self.kLineWidth + self.kLinePadding;
+            xAxisValue += self.kLineWidth + self.kLinePadding;
         }
     }
     
