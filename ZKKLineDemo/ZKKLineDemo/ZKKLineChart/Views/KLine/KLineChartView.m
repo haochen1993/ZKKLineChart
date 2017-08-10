@@ -18,6 +18,7 @@
 static NSString *const KLineKeyStartUserInterfaceNotification = @"KLineKeyStartUserInterfaceNotification";
 static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfUserInterfaceNotification";
 static const CGFloat kBarChartHeight = 100.f;
+static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 
 @interface KLineChartView ()
 
@@ -555,28 +556,28 @@ static const CGFloat kBarChartHeight = 100.f;
 - (void)drawTimeAxis {
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    CGFloat quarteredWidth = self.xAxisWidth / 4.0;
-    NSInteger avgDrawCount = ceil(quarteredWidth / (_kLinePadding + _kLineWidth));
+    CGFloat widthPerGrid = self.xAxisWidth / kXAxisCutCount;
+    NSInteger lineCountPerGrid = ceil(widthPerGrid / (_kLinePadding + _kLineWidth));
     
-    CGFloat xAxis = (self.fullScreen ? 0 : self.leftMargin) + _kLineWidth/2.0 + _kLinePadding;
-    //画4条虚线
-    for (int i = 0; i < 4; i ++) {
-        if (xAxis > (self.fullScreen ? 0 : self.leftMargin) + self.xAxisWidth) {
+    CGFloat xAxisValue = (self.fullScreen ? 0 : self.leftMargin) + _kLineWidth/2.0 + _kLinePadding;
+    //画X条虚线
+    for (int i = 0; i < kXAxisCutCount; i ++) {
+        if (xAxisValue > (self.fullScreen ? 0 : self.leftMargin) + self.xAxisWidth) {
             break;
         }
-        [self drawDashLineInContext:context movePoint:CGPointMake(xAxis, self.topMargin + 1.25) toPoint:CGPointMake(xAxis, self.topMargin + self.yAxisHeight - 1.25)];
+        [self drawDashLineInContext:context movePoint:CGPointMake(xAxisValue, self.topMargin + 1.25) toPoint:CGPointMake(xAxisValue, self.topMargin + self.yAxisHeight - 1.25)];
         //x轴坐标
-        NSInteger timeIndex = i*avgDrawCount + self.startDrawIndex;
+        NSInteger timeIndex = i * lineCountPerGrid + self.startDrawIndex;
         if (timeIndex > self.chartValues.count - 1) {
-            xAxis += avgDrawCount*(_kLinePadding + _kLineWidth);
+            xAxisValue += lineCountPerGrid * (_kLinePadding + _kLineWidth);
             continue;
         }
         NSAttributedString *attString = [Global_Helper attributeText:self.chartValues[timeIndex].date textColor:self.xAxisTitleColor font:self.xAxisTitleFont lineSpacing:2];
         CGSize size = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
-        CGFloat originX = MAX(MIN(xAxis - size.width/2.0, self.frame.size.width - self.rightMargin - size.width), 0);
+        CGFloat originX = MAX(MIN(xAxisValue - size.width/2.0, self.frame.size.width - self.rightMargin - size.width), 0);
         [attString drawInRect:CGRectMake(originX, self.topMargin + self.yAxisHeight + 2.0, size.width, size.height)];
         
-        xAxis += avgDrawCount*(_kLinePadding + _kLineWidth);
+        xAxisValue += lineCountPerGrid * (_kLinePadding + _kLineWidth);
     }
     CGContextSetLineDash(context, 0, 0, 0);
 }
