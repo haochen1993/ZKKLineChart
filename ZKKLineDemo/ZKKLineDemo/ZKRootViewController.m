@@ -36,8 +36,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"币柒网";
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"旋转" style:UIBarButtonItemStyleDone target:self action:@selector(rotateScreen)];
+    [rightItem setTintColor:[UIColor whiteColor]];
+    self.navigationItem.rightBarButtonItem = rightItem;
     [self setupKLineView];
     [self requestData];
+}
+
+- (void)rotateScreen {
+    [UIView animateWithDuration:.3 animations:^{
+        _kLineChartView.transform = CGAffineTransformMakeRotation(M_PI_2);
+    }];
+    CGRect bounds = CGRectMake(0, 0, CGRectGetHeight(self.view.bounds), CGRectGetWidth(self.view.bounds));
+    CGPoint center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds));
+    _kLineChartView.bounds = bounds;
+    _kLineChartView.center = center;
+    
+    [_kLineChartView setNeedsDisplay];
 }
 
 - (void)setupKLineView {
