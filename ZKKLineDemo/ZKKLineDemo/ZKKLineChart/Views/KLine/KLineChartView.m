@@ -137,7 +137,6 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     
     //添加手势
     [self addGestures];
-    
     [self registerObserver];
 }
 
@@ -236,7 +235,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     self.leftMargin = size.width + 4.0f;
     
     //更具宽度和间距确定要画多少个k线柱形图
-    self.kLineDrawNum = floor(((self.frame.size.width - self.leftMargin - self.rightMargin - _kLinePadding) / (self.kLineWidth + self.kLinePadding)));
+    self.kLineDrawNum = floor(((self.us_width - self.leftMargin - self.rightMargin - _kLinePadding) / (self.kLineWidth + self.kLinePadding)));
     
     //确定从第几个开始画
     self.startDrawIndex = self.chartValues.count > 0 ? self.chartValues.count - self.kLineDrawNum : 0;
@@ -306,16 +305,13 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     if (!self.scrollEnable || self.chartValues.count == 0 || offsetIndex == 0) {
         return;
     }
-    
     if (touchPoint.x > 0) {
         self.startDrawIndex = self.startDrawIndex - offsetIndex < 0 ? 0 : self.startDrawIndex - offsetIndex;
     }
     else {
         self.startDrawIndex = self.startDrawIndex + offsetIndex + self.kLineDrawNum > self.chartValues.count ? self.chartValues.count - self.kLineDrawNum : self.startDrawIndex + offsetIndex;
     }
-    
     [self resetMaxAndMin];
-    
     [panGesture setTranslation:CGPointZero inView:self];
     [self setNeedsDisplay];
 }
@@ -581,7 +577,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
         }
         NSAttributedString *attString = [Global_Helper attributeText:self.chartValues[timeIndex].date textColor:self.xAxisTitleColor font:self.xAxisTitleFont lineSpacing:2];
         CGSize size = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
-        CGFloat originX = MAX(MIN(xAxisValue - size.width/2.0, self.frame.size.width - self.rightMargin - size.width), 0);
+        CGFloat originX = MAX(MIN(xAxisValue - size.width/2.0, self.us_width - self.rightMargin - size.width), 0);
         [attString drawInRect:CGRectMake(originX, MaxYAxis + 2.0, size.width, size.height)];
         
         xAxisValue += lineCountPerGrid * (_kLinePadding + _kLineWidth);
@@ -789,7 +785,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 }
 
 - (NSString *)dealDecimalWithNum:(CGFloat)num {
-    NSString *dealString;
+    NSString *dealString = nil;
     
     switch (self.saveDecimalPlaces) {
         case 0: {
@@ -909,7 +905,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 
 - (MATipView *)maTipView {
     if (!_maTipView) {
-        _maTipView = [[MATipView alloc] initWithFrame:CGRectMake(self.leftMargin + 20, self.topMargin - 18.0f, self.frame.size.width - self.leftMargin - self.rightMargin - 20, 13.0f)];
+        _maTipView = [[MATipView alloc] initWithFrame:CGRectMake(self.leftMargin + 20, self.topMargin - 18.0f, self.us_width - self.leftMargin - self.rightMargin - 20, 13.0f)];
         _maTipView.layer.masksToBounds = YES;
         _maTipView.layer.cornerRadius = 7.0f;
         _maTipView.backgroundColor = [UIColor colorWithWhite:0.35 alpha:1.0];
@@ -924,7 +920,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
         [_realDataTipBtn setTitle:@"New Data" forState:UIControlStateNormal];
         [_realDataTipBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         _realDataTipBtn.titleLabel.font = [UIFont systemFontOfSize:12.0f];
-        _realDataTipBtn.frame = CGRectMake(self.frame.size.width - self.rightMargin - 60.0f, self.topMargin + 10.0f, 60.0f, 25.0f);
+        _realDataTipBtn.frame = CGRectMake(self.us_width - self.rightMargin - 60.0f, self.topMargin + 10.0f, 60.0f, 25.0f);
         [_realDataTipBtn addTarget:self action:@selector(updateChartPressed:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_realDataTipBtn];
         _realDataTipBtn.layer.borderWidth = 1.0;
@@ -1005,7 +1001,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     _kLineDrawNum = MAX(MIN(self.chartValues.count, kLineDrawNum), 0);
     
     if (_kLineDrawNum != 0) {
-        self.kLineWidth = (self.frame.size.width - self.leftMargin - self.rightMargin - _kLinePadding)/_kLineDrawNum - _kLinePadding;
+        self.kLineWidth = (self.us_width - self.leftMargin - self.rightMargin - _kLinePadding)/_kLineDrawNum - _kLinePadding;
     }
 }
 
@@ -1018,7 +1014,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
         maxKLineWidth = _minKLineWidth;
     }
     
-    CGFloat realAxisWidth = (self.frame.size.width - self.leftMargin - self.rightMargin - _kLinePadding);
+    CGFloat realAxisWidth = (self.us_width - self.leftMargin - self.rightMargin - _kLinePadding);
     NSInteger maxKLineCount = floor(realAxisWidth)/(maxKLineWidth + _kLinePadding);
     maxKLineWidth = realAxisWidth/maxKLineCount - _kLinePadding;
     
@@ -1027,7 +1023,6 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 
 - (void)setLeftMargin:(CGFloat)leftMargin {
     _leftMargin = leftMargin;
-    
     self.maxKLineWidth = _maxKLineWidth;
 }
 
