@@ -119,8 +119,6 @@
  */
 @property (nonatomic, assign) BOOL dynamicUpdateIsNew;
 
-@property (nonatomic, assign) BOOL fullScreen; //!< 全屏绘制时，topMargin无效
-
 - (void)drawChartWithDataSource:(NSArray<ZKKLineItem *> *)dataSource;
 
 // 更新数据
