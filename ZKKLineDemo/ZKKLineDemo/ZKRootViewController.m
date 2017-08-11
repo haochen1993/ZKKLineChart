@@ -52,15 +52,13 @@
     _kLineChartView.yAxisTitleIsChange = true;
     
     // 绘制均线
-    
     self.kLineChartView.MAs = @[ @5, @10, @30, @60 ];
-    
     self.kLineChartView.MAColors = @[
-                                      [UIColor grayColor],
-                                      [UIColor yellowColor],
-                                      [UIColor purpleColor],
-                                      [UIColor greenColor],
-                                      ];
+                                     [UIColor grayColor],
+                                     [UIColor yellowColor],
+                                     [UIColor purpleColor],
+                                     [UIColor greenColor],
+                                     ];
 }
 
 - (void)requestData {
