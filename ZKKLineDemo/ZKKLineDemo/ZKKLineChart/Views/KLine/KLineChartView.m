@@ -89,7 +89,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     
     self.movingAvgLineWidth = 1.f;
     
-    self.masColors = @[HexRGB(0x019FFD), HexRGB(0xFF9900), HexRGB(0xFF00FF)];
+    self.MAColors = @[HexRGB(0x019FFD), HexRGB(0xFF9900), HexRGB(0xFF00FF)];
     
     self.positiveVolColor = self.positiveLineColor;
     self.negativeVolColor =  self.negativeLineColor;
@@ -423,9 +423,9 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     //均值
     self.maTipView.hidden = !self.showAvgLine;
     if (self.showAvgLine) {
-        self.maTipView.minAvgPrice = [NSString stringWithFormat:@"MA5：%.2f", [self.Mas[0] doubleValue]];
-        self.maTipView.midAvgPrice = [NSString stringWithFormat:@"MA10：%.2f", [self.Mas[1] doubleValue]];
-        self.maTipView.maxAvgPrice = [NSString stringWithFormat:@"MA20：%.2f", [self.Mas[2] doubleValue]];
+        self.maTipView.minAvgPrice = [NSString stringWithFormat:@"MA5：%.2f", [self.MAs[0] doubleValue]];
+        self.maTipView.midAvgPrice = [NSString stringWithFormat:@"MA10：%.2f", [self.MAs[1] doubleValue]];
+        self.maTipView.maxAvgPrice = [NSString stringWithFormat:@"MA20：%.2f", [self.MAs[2] doubleValue]];
     }
     //提示版
     self.tipBoard.openingPrice = [self dealDecimalWithNum:item.openingPrice];
@@ -659,14 +659,13 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     if (!self.showAvgLine) {
         return;
     }
-    
-    NSAssert(self.masColors.count == self.Mas.count, @"绘制均线个数与均线绘制颜色个数不一致！");
+    NSAssert(self.MAColors.count == self.MAs.count, @"绘制均线个数与均线绘制颜色个数不一致！");
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, self.movingAvgLineWidth);
     
-    for (int i = 0; i < self.Mas.count; i ++) {
-        CGContextSetStrokeColorWithColor(context, self.masColors[i].CGColor);
+    for (int i = 0; i < self.MAs.count; i ++) {
+        CGContextSetStrokeColorWithColor(context, self.MAColors[i].CGColor);
         CGPathRef path = [self movingAvgGraphPathForContextAtIndex:i];
         CGContextAddPath(context, path);
         CGContextStrokePath(context);
@@ -686,7 +685,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     }
     
     // 均线个数
-    NSInteger maLength = [self.Mas[index] integerValue];
+    NSInteger maLength = [self.MAs[index] integerValue];
     
     // 均线个数达不到三个以上也不绘制
     if (pricePerHeightUnit != 0 || maLength + 2 < self.chartValues.count) {
@@ -699,55 +698,49 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
                 xAxisValue += self.kLineWidth + self.kLinePadding;
                 continue;
             }
-            NSRange subRange = NSMakeRange([self.chartValues indexOfObject:item] - maLength + 1, maLength);
-            NSArray *mas = [self maWithData:self.chartValues subInRange:subRange];
-            CGFloat deltaOfAvg = ([[mas valueForKeyPath:@"@avg.floatValue"] floatValue] - self.lowestPriceOfAll)/pricePerHeightUnit;
-            CGFloat yAxis = self.yAxisHeight - (deltaOfAvg == 0 ? 1.0 : deltaOfAvg) + self.topMargin;
+            NSRange subrange = NSMakeRange([self.chartValues indexOfObject:item] - maLength + 1, maLength);
+            NSArray *closingPrices = [self closingPricesWithSubrange:subrange];
+            CGFloat avgClosingPrice = [[closingPrices valueForKeyPath:@"@avg.floatValue"] floatValue];
+            CGFloat deltaOfAvg = (avgClosingPrice - self.lowestPriceOfAll) / pricePerHeightUnit;
+            CGFloat yAxisValue = self.topMargin + self.yAxisHeight - (deltaOfAvg == 0 ? 1.0 : deltaOfAvg);
             
-            CGPoint maPoint = CGPointMake(xAxisValue, yAxis);
+            CGPoint maPoint = CGPointMake(xAxisValue, yAxisValue);
             
-            if (yAxis < self.topMargin) {
+            if (yAxisValue < self.topMargin) {
                 continue;
             }
-            
-            if (yAxis > self.frame.size.height - self.bottomMargin) {
+            if (yAxisValue > self.frame.size.height - self.bottomMargin) {
                 xAxisValue += self.kLineWidth + self.kLinePadding;
                 continue;
             }
-            
             if (!path) {
                 path = [UIBezierPath bezierPath];
                 [path moveToPoint:maPoint];
-            } else {
+            }
+            else {
                 [path addLineToPoint:maPoint];
             }
-            
             xAxisValue += self.kLineWidth + self.kLinePadding;
         }
     }
-    
     //圆滑
     path = [path mc_smoothedPathWithGranularity:15];
-    
     return path.CGPath;
 }
 
-// MA Count
-- (NSMutableArray *)maWithData:(NSArray *)data subInRange:(NSRange)range {
-    
-    NSArray<ZKKLineItem *> *rangeData = data.count - range.location >= range.length ? [data subarrayWithRange:range] : data;
-    
-    NSMutableArray *mas = [NSMutableArray new];
-    for (int i = 0; i < rangeData.count; i ++) {
-        [mas addObject:@(rangeData[i].closingPrice)];
+/** MA时间段内的收盘价数组 */
+- (NSMutableArray *)closingPricesWithSubrange:(NSRange)range {
+    NSArray<ZKKLineItem *> *subItems =
+    self.chartValues.count >= range.location + range.length ? [self.chartValues subarrayWithRange:range]
+                                                            : self.chartValues;
+    NSMutableArray *closingPrices = [NSMutableArray array];
+    for (int i = 0; i < subItems.count; i ++) {
+        [closingPrices addObject:@(subItems[i].closingPrice)];
     }
-    
-    return mas;
+    return closingPrices;
 }
 
-/**
- *  交易量
- */
+/** 绘制交易量柱状图 */
 - (void)drawVol {
     if (!self.showBarChart) {
         return;

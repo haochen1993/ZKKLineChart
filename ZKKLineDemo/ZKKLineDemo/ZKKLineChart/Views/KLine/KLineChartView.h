@@ -105,9 +105,9 @@
 
 @property (nonatomic, assign) BOOL supportGesture; //!< 支持手势（默认支持）
 
-@property (nonatomic, strong) NSArray *Mas; //!< 均线个数（默认ma5, ma10, ma20）
+@property (nonatomic, strong) NSArray <NSNumber *> *MAs; //!< 均线个数（默认ma5, ma10, ma20）
 
-@property (nonatomic, strong) NSArray<UIColor *> *masColors; //!< 均线颜色值 (默认 HexRGB(0x019FFD)、HexRGB(0xFF9900)、HexRGB(0xFF00FF))
+@property (nonatomic, strong) NSArray<UIColor *> *MAColors; //!< 均线颜色值 (默认 HexRGB(0x019FFD)、HexRGB(0xFF9900)、HexRGB(0xFF00FF))
 
 /**
  *  动态更新显示最新, 默认不开启。

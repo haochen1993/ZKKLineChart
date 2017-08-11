@@ -53,9 +53,9 @@
     
     // 绘制均线
     
-    self.kLineChartView.Mas = @[ @5, @10, @30, @60 ];
+    self.kLineChartView.MAs = @[ @5, @10, @30, @60 ];
     
-    self.kLineChartView.masColors = @[
+    self.kLineChartView.MAColors = @[
                                       [UIColor grayColor],
                                       [UIColor yellowColor],
                                       [UIColor purpleColor],
