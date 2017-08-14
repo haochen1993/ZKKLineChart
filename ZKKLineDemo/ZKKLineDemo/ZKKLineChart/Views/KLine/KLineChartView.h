@@ -109,6 +109,8 @@
 
 @property (nonatomic, strong) NSArray<UIColor *> *MAColors; //!< 均线颜色值 (默认 HexRGB(0x019FFD)、HexRGB(0xFF9900)、HexRGB(0xFF00FF))
 
+@property (nonatomic, assign) BOOL landscapeMode;
+
 /**
  *  动态更新显示最新, 默认不开启。
  *

@@ -44,11 +44,12 @@
 }
 
 - (void)rotateScreen {
+    _kLineChartView.landscapeMode = true;
     [UIView animateWithDuration:.3 animations:^{
         _kLineChartView.transform = CGAffineTransformMakeRotation(M_PI_2);
     }];
-    CGRect bounds = CGRectMake(0, 0, CGRectGetHeight(self.view.bounds), CGRectGetWidth(self.view.bounds));
-    CGPoint center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds));
+    CGRect bounds = CGRectMake(0, 0, CGRectGetHeight(self.view.bounds) - 64.f, CGRectGetWidth(self.view.bounds));
+    CGPoint center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) + 32.f);
     _kLineChartView.bounds = bounds;
     _kLineChartView.center = center;
     

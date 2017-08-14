@@ -15,7 +15,11 @@
 #import "Global+Helper.h"
 #import "VolumnView.h"
 
-#define MaxYAxis (self.topMargin + self.yAxisHeight)
+#define MaxYAxis       (self.topMargin + self.yAxisHeight)
+#define MaxBoundSize   (MAX(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)))
+#define MinBoundSize   (MIN(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)))
+#define SelfWidth      (_landscapeMode ? MaxBoundSize : MinBoundSize)
+#define SelfHeight     (_landscapeMode ? MinBoundSize : MaxBoundSize)
 
 static NSString *const KLineKeyStartUserInterfaceNotification = @"KLineKeyStartUserInterfaceNotification";
 static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfUserInterfaceNotification";
@@ -80,6 +84,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 
 - (void)setup {
     self.timeAxisHeight = 20.0;
+    _landscapeMode = false;
     
     self.positiveLineColor = [UIColor colorWithRed:(31/255.0f) green:(185/255.0f) blue:(63.0f/255.0f) alpha:1.0];
     self.negativeLineColor = [UIColor colorWithRed:(232/255.0f) green:(50.0f/255.0f) blue:(52.0f/255.0f) alpha:1.0];
@@ -233,10 +238,12 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
                                     attributes:attributes];
     CGSize size = [attString boundingRectWithSize:CGSizeMake(MAXFLOAT, self.yAxisTitleFont.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
     self.leftMargin = size.width + 4.0f;
-    
+    [self resetDrawNumAndIndex];
+}
+
+- (void)resetDrawNumAndIndex {
     //更具宽度和间距确定要画多少个k线柱形图
-    self.kLineDrawNum = floor(((self.us_width - self.leftMargin - self.rightMargin - _kLinePadding) / (self.kLineWidth + self.kLinePadding)));
-    
+    self.kLineDrawNum = floor(((SelfWidth - self.leftMargin - self.rightMargin - _kLinePadding) / (self.kLineWidth + self.kLinePadding)));
     //确定从第几个开始画
     self.startDrawIndex = self.chartValues.count > 0 ? self.chartValues.count - self.kLineDrawNum : 0;
 }
@@ -330,10 +337,10 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     
     CGFloat forwardDrawCount = self.kLineDrawNum;
     
-    _kLineDrawNum = floor((self.frame.size.width - self.leftMargin - self.rightMargin) / (self.kLineWidth + self.kLinePadding));
+    _kLineDrawNum = floor((SelfWidth - self.leftMargin - self.rightMargin) / (self.kLineWidth + self.kLinePadding));
     
     //容差处理
-    CGFloat diffWidth = (self.frame.size.width - self.leftMargin - self.rightMargin) - (self.kLineWidth + self.kLinePadding)*_kLineDrawNum;
+    CGFloat diffWidth = (SelfWidth - self.leftMargin - self.rightMargin) - (self.kLineWidth + self.kLinePadding)*_kLineDrawNum;
     if (diffWidth > 4*(self.kLineWidth + self.kLinePadding)/5.0) {
         _kLineDrawNum = _kLineDrawNum + 1;
     }
@@ -407,7 +414,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 - (void)configUIWithLineItem:(ZKKLineItem *)item atPoint:(CGPoint)point {
     //十字线
     self.verticalCrossLine.hidden = NO;
-    self.verticalCrossLine.us_height = self.showBarChart ? self.frame.size.height - self.topMargin : self.verticalCrossLine.us_height;
+    self.verticalCrossLine.us_height = self.showBarChart ? SelfHeight - self.topMargin : self.verticalCrossLine.us_height;
     self.verticalCrossLine.us_left = point.x;
     
     self.horizontalCrossLine.hidden = NO;
@@ -463,7 +470,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     [self bringSubviewToFront:self.timeLabel];
     if (date.length > 0) {
         CGSize size = [date boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.xAxisTitleFont} context:nil].size;
-        CGFloat originX = MIN(MAX(0, point.x - size.width/2.0 - 2), self.frame.size.width - self.rightMargin - size.width - 4);
+        CGFloat originX = MIN(MAX(0, point.x - size.width/2.0 - 2), SelfWidth - self.rightMargin - size.width - 4);
         self.timeLabel.frame = CGRectMake(originX, MaxYAxis + self.separatorWidth, size.width + 4, self.timeAxisHeight - self.separatorWidth*2);
     }
 }
@@ -577,7 +584,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
         }
         NSAttributedString *attString = [Global_Helper attributeText:self.chartValues[timeIndex].date textColor:self.xAxisTitleColor font:self.xAxisTitleFont lineSpacing:2];
         CGSize size = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
-        CGFloat originX = MAX(MIN(xAxisValue - size.width/2.0, self.us_width - self.rightMargin - size.width), 0);
+        CGFloat originX = MAX(MIN(xAxisValue - size.width/2.0, SelfWidth - self.rightMargin - size.width), 0);
         [attString drawInRect:CGRectMake(originX, MaxYAxis + 2.0, size.width, size.height)];
         
         xAxisValue += lineCountPerGrid * (_kLinePadding + _kLineWidth);
@@ -712,7 +719,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
             if (yAxisValue < self.topMargin) {
                 continue;
             }
-            if (yAxisValue > self.frame.size.height - self.bottomMargin) {
+            if (yAxisValue > SelfHeight - self.bottomMargin) {
                 xAxisValue += self.kLineWidth + self.kLinePadding;
                 continue;
             }
@@ -886,7 +893,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 
 - (UIView *)barVerticalLine {
     if (!_barVerticalLine) {
-        _barVerticalLine = [[UIView alloc] initWithFrame:CGRectMake(self.leftMargin, MaxYAxis + self.timeAxisHeight, 0.5, self.frame.size.height - (MaxYAxis + self.timeAxisHeight))];
+        _barVerticalLine = [[UIView alloc] initWithFrame:CGRectMake(self.leftMargin, MaxYAxis + self.timeAxisHeight, 0.5, SelfHeight - (MaxYAxis + self.timeAxisHeight))];
         _barVerticalLine.backgroundColor = self.crossLineColor;
         [self addSubview:_barVerticalLine];
     }
@@ -905,7 +912,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 
 - (MATipView *)maTipView {
     if (!_maTipView) {
-        _maTipView = [[MATipView alloc] initWithFrame:CGRectMake(self.leftMargin + 20, self.topMargin - 18.0f, self.us_width - self.leftMargin - self.rightMargin - 20, 13.0f)];
+        _maTipView = [[MATipView alloc] initWithFrame:CGRectMake(self.leftMargin + 20, self.topMargin - 18.0f, SelfWidth - self.leftMargin - self.rightMargin - 20, 13.0f)];
         _maTipView.layer.masksToBounds = YES;
         _maTipView.layer.cornerRadius = 7.0f;
         _maTipView.backgroundColor = [UIColor colorWithWhite:0.35 alpha:1.0];
@@ -920,7 +927,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
         [_realDataTipBtn setTitle:@"New Data" forState:UIControlStateNormal];
         [_realDataTipBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         _realDataTipBtn.titleLabel.font = [UIFont systemFontOfSize:12.0f];
-        _realDataTipBtn.frame = CGRectMake(self.us_width - self.rightMargin - 60.0f, self.topMargin + 10.0f, 60.0f, 25.0f);
+        _realDataTipBtn.frame = CGRectMake(SelfWidth - self.rightMargin - 60.0f, self.topMargin + 10.0f, 60.0f, 25.0f);
         [_realDataTipBtn addTarget:self action:@selector(updateChartPressed:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_realDataTipBtn];
         _realDataTipBtn.layer.borderWidth = 1.0;
@@ -1001,7 +1008,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     _kLineDrawNum = MAX(MIN(self.chartValues.count, kLineDrawNum), 0);
     
     if (_kLineDrawNum != 0) {
-        self.kLineWidth = (self.us_width - self.leftMargin - self.rightMargin - _kLinePadding)/_kLineDrawNum - _kLinePadding;
+        self.kLineWidth = (SelfWidth - self.leftMargin - self.rightMargin - _kLinePadding)/_kLineDrawNum - _kLinePadding;
     }
 }
 
@@ -1014,7 +1021,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
         maxKLineWidth = _minKLineWidth;
     }
     
-    CGFloat realAxisWidth = (self.us_width - self.leftMargin - self.rightMargin - _kLinePadding);
+    CGFloat realAxisWidth = (SelfWidth - self.leftMargin - self.rightMargin - _kLinePadding);
     NSInteger maxKLineCount = floor(realAxisWidth)/(maxKLineWidth + _kLinePadding);
     maxKLineWidth = realAxisWidth/maxKLineCount - _kLinePadding;
     
@@ -1032,6 +1039,11 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     for (UIGestureRecognizer *gesture in self.gestureRecognizers) {
         gesture.enabled = supportGesture;
     }
+}
+
+- (void)setLandscapeMode:(BOOL)landscapeMode {
+    _landscapeMode = landscapeMode;
+    [self resetDrawNumAndIndex];
 }
 
 - (void)setBottomMargin:(CGFloat)bottomMargin {
