@@ -614,15 +614,15 @@ static const CGFloat kChartVerticalMargin = 30.f;
         CGFloat maxValue = MAX(open, close);
         CGFloat KLineHeight = MAX(diffValue/pricePerHeightUnit ?: 1, 0.5);
         CGFloat deltaToBottomAxis = (maxValue - self.lowestPriceOfAll) / pricePerHeightUnit + kChartVerticalMargin;
-        CGFloat yAxis = self.yAxisHeight + self.topMargin - (deltaToBottomAxis ?: 1);
+        CGFloat yAxis = MaxYAxis - (deltaToBottomAxis ?: 1);
         
         CGRect rect = CGRectMake(xAxis + self.leftMargin, yAxis, _kLineWidth, KLineHeight);
         CGContextAddRect(context, rect);
         CGContextFillPath(context);
         
         //上、下影线
-        CGFloat highYAxis = self.yAxisHeight + self.topMargin - kChartVerticalMargin - (item.highestPrice - self.lowestPriceOfAll)/pricePerHeightUnit;
-        CGFloat lowYAxis = self.yAxisHeight + self.topMargin - kChartVerticalMargin - (item.lowestPrice - self.lowestPriceOfAll)/pricePerHeightUnit;
+        CGFloat highYAxis = MaxYAxis - kChartVerticalMargin - (item.highestPrice - self.lowestPriceOfAll)/pricePerHeightUnit;
+        CGFloat lowYAxis = MaxYAxis - kChartVerticalMargin - (item.lowestPrice - self.lowestPriceOfAll)/pricePerHeightUnit;
         CGPoint highPoint = CGPointMake(xAxis + _kLineWidth/2.0 + self.leftMargin, highYAxis);
         CGPoint lowPoint = CGPointMake(xAxis + _kLineWidth/2.0 + self.leftMargin, lowYAxis);
         CGContextSetStrokeColorWithColor(context, fillColor.CGColor);
@@ -684,8 +684,8 @@ static const CGFloat kChartVerticalMargin = 30.f;
 - (CGPathRef)movingAvgGraphPathForContextAtIndex:(NSInteger)index {
     UIBezierPath *path = nil;
     
-    CGFloat xAxisValue = self.leftMargin + 1/2.0*_kLineWidth + _kLinePadding;
-    CGFloat pricePerHeightUnit = (self.highestPriceOfAll - self.lowestPriceOfAll) / self.yAxisHeight;
+    CGFloat xAxisValue = self.leftMargin + 0.5*_kLineWidth + _kLinePadding;
+    CGFloat pricePerHeightUnit = [self getPricePerHeightUnit];
     if (pricePerHeightUnit == 0) {
         pricePerHeightUnit = 1.0f;
     }
@@ -705,10 +705,10 @@ static const CGFloat kChartVerticalMargin = 30.f;
                 continue;
             }
             NSRange subrange = NSMakeRange([self.dataSource indexOfObject:item] - maLength + 1, maLength);
-            NSArray *closingPrices = [self closingPricesWithSubrange:subrange];
+            NSArray <NSNumber *> *closingPrices = [self closingPricesWithSubrange:subrange];
             CGFloat avgClosingPrice = [[closingPrices valueForKeyPath:@"@avg.floatValue"] floatValue];
-            CGFloat deltaOfAvg = (avgClosingPrice - self.lowestPriceOfAll) / pricePerHeightUnit;
-            CGFloat yAxisValue = MaxYAxis - (deltaOfAvg ?: 1);
+            CGFloat deltaToBottomAxis = (avgClosingPrice - self.lowestPriceOfAll) / pricePerHeightUnit + kChartVerticalMargin;
+            CGFloat yAxisValue = MaxYAxis - (deltaToBottomAxis ?: 1);
             
             CGPoint maPoint = CGPointMake(xAxisValue, yAxisValue);
             
@@ -735,7 +735,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
 }
 
 /** MA时间段内的收盘价数组 */
-- (NSMutableArray *)closingPricesWithSubrange:(NSRange)range {
+- (NSMutableArray <NSNumber *> *)closingPricesWithSubrange:(NSRange)range {
     NSArray<ZKKLineItem *> *subItems =
     self.dataSource.count >= range.location + range.length ? [self.dataSource subarrayWithRange:range]
                                                             : self.dataSource;
