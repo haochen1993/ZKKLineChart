@@ -21,8 +21,8 @@
 #define SelfWidth      (_landscapeMode ? MaxBoundSize : MinBoundSize)
 #define SelfHeight     (_landscapeMode ? MinBoundSize : MaxBoundSize)
 
-static const CGFloat kBarChartHeight = 100.f;
 static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
+static const CGFloat kBarChartHeightRatio = .182f;
 
 @interface KLineChartView ()
 
@@ -114,8 +114,8 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
                        [UIColor purpleColor],
                        [UIColor greenColor], ];
     
-    self.axisShadowColor = [UIColor colorWithRed:223/255.0f green:223/255.0f blue:223/255.0f alpha:1.0];
-    self.axisShadowWidth = 0.8;
+    self.axisShadowColor = HexRGB(0x535d69);
+    self.axisShadowWidth = 0.5;
     
     self.separatorColor = HexRGB(0x535d69);
     self.separatorWidth = 0.5;
@@ -197,7 +197,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     self.xAxisWidth = rect.size.width - self.rightMargin - self.leftMargin;
     
     //y坐标轴高度
-    self.yAxisHeight = rect.size.height - self.bottomMargin - self.topMargin;
+    self.yAxisHeight = rect.size.height - (rect.size.height * kBarChartHeightRatio * 2) - self.topMargin - 30.f;
     
     //坐标轴
     [self drawAxisInRect:rect];
@@ -748,7 +748,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     CGRect rect = self.bounds;
     
     CGFloat boxOriginY = MaxYAxis + self.timeAxisHeight;
-    self.volView.frame = CGRectMake(0, boxOriginY, rect.size.width, kBarChartHeight);
+    self.volView.frame = CGRectMake(0, boxOriginY, rect.size.width, rect.size.height * kBarChartHeightRatio);
     self.volView.kLineWidth = self.kLineWidth;
     self.volView.linePadding = self.kLinePadding;
     self.volView.boxOriginX = self.leftMargin;
@@ -756,7 +756,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     self.volView.numberOfDrawCount = self.kLineDrawNum;
     [self.volView update];
     
-    self.MACDView.frame = CGRectMake(0, CGRectGetMaxY(self.volView.frame), rect.size.width, kBarChartHeight);
+    self.MACDView.frame = CGRectMake(0, CGRectGetMaxY(self.volView.frame), rect.size.width, rect.size.height * kBarChartHeightRatio);
     self.MACDView.kLineWidth = self.kLineWidth;
     self.MACDView.linePadding = self.kLinePadding;
     self.MACDView.boxOriginX = self.leftMargin;
