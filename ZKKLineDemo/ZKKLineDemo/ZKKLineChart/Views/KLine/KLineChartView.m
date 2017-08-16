@@ -21,8 +21,6 @@
 #define SelfWidth      (_landscapeMode ? MaxBoundSize : MinBoundSize)
 #define SelfHeight     (_landscapeMode ? MinBoundSize : MaxBoundSize)
 
-static NSString *const KLineKeyStartUserInterfaceNotification = @"KLineKeyStartUserInterfaceNotification";
-static NSString *const KLineKeyEndOfUserInterfaceNotification = @"KLineKeyEndOfUserInterfaceNotification";
 static const CGFloat kBarChartHeight = 100.f;
 static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 
@@ -30,7 +28,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 
 @property (nonatomic, assign) CGFloat yAxisHeight;
 @property (nonatomic, assign) CGFloat xAxisWidth;
-@property (nonatomic, strong) NSArray <ZKKLineItem *> *chartValues;
+@property (nonatomic, strong) NSArray <ZKKLineItem *> *dataSource;
 @property (nonatomic, assign) NSInteger startDrawIndex;
 @property (nonatomic, assign) NSInteger kLineDrawNum;
 @property (nonatomic, strong) ZKKLineItem *highestItem;
@@ -59,8 +57,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 @property (nonatomic, strong) UILabel *priceLabel;
 //实时数据提示按钮
 @property (nonatomic, strong) UIButton *realDataTipBtn;
-//交互中， 默认NO
-@property (nonatomic, assign) BOOL interactive;
+
 @property (nonatomic, assign) CGFloat kLineWidth; //!< k线图宽度
 @property (nonatomic, assign) CGFloat kLinePadding; //!< k线图间距
 @property (nonatomic, assign) CGFloat maxKLineWidth; //!< k线最大宽度
@@ -178,16 +175,11 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
  *  通知
  */
 - (void)registerObserver {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startTouchNotification:) name:KLineKeyStartUserInterfaceNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endOfTouchNotification:) name:KLineKeyEndOfUserInterfaceNotification object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChangeNotification:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 - (void)removeObserver {
-    [self removeObserver:self forKeyPath:KLineKeyStartUserInterfaceNotification];
-    [self removeObserver:self forKeyPath:KLineKeyEndOfUserInterfaceNotification];
-    [self removeObserver:self forKeyPath:UIDeviceOrientationDidChangeNotification];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -198,7 +190,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     [_horizontalCrossLine removeFromSuperview];
     _horizontalCrossLine = nil;
     
-    if (!self.chartValues || self.chartValues.count == 0) {
+    if (!self.dataSource || self.dataSource.count == 0) {
         return;
     }
     //x坐标轴长度
@@ -229,7 +221,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 #pragma mark - render UI
 
 - (void)drawChartWithDataSource:(NSArray<ZKKLineItem *> *)dataSource {
-    self.chartValues = dataSource;
+    self.dataSource = dataSource;
     
     if (self.showBarChart) {
         self.volView.data = dataSource;
@@ -261,7 +253,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     //更具宽度和间距确定要画多少个k线柱形图
     self.kLineDrawNum = floor(((SelfWidth - self.leftMargin - self.rightMargin - _kLinePadding) / (self.kLineWidth + self.kLinePadding)));
     //确定从第几个开始画
-    self.startDrawIndex = self.chartValues.count > 0 ? self.chartValues.count - self.kLineDrawNum : 0;
+    self.startDrawIndex = self.dataSource.count > 0 ? self.dataSource.count - self.kLineDrawNum : 0;
 }
 
 #pragma mark - public methods
@@ -290,28 +282,28 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     item.date = date;
     
     if (isNew) {
-        self.chartValues = self.chartValues.count != 0 ? [self.chartValues arrayByAddingObject:item] : @[item];
+        self.dataSource = self.dataSource.count != 0 ? [self.dataSource arrayByAddingObject:item] : @[item];
     }
     else {
-        if (item.closingPrice == self.chartValues.lastObject.closingPrice) {
+        if (item.closingPrice == self.dataSource.lastObject.closingPrice) {
             return;
         }
-        NSMutableArray *copy = [self.chartValues mutableCopy];
+        NSMutableArray *copy = [self.dataSource mutableCopy];
         [copy removeLastObject];
         [copy addObject:item];
-        self.chartValues = copy;
+        self.dataSource = copy;
     }
-    [self drawChartWithDataSource:self.chartValues];
+    [self drawChartWithDataSource:self.dataSource];
 }
 
 #pragma mark - event reponse
 
 - (void)updateChartPressed:(UIButton *)button {
-    self.startDrawIndex = self.chartValues.count - self.kLineDrawNum;
+    self.startDrawIndex = self.dataSource.count - self.kLineDrawNum;
 }
 
 - (void)tapEvent:(UITapGestureRecognizer *)tapGesture {
-    if (self.chartValues.count == 0 || !self.chartValues) {
+    if (self.dataSource.count == 0 || !self.dataSource) {
         return;
     }
     
@@ -323,16 +315,14 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     [self hideTipsWithAnimated:NO];
     CGPoint touchPoint = [panGesture translationInView:self];
     NSInteger offsetIndex = fabs(touchPoint.x/(self.kLineWidth > self.maxKLineWidth/2.0 ? 16.0f : 8.0));
-    
-    [self postNotificationWithGestureRecognizerStatus:panGesture.state];
-    if (self.chartValues.count == 0 || offsetIndex == 0) {
+    if (self.dataSource.count == 0 || offsetIndex == 0) {
         return;
     }
     if (touchPoint.x > 0) {
         self.startDrawIndex = self.startDrawIndex - offsetIndex < 0 ? 0 : self.startDrawIndex - offsetIndex;
     }
     else {
-        self.startDrawIndex = self.startDrawIndex + offsetIndex + self.kLineDrawNum > self.chartValues.count ? self.chartValues.count - self.kLineDrawNum : self.startDrawIndex + offsetIndex;
+        self.startDrawIndex = self.startDrawIndex + offsetIndex + self.kLineDrawNum > self.dataSource.count ? self.dataSource.count - self.kLineDrawNum : self.startDrawIndex + offsetIndex;
     }
     [self resetMaxAndMin];
     [panGesture setTranslation:CGPointZero inView:self];
@@ -343,9 +333,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     [self hideTipsWithAnimated:NO];
     CGFloat scale = pinchEvent.scale - self.lastPanScale + 1;
     
-    [self postNotificationWithGestureRecognizerStatus:pinchEvent.state];
-    
-    if (!self.zoomEnable || self.chartValues.count == 0) {
+    if (!self.zoomEnable || self.dataSource.count == 0) {
         return;
     }
     
@@ -361,7 +349,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
         _kLineDrawNum = _kLineDrawNum + 1;
     }
     
-    _kLineDrawNum = self.chartValues.count > 0 && _kLineDrawNum < self.chartValues.count ? _kLineDrawNum : self.chartValues.count;
+    _kLineDrawNum = self.dataSource.count > 0 && _kLineDrawNum < self.dataSource.count ? _kLineDrawNum : self.dataSource.count;
     if (forwardDrawCount == self.kLineDrawNum && self.maxKLineWidth != self.kLineWidth) {
         return;
     }
@@ -377,7 +365,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
         self.startDrawIndex = self.startDrawIndex < 0 ? 0 : self.startDrawIndex;
     }
     
-    self.startDrawIndex = self.startDrawIndex + self.kLineDrawNum > self.chartValues.count ? self.chartValues.count - self.kLineDrawNum : self.startDrawIndex;
+    self.startDrawIndex = self.startDrawIndex + self.kLineDrawNum > self.dataSource.count ? self.dataSource.count - self.kLineDrawNum : self.startDrawIndex;
     
     [self resetMaxAndMin];
     
@@ -388,15 +376,13 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 }
 
 - (void)longPressEvent:(UILongPressGestureRecognizer *)longGesture {
-    [self postNotificationWithGestureRecognizerStatus:longGesture.state];
-    
-    if (self.chartValues.count == 0 || !self.chartValues) {
+    if (self.dataSource.count == 0 || !self.dataSource) {
         return;
     }
-    
     if (longGesture.state == UIGestureRecognizerStateEnded) {
         [self hideTipsWithAnimated:NO];
-    } else {
+    }
+    else {
         CGPoint touchPoint = [longGesture locationInView:self];
         [self showTipBoardWithTouchPoint:touchPoint];
     }
@@ -407,7 +393,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
         if (_kLinePadding+_kLineWidth >= ([xAxisKey floatValue] - touchPoint.x) && ([xAxisKey floatValue] - touchPoint.x) > 0) {
             NSInteger index = [indexObject integerValue];
             // 获取对应的k线数据
-            ZKKLineItem *item = self.chartValues[index];
+            ZKKLineItem *item = self.dataSource[index];
             CGFloat open = item.openingPrice;
             CGFloat close = item.closingPrice;
             CGFloat scale = (self.highestPriceOfAll - self.lowestPriceOfAll) / self.yAxisHeight;
@@ -505,21 +491,6 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     }
 }
 
-- (void)postNotificationWithGestureRecognizerStatus:(UIGestureRecognizerState)state {
-    switch (state) {
-        case UIGestureRecognizerStateBegan: {
-            [[NSNotificationCenter defaultCenter] postNotificationName:KLineKeyStartUserInterfaceNotification object:nil];
-            break;
-        }
-        case UIGestureRecognizerStateEnded: {
-            [[NSNotificationCenter defaultCenter] postNotificationName:KLineKeyEndOfUserInterfaceNotification object:nil];
-            break;
-        }
-        default:
-            break;
-    }
-}
-
 #pragma mark - private methods
 
 /**
@@ -594,11 +565,11 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
         [self drawDashLineInContext:context movePoint:CGPointMake(xAxisValue, self.topMargin + 1.25) toPoint:CGPointMake(xAxisValue, MaxYAxis - 1.25)];
         //x轴坐标
         NSInteger timeIndex = i * lineCountPerGrid + self.startDrawIndex;
-        if (timeIndex > self.chartValues.count - 1) {
+        if (timeIndex > self.dataSource.count - 1) {
             xAxisValue += lineCountPerGrid * (_kLinePadding + _kLineWidth);
             continue;
         }
-        NSAttributedString *attString = [Global_Helper attributeText:self.chartValues[timeIndex].date textColor:self.xAxisTitleColor font:self.xAxisTitleFont lineSpacing:2];
+        NSAttributedString *attString = [Global_Helper attributeText:self.dataSource[timeIndex].date textColor:self.xAxisTitleColor font:self.xAxisTitleFont lineSpacing:2];
         CGSize size = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
         CGFloat originX = MAX(MIN(xAxisValue - size.width/2.0, SelfWidth - self.rightMargin - size.width), 0);
         [attString drawInRect:CGRectMake(originX, MaxYAxis + 2.0, size.width, size.height)];
@@ -625,9 +596,9 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     
     CGPoint maxPoint, minPoint;
     
-    NSArray *items = [self.chartValues subarrayWithRange:NSMakeRange(self.startDrawIndex, self.kLineDrawNum)];
+    NSArray *items = [self.dataSource subarrayWithRange:NSMakeRange(self.startDrawIndex, self.kLineDrawNum)];
     for (ZKKLineItem *item in items) {
-        self.xAxisMapper[@(xAxis + _kLineWidth)] = @([self.chartValues indexOfObject:item]);
+        self.xAxisMapper[@(xAxis + _kLineWidth)] = @([self.dataSource indexOfObject:item]);
         //通过开盘价、收盘价判断颜色
         CGFloat open = item.openingPrice;
         CGFloat close = item.closingPrice;
@@ -714,17 +685,17 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     NSInteger maLength = [self.MAValues[index] integerValue];
     
     // 均线个数达不到三个以上也不绘制
-    if (pricePerHeightUnit != 0 || maLength + 2 < self.chartValues.count) {
-        NSArray *drawArrays = [self.chartValues subarrayWithRange:NSMakeRange(self.startDrawIndex, self.kLineDrawNum)];
+    if (pricePerHeightUnit != 0 || maLength + 2 < self.dataSource.count) {
+        NSArray *drawArrays = [self.dataSource subarrayWithRange:NSMakeRange(self.startDrawIndex, self.kLineDrawNum)];
         for (int i = 0; i < drawArrays.count; i ++) {
             ZKKLineItem *item = drawArrays[i];
             
             // 不足均线个数，则不需要获取该段均线数据(例如: 均5，个数小于5个，则不需要绘制前四均线，...)
-            if ([self.chartValues indexOfObject:item] < maLength - 1) {
+            if ([self.dataSource indexOfObject:item] < maLength - 1) {
                 xAxisValue += self.kLineWidth + self.kLinePadding;
                 continue;
             }
-            NSRange subrange = NSMakeRange([self.chartValues indexOfObject:item] - maLength + 1, maLength);
+            NSRange subrange = NSMakeRange([self.dataSource indexOfObject:item] - maLength + 1, maLength);
             NSArray *closingPrices = [self closingPricesWithSubrange:subrange];
             CGFloat avgClosingPrice = [[closingPrices valueForKeyPath:@"@avg.floatValue"] floatValue];
             CGFloat deltaOfAvg = (avgClosingPrice - self.lowestPriceOfAll) / pricePerHeightUnit;
@@ -757,8 +728,8 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 /** MA时间段内的收盘价数组 */
 - (NSMutableArray *)closingPricesWithSubrange:(NSRange)range {
     NSArray<ZKKLineItem *> *subItems =
-    self.chartValues.count >= range.location + range.length ? [self.chartValues subarrayWithRange:range]
-                                                            : self.chartValues;
+    self.dataSource.count >= range.location + range.length ? [self.dataSource subarrayWithRange:range]
+                                                            : self.dataSource;
     NSMutableArray *closingPrices = [NSMutableArray array];
     for (int i = 0; i < subItems.count; i ++) {
         [closingPrices addObject:@(subItems[i].closingPrice)];
@@ -797,8 +768,8 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 - (void)resetMaxAndMin {
     self.highestPriceOfAll = -MAXFLOAT;
     self.lowestPriceOfAll = MAXFLOAT;
-    NSArray *subChartValues = [self.chartValues subarrayWithRange:NSMakeRange(self.startDrawIndex, MIN(self.kLineDrawNum, self.chartValues.count))];
-    NSArray *drawContext = self.autoFit ? subChartValues : self.chartValues;
+    NSArray *subChartValues = [self.dataSource subarrayWithRange:NSMakeRange(self.startDrawIndex, MIN(self.kLineDrawNum, self.dataSource.count))];
+    NSArray *drawContext = self.autoFit ? subChartValues : self.dataSource;
     
     for (int i = 0; i < drawContext.count; i++) {
         ZKKLineItem *item = drawContext[i];
@@ -833,19 +804,11 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 #pragma mark -  public methods
 
 - (void)clear {
-    self.chartValues = nil;
+    self.dataSource = nil;
     [self setNeedsDisplay];
 }
 
 #pragma mark - notificaiton events
-
-- (void)startTouchNotification:(NSNotification *)notification {
-    self.interactive = YES;
-}
-
-- (void)endOfTouchNotification:(NSNotification *)notification {
-    self.interactive = NO;
-}
 
 - (void)deviceOrientationDidChangeNotification:(NSNotification *)notificaiton {
     
@@ -1008,11 +971,11 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 
 #pragma mark - setters 
 
-- (void)setChartValues:(NSArray<ZKKLineItem *> *)chartValues {
-    _chartValues = chartValues;
+- (void)setDataSource:(NSArray<ZKKLineItem *> *)chartValues {
+    _dataSource = chartValues;
     
     CGFloat maxHigh = -MAXFLOAT;
-    for (ZKKLineItem *item in self.chartValues) {
+    for (ZKKLineItem *item in self.dataSource) {
         if (item.highestPrice > maxHigh) {
             maxHigh = item.highestPrice;
             self.highestItem = item;
@@ -1021,7 +984,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 }
 
 - (void)setKLineDrawNum:(NSInteger)kLineDrawNum {
-    _kLineDrawNum = MAX(MIN(self.chartValues.count, kLineDrawNum), 0);
+    _kLineDrawNum = MAX(MIN(self.dataSource.count, kLineDrawNum), 0);
     
     if (_kLineDrawNum != 0) {
         self.kLineWidth = (SelfWidth - self.leftMargin - self.rightMargin - _kLinePadding)/_kLineDrawNum - _kLinePadding;
