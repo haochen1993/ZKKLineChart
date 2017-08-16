@@ -21,6 +21,8 @@
 
 @end
 
+static const CGFloat kVerticalMargin = 18.f;
+
 @implementation VolumnView
 
 #pragma mark - life cycle
@@ -148,7 +150,7 @@
     
     CGFloat boxOriginY = self.axisShadowWidth;
     CGFloat boxHeight = rect.size.height - boxOriginY;
-    CGFloat volumePerUnit = self.maxValue/boxHeight;
+    CGFloat volumePerUnit = self.maxValue/(boxHeight - kVerticalMargin);
     
     NSArray *contentValues = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
     for (ZKKLineItem *item in contentValues) {
