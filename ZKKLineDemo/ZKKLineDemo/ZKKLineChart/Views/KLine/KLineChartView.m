@@ -61,6 +61,24 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 @property (nonatomic, strong) UIButton *realDataTipBtn;
 //交互中， 默认NO
 @property (nonatomic, assign) BOOL interactive;
+@property (nonatomic, assign) CGFloat kLineWidth; //!< k线图宽度
+@property (nonatomic, assign) CGFloat kLinePadding; //!< k线图间距
+@property (nonatomic, assign) CGFloat maxKLineWidth; //!< k线最大宽度
+@property (nonatomic, assign) CGFloat minKLineWidth; //!< k线最小宽度
+@property (nonatomic, strong) UIFont *yAxisTitleFont; //!< y坐标轴字体
+@property (nonatomic, strong) UIColor *yAxisTitleColor; //!< y坐标轴标题颜色
+@property (nonatomic, strong) UIFont *xAxisTitleFont; //!< x坐标轴字体
+@property (nonatomic, strong) UIColor *xAxisTitleColor; //!< x坐标轴标题颜色
+@property (nonatomic, assign) CGFloat timeAxisHeight; //!< 时间轴高度（默认20.0f）
+@property (nonatomic, strong) UIColor *axisShadowColor; //!< 坐标轴边框颜色
+@property (nonatomic, assign) CGFloat axisShadowWidth; //!< 坐标轴边框宽度
+@property (nonatomic, assign) CGFloat separatorWidth; //!< 分割线宽度
+@property (nonatomic, strong) UIColor *separatorColor; //!< 分割线颜色
+@property (nonatomic, strong) UIColor *crossLineColor; //!< 十字线颜色
+@property (nonatomic, assign) NSInteger saveDecimalPlaces; //!< 保留小数点位数，默认保留两位(最多两位)
+@property (nonatomic, strong) UIColor *timeAndPriceTextColor; //!< 时间和价格提示的字体颜色
+@property (nonatomic, strong) UIColor *timeAndPriceTipsBackgroundColor; //!< 时间和价格提示背景颜色
+@property (nonatomic, assign) CGFloat movingAvgLineWidth; //!< 均线宽度
 
 @end
 
@@ -91,15 +109,13 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     self.positiveLineColor = KLineColor_Green;
     self.negativeLineColor = KLineColor_Red;
     
-    self.upperShadowColor = self.positiveLineColor;
-    self.lowerShadowColor = self.negativeLineColor;
-    
     self.movingAvgLineWidth = 1.f;
     
-    self.MAColors = @[HexRGB(0x019FFD), HexRGB(0xFF9900), HexRGB(0xFF00FF)];
-    
-    self.positiveVolColor = self.positiveLineColor;
-    self.negativeVolColor =  self.negativeLineColor;
+    self.MAValues = @[ @5, @10, @30, @60 ];
+    self.MAColors = @[ [UIColor lightGrayColor],
+                       [UIColor yellowColor],
+                       [UIColor purpleColor],
+                       [UIColor greenColor], ];
     
     self.axisShadowColor = [UIColor colorWithRed:223/255.0f green:223/255.0f blue:223/255.0f alpha:1.0];
     self.axisShadowWidth = 0.8;
@@ -115,8 +131,6 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     
     self.crossLineColor = HexRGB(0xC9C9C9);
     
-    self.scrollEnable = YES;
-    
     self.zoomEnable = YES;
     
     self.showAvgLine = YES;
@@ -130,8 +144,6 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     self.timeAndPriceTipsBackgroundColor = HexRGB(0xD70002);
     self.timeAndPriceTextColor = [UIColor colorWithWhite:1.0 alpha:0.95];
     
-    self.supportGesture = YES;
-    
     self.maxKLineWidth = 24;
     self.minKLineWidth = 1.5;
     
@@ -142,6 +154,11 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     
     self.xAxisMapper = [NSMutableDictionary dictionary];
     
+    self.topMargin = 20.0f;
+    self.rightMargin = 2.0;
+    self.bottomMargin = 250.0f;
+    self.leftMargin = 25.0f;
+    
     //添加手势
     [self addGestures];
     [self registerObserver];
@@ -151,9 +168,6 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
  *  添加手势
  */
 - (void)addGestures {
-    if (!self.supportGesture) {
-        return;
-    }
     [self addGestureRecognizer:self.tapGesture];
     [self addGestureRecognizer:self.panGesture];
     [self addGestureRecognizer:self.pinchGesture];
@@ -311,7 +325,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     NSInteger offsetIndex = fabs(touchPoint.x/(self.kLineWidth > self.maxKLineWidth/2.0 ? 16.0f : 8.0));
     
     [self postNotificationWithGestureRecognizerStatus:panGesture.state];
-    if (!self.scrollEnable || self.chartValues.count == 0 || offsetIndex == 0) {
+    if (self.chartValues.count == 0 || offsetIndex == 0) {
         return;
     }
     if (touchPoint.x > 0) {
@@ -428,9 +442,9 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     //均值
     self.maTipView.hidden = !self.showAvgLine;
     if (self.showAvgLine) {
-        self.maTipView.minAvgPrice = [NSString stringWithFormat:@"MA5：%.2f", [self.MAs[0] doubleValue]];
-        self.maTipView.midAvgPrice = [NSString stringWithFormat:@"MA10：%.2f", [self.MAs[1] doubleValue]];
-        self.maTipView.maxAvgPrice = [NSString stringWithFormat:@"MA20：%.2f", [self.MAs[2] doubleValue]];
+        self.maTipView.minAvgPrice = [NSString stringWithFormat:@"MA5：%.2f", [self.MAValues[0] doubleValue]];
+        self.maTipView.midAvgPrice = [NSString stringWithFormat:@"MA10：%.2f", [self.MAValues[1] doubleValue]];
+        self.maTipView.maxAvgPrice = [NSString stringWithFormat:@"MA20：%.2f", [self.MAValues[2] doubleValue]];
     }
     //提示版
     self.tipBoard.openingPrice = [self dealDecimalWithNum:item.openingPrice];
@@ -671,12 +685,12 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     if (!self.showAvgLine) {
         return;
     }
-    NSAssert(self.MAColors.count == self.MAs.count, @"绘制均线个数与均线绘制颜色个数不一致！");
+    NSAssert(self.MAColors.count == self.MAValues.count, @"绘制均线个数与均线绘制颜色个数不一致！");
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, self.movingAvgLineWidth);
     
-    for (int i = 0; i < self.MAs.count; i ++) {
+    for (int i = 0; i < self.MAValues.count; i ++) {
         CGContextSetStrokeColorWithColor(context, self.MAColors[i].CGColor);
         CGPathRef path = [self movingAvgGraphPathForContextAtIndex:i];
         CGContextAddPath(context, path);
@@ -697,7 +711,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     }
     
     // 均线个数
-    NSInteger maLength = [self.MAs[index] integerValue];
+    NSInteger maLength = [self.MAValues[index] integerValue];
     
     // 均线个数达不到三个以上也不绘制
     if (pricePerHeightUnit != 0 || maLength + 2 < self.chartValues.count) {
@@ -846,8 +860,8 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
         _volView.boxRightMargin = self.rightMargin;
         _volView.axisShadowColor = self.axisShadowColor;
         _volView.axisShadowWidth = self.axisShadowWidth;
-        _volView.negativeVolColor = self.negativeVolColor;
-        _volView.positiveVolColor = self.positiveVolColor;
+        _volView.negativeVolColor = self.negativeLineColor;
+        _volView.positiveVolColor = self.positiveLineColor;
         _volView.yAxisTitleFont = self.yAxisTitleFont;
         _volView.yAxisTitleColor = self.yAxisTitleColor;
         _volView.separatorWidth = self.separatorWidth;
@@ -864,8 +878,8 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
         _MACDView.boxRightMargin = self.rightMargin;
         _MACDView.axisShadowColor = self.axisShadowColor;
         _MACDView.axisShadowWidth = self.axisShadowWidth;
-        _MACDView.negativeVolColor = self.negativeVolColor;
-        _MACDView.positiveVolColor = self.positiveVolColor;
+        _MACDView.negativeVolColor = self.negativeLineColor;
+        _MACDView.positiveVolColor = self.positiveLineColor;
         _MACDView.yAxisTitleFont = self.yAxisTitleFont;
         _MACDView.yAxisTitleColor = self.yAxisTitleColor;
         _MACDView.separatorWidth = self.separatorWidth;
@@ -1035,16 +1049,28 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     self.maxKLineWidth = _maxKLineWidth;
 }
 
-- (void)setSupportGesture:(BOOL)supportGesture {
-    _supportGesture = supportGesture;
-    
-    for (UIGestureRecognizer *gesture in self.gestureRecognizers) {
-        gesture.enabled = supportGesture;
-    }
-}
-
 - (void)setLandscapeMode:(BOOL)landscapeMode {
     _landscapeMode = landscapeMode;
+    CGFloat angle = 0;
+    CGRect bounds = CGRectZero;
+    CGPoint center = CGPointZero;
+    
+    if (landscapeMode) {
+        angle = M_PI_2;
+        bounds = CGRectMake(0, 0, CGRectGetHeight(self.superview.bounds) - 64.f, CGRectGetWidth(self.superview.bounds));
+        center = CGPointMake(CGRectGetMidX(self.superview.bounds), CGRectGetMidY(self.superview.bounds) + 32.f);
+    }
+    else {
+        angle = 0;
+        bounds = CGRectMake(0, 0, CGRectGetWidth(self.superview.bounds), CGRectGetHeight(self.superview.bounds) - 64.f);
+        center = CGPointMake(CGRectGetMidX(self.superview.bounds), CGRectGetMidY(self.superview.bounds) + 32.f);
+    }
+    [UIView animateWithDuration:.33 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        self.transform = CGAffineTransformMakeRotation(angle);
+        self.bounds = bounds;
+        self.center = center;
+    } completion:nil];
+    [self setNeedsDisplay];
     [self resetDrawNumAndIndex];
 }
 

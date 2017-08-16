@@ -43,49 +43,11 @@
 
 @property (nonatomic, assign) CGFloat bottomMargin; //!< 内容距离父试图底部距离
 
-@property (nonatomic, assign) CGFloat kLineWidth; //!< k线图宽度
-
-@property (nonatomic, assign) CGFloat kLinePadding; //!< k线图间距
-
-@property (nonatomic, assign) CGFloat movingAvgLineWidth; //!< 均线宽度
-
 @property (nonatomic, strong) UIColor *positiveLineColor; //!< 阳线颜色(negative line)
 
 @property (nonatomic, strong) UIColor *negativeLineColor; //!< 阴线颜色
 
-@property (nonatomic, strong) UIColor *upperShadowColor; //!< 上影线
-
-@property (nonatomic, strong) UIColor *lowerShadowColor; //!< 下影线
-
-@property (nonatomic, strong) UIColor *positiveVolColor; //!< 交易量阳线颜色
-
-@property (nonatomic, strong) UIColor *negativeVolColor; //!< 交易量阴线颜色
-
-@property (nonatomic, strong) UIFont *yAxisTitleFont; //!< y坐标轴字体
-
-@property (nonatomic, strong) UIColor *yAxisTitleColor; //!< y坐标轴标题颜色
-
-@property (nonatomic, strong) UIFont *xAxisTitleFont; //!< x坐标轴字体
-
-@property (nonatomic, strong) UIColor *xAxisTitleColor; //!< x坐标轴标题颜色
-
-@property (nonatomic, assign) CGFloat timeAxisHeight; //!< 时间轴高度（默认20.0f）
-
-@property (nonatomic, strong) UIColor *axisShadowColor; //!< 坐标轴边框颜色
-
-@property (nonatomic, assign) CGFloat axisShadowWidth; //!< 坐标轴边框宽度
-
-@property (nonatomic, assign) NSInteger separatorNum; //!< 分割线个数
-
-@property (nonatomic, assign) CGFloat separatorWidth; //!< 分割线大小
-
-@property (nonatomic, strong) UIColor *separatorColor; //!< 分割线颜色
-
-@property (nonatomic, strong) UIColor *crossLineColor; //!< 十字线颜色
-
 @property (nonatomic, assign) BOOL zoomEnable; //!< 默认可以放大缩小
-
-@property (nonatomic, assign) BOOL scrollEnable; //!< 默认可以滑动
 
 @property (nonatomic, assign) BOOL showAvgLine; //!< 默认显示均线
 
@@ -93,19 +55,7 @@
 
 @property (nonatomic, assign) BOOL yAxisTitleIsChange; //!< YES表示：Y坐标的值根据视图中呈现的k线图的最大值最小值变化而变化；NO表示：Y坐标是所有数据中的最大值最小值，不管k线图呈现如何都不会变化。默认YES
 
-@property (nonatomic, assign) NSInteger saveDecimalPlaces; //!< 保留小数点位数，默认保留两位(最多两位)
-
-@property (nonatomic, assign) CGFloat maxKLineWidth; //!< k线最大宽度
-
-@property (nonatomic, assign) CGFloat minKLineWidth; //!< k线最小宽度
-
-@property (nonatomic, strong) UIColor *timeAndPriceTextColor; //!< 时间和价格提示的字体颜色
-
-@property (nonatomic, strong) UIColor *timeAndPriceTipsBackgroundColor; //!< 时间和价格提示背景颜色
-
-@property (nonatomic, assign) BOOL supportGesture; //!< 支持手势（默认支持）
-
-@property (nonatomic, strong) NSArray <NSNumber *> *MAs; //!< 均线个数（默认ma5, ma10, ma20）
+@property (nonatomic, strong) NSArray <NSNumber *> *MAValues; //!< 均线个数（默认ma5, ma10, ma20）
 
 @property (nonatomic, strong) NSArray<UIColor *> *MAColors; //!< 均线颜色值 (默认 HexRGB(0x019FFD)、HexRGB(0xFF9900)、HexRGB(0xFF00FF))
 

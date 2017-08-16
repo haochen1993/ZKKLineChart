@@ -37,44 +37,28 @@
     [super viewDidLoad];
     self.title = @"币柒网";
     self.view.backgroundColor = GlobalColor_Dark;
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"旋转" style:UIBarButtonItemStyleDone target:self action:@selector(rotateScreen)];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"旋转" style:UIBarButtonItemStyleDone target:self action:@selector(rotateScreen:)];
     [rightItem setTintColor:[UIColor whiteColor]];
     self.navigationItem.rightBarButtonItem = rightItem;
     [self setupKLineView];
     [self requestData];
 }
 
-- (void)rotateScreen {
-    _kLineChartView.landscapeMode = true;
-    [UIView animateWithDuration:.3 animations:^{
-        _kLineChartView.transform = CGAffineTransformMakeRotation(M_PI_2);
-    }];
-    CGRect bounds = CGRectMake(0, 0, CGRectGetHeight(self.view.bounds) - 64.f, CGRectGetWidth(self.view.bounds));
-    CGPoint center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) + 32.f);
-    _kLineChartView.bounds = bounds;
-    _kLineChartView.center = center;
-    
-    [_kLineChartView setNeedsDisplay];
+- (void)rotateScreen:(UIBarButtonItem *)item {
+    if (item.tag == 0) {
+        _kLineChartView.landscapeMode = true;
+        item.tag = 1;
+    }
+    else {
+        _kLineChartView.landscapeMode = false;
+        item.tag = 0;
+    }
 }
 
 - (void)setupKLineView {
     _kLineChartView = [[KLineChartView alloc] initWithFrame:CGRectMake(0, 64, self.view.us_width, self.view.us_height - 64)];
     [self.view addSubview:self.kLineChartView];
-    
-    _kLineChartView.topMargin = 20.0f;
-    _kLineChartView.rightMargin = 1.0;
-    _kLineChartView.bottomMargin = 250.0f;
-    _kLineChartView.leftMargin = 25.0f;
     _kLineChartView.yAxisTitleIsChange = true;
-    
-    // 绘制均线
-    self.kLineChartView.MAs = @[ @5, @10, @30, @60 ];
-    self.kLineChartView.MAColors = @[
-                                     [UIColor grayColor],
-                                     [UIColor yellowColor],
-                                     [UIColor purpleColor],
-                                     [UIColor greenColor],
-                                     ];
 }
 
 - (void)requestData {
