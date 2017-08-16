@@ -23,6 +23,7 @@
 
 static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 static const CGFloat kBarChartHeightRatio = .182f;
+static const CGFloat kChartVerticalMargin = 30.f;
 
 @interface KLineChartView ()
 
@@ -579,11 +580,15 @@ static const CGFloat kBarChartHeightRatio = .182f;
     CGContextSetLineDash(context, 0, 0, 0);
 }
 
+- (CGFloat)getPricePerHeightUnit {
+    return (self.highestPriceOfAll - self.lowestPriceOfAll) / (self.yAxisHeight - kChartVerticalMargin * 2);
+}
+
 /**
  *  K线
  */
 - (void)drawKLine {
-    CGFloat pricePerHeightUnit = (self.highestPriceOfAll - self.lowestPriceOfAll) / self.yAxisHeight;
+    CGFloat pricePerHeightUnit = [self getPricePerHeightUnit];
     if (pricePerHeightUnit == 0) {
         pricePerHeightUnit = 1.0;
     }
@@ -608,18 +613,18 @@ static const CGFloat kBarChartHeightRatio = .182f;
         CGFloat diffValue = fabs(open - close);
         CGFloat maxValue = MAX(open, close);
         CGFloat KLineHeight = MAX(diffValue/pricePerHeightUnit ?: 1, 0.5);
-        CGFloat delta = (maxValue - self.lowestPriceOfAll)/pricePerHeightUnit;
-        CGFloat yAxis = self.yAxisHeight + self.topMargin - (delta ?: 1);
+        CGFloat deltaToBottomAxis = (maxValue - self.lowestPriceOfAll) / pricePerHeightUnit + kChartVerticalMargin;
+        CGFloat yAxis = self.yAxisHeight + self.topMargin - (deltaToBottomAxis ?: 1);
         
         CGRect rect = CGRectMake(xAxis + self.leftMargin, yAxis, _kLineWidth, KLineHeight);
         CGContextAddRect(context, rect);
         CGContextFillPath(context);
         
         //上、下影线
-        CGFloat highYAxis = self.yAxisHeight - (item.highestPrice - self.lowestPriceOfAll)/pricePerHeightUnit;
-        CGFloat lowYAxis = self.yAxisHeight - (item.lowestPrice - self.lowestPriceOfAll)/pricePerHeightUnit;
-        CGPoint highPoint = CGPointMake(xAxis + _kLineWidth/2.0 + self.leftMargin, highYAxis + self.topMargin);
-        CGPoint lowPoint = CGPointMake(xAxis + _kLineWidth/2.0 + self.leftMargin, lowYAxis + self.topMargin);
+        CGFloat highYAxis = self.yAxisHeight + self.topMargin - kChartVerticalMargin - (item.highestPrice - self.lowestPriceOfAll)/pricePerHeightUnit;
+        CGFloat lowYAxis = self.yAxisHeight + self.topMargin - kChartVerticalMargin - (item.lowestPrice - self.lowestPriceOfAll)/pricePerHeightUnit;
+        CGPoint highPoint = CGPointMake(xAxis + _kLineWidth/2.0 + self.leftMargin, highYAxis);
+        CGPoint lowPoint = CGPointMake(xAxis + _kLineWidth/2.0 + self.leftMargin, lowYAxis);
         CGContextSetStrokeColorWithColor(context, fillColor.CGColor);
         CGContextSetLineWidth(context, 1.f);
         CGContextBeginPath(context);
@@ -630,23 +635,27 @@ static const CGFloat kBarChartHeightRatio = .182f;
         if (item.highestPrice == self.highestPriceOfAll) {
             maxPoint = highPoint;
         }
-        
         if (item.lowestPrice == self.lowestPriceOfAll) {
             minPoint = lowPoint;
         }
-        
         xAxis += _kLineWidth + _kLinePadding;
     }
     
     NSAttributedString *attString = [Global_Helper attributeText:[self dealDecimalWithNum:self.highestPriceOfAll] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
-    CGSize size = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(100, 100)];
-    float originX = maxPoint.x - size.width - self.kLineWidth - 2 < self.leftMargin + self.kLineWidth + 2.0 ?  maxPoint.x + self.kLineWidth : maxPoint.x - size.width - self.kLineWidth;
-    [attString drawInRect:CGRectMake(originX, maxPoint.y, size.width, size.height)];
+    CGSize textSize = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(100, 100)];
+    CGFloat originX = maxPoint.x - textSize.width - self.kLineWidth - 2 < self.leftMargin + self.kLineWidth + 2.0 ? maxPoint.x + self.kLineWidth : maxPoint.x - textSize.width - self.kLineWidth;
+    [attString drawInRect:CGRectMake(originX,
+                                     maxPoint.y - kChartVerticalMargin,
+                                     textSize.width,
+                                     textSize.height)];
     
     attString = [Global_Helper attributeText:[self dealDecimalWithNum:self.lowestPriceOfAll] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
-    size = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(100, 100)];
-    originX = minPoint.x - size.width - self.kLineWidth - 2 < self.leftMargin + self.kLineWidth + 2.0 ?  minPoint.x + self.kLineWidth : minPoint.x - size.width - self.kLineWidth;
-    [attString drawInRect:CGRectMake(originX, self.yAxisHeight - size.height + self.topMargin, size.width, size.height)];
+    textSize = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(100, 100)];
+    originX = minPoint.x - textSize.width - self.kLineWidth - 2 < self.leftMargin + self.kLineWidth + 2.0 ?  minPoint.x + self.kLineWidth : minPoint.x - textSize.width - self.kLineWidth;
+    [attString drawInRect:CGRectMake(originX,
+                                     self.yAxisHeight - textSize.height + self.topMargin - kChartVerticalMargin,
+                                     textSize.width,
+                                     textSize.height)];
 }
 
 /**
