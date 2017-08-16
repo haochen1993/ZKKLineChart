@@ -397,7 +397,7 @@ static const CGFloat kBarChartHeightRatio = .182f;
             CGFloat open = item.openingPrice;
             CGFloat close = item.closingPrice;
             CGFloat scale = (self.highestPriceOfAll - self.lowestPriceOfAll) / self.yAxisHeight;
-            scale = scale == 0 ? 1.0 : scale;
+            scale = scale ?: 1;
             
             CGFloat xAxis = [xAxisKey floatValue] - _kLineWidth / 2.0 + self.leftMargin;
             CGFloat yAxis = self.yAxisHeight - (open - self.lowestPriceOfAll)/scale + self.topMargin;
@@ -468,7 +468,7 @@ static const CGFloat kBarChartHeightRatio = .182f;
     
     NSString *date = item.date;
     self.timeLabel.text = date;
-    self.timeLabel.hidden = date.length > 0 ? NO : YES;
+    self.timeLabel.hidden = !date.length;
     [self bringSubviewToFront:self.timeLabel];
     if (date.length > 0) {
         CGSize size = [date boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.xAxisTitleFont} context:nil].size;
@@ -583,9 +583,9 @@ static const CGFloat kBarChartHeightRatio = .182f;
  *  K线
  */
 - (void)drawKLine {
-    CGFloat scale = (self.highestPriceOfAll - self.lowestPriceOfAll) / self.yAxisHeight;
-    if (scale == 0) {
-        scale = 1.0;
+    CGFloat pricePerHeightUnit = (self.highestPriceOfAll - self.lowestPriceOfAll) / self.yAxisHeight;
+    if (pricePerHeightUnit == 0) {
+        pricePerHeightUnit = 1.0;
     }
     
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -607,17 +607,17 @@ static const CGFloat kBarChartHeightRatio = .182f;
         
         CGFloat diffValue = fabs(open - close);
         CGFloat maxValue = MAX(open, close);
-        CGFloat KLineHeight = MAX(diffValue/scale == 0 ? 1 : diffValue/scale, 0.5);
-        CGFloat delta = (maxValue - self.lowestPriceOfAll)/scale;
-        CGFloat yAxis = self.yAxisHeight - (delta == 0 ? 1 : delta) + self.topMargin;
+        CGFloat KLineHeight = MAX(diffValue/pricePerHeightUnit ?: 1, 0.5);
+        CGFloat delta = (maxValue - self.lowestPriceOfAll)/pricePerHeightUnit;
+        CGFloat yAxis = self.yAxisHeight + self.topMargin - (delta ?: 1);
         
         CGRect rect = CGRectMake(xAxis + self.leftMargin, yAxis, _kLineWidth, KLineHeight);
         CGContextAddRect(context, rect);
         CGContextFillPath(context);
         
         //上、下影线
-        CGFloat highYAxis = self.yAxisHeight - (item.highestPrice - self.lowestPriceOfAll)/scale;
-        CGFloat lowYAxis = self.yAxisHeight - (item.lowestPrice - self.lowestPriceOfAll)/scale;
+        CGFloat highYAxis = self.yAxisHeight - (item.highestPrice - self.lowestPriceOfAll)/pricePerHeightUnit;
+        CGFloat lowYAxis = self.yAxisHeight - (item.lowestPrice - self.lowestPriceOfAll)/pricePerHeightUnit;
         CGPoint highPoint = CGPointMake(xAxis + _kLineWidth/2.0 + self.leftMargin, highYAxis + self.topMargin);
         CGPoint lowPoint = CGPointMake(xAxis + _kLineWidth/2.0 + self.leftMargin, lowYAxis + self.topMargin);
         CGContextSetStrokeColorWithColor(context, fillColor.CGColor);
@@ -699,7 +699,7 @@ static const CGFloat kBarChartHeightRatio = .182f;
             NSArray *closingPrices = [self closingPricesWithSubrange:subrange];
             CGFloat avgClosingPrice = [[closingPrices valueForKeyPath:@"@avg.floatValue"] floatValue];
             CGFloat deltaOfAvg = (avgClosingPrice - self.lowestPriceOfAll) / pricePerHeightUnit;
-            CGFloat yAxisValue = MaxYAxis - (deltaOfAvg == 0 ? 1.0 : deltaOfAvg);
+            CGFloat yAxisValue = MaxYAxis - (deltaOfAvg ?: 1);
             
             CGPoint maPoint = CGPointMake(xAxisValue, yAxisValue);
             
