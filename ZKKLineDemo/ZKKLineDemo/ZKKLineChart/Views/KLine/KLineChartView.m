@@ -137,7 +137,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     
     self.showBarChart = YES;
     
-    self.yAxisTitleIsChange = YES;
+    self.autoFit = YES;
     
     self.saveDecimalPlaces = 2;
     
@@ -798,7 +798,7 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
     self.highestPriceOfAll = -MAXFLOAT;
     self.lowestPriceOfAll = MAXFLOAT;
     NSArray *subChartValues = [self.chartValues subarrayWithRange:NSMakeRange(self.startDrawIndex, MIN(self.kLineDrawNum, self.chartValues.count))];
-    NSArray *drawContext = self.yAxisTitleIsChange ? subChartValues : self.chartValues;
+    NSArray *drawContext = self.autoFit ? subChartValues : self.chartValues;
     
     for (int i = 0; i < drawContext.count; i++) {
         ZKKLineItem *item = drawContext[i];

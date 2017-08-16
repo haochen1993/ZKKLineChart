@@ -58,7 +58,7 @@
 - (void)setupKLineView {
     _kLineChartView = [[KLineChartView alloc] initWithFrame:CGRectMake(0, 64, self.view.us_width, self.view.us_height - 64)];
     [self.view addSubview:self.kLineChartView];
-    _kLineChartView.yAxisTitleIsChange = true;
+    _kLineChartView.autoFit = true;
 }
 
 - (void)requestData {
