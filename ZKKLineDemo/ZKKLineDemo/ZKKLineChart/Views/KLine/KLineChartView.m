@@ -83,11 +83,13 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 }
 
 - (void)setup {
+    self.backgroundColor = GlobalColor_Dark;
+    
     self.timeAxisHeight = 20.0;
     _landscapeMode = false;
     
-    self.positiveLineColor = [UIColor colorWithRed:(31/255.0f) green:(185/255.0f) blue:(63.0f/255.0f) alpha:1.0];
-    self.negativeLineColor = [UIColor colorWithRed:(232/255.0f) green:(50.0f/255.0f) blue:(52.0f/255.0f) alpha:1.0];
+    self.positiveLineColor = KLineColor_Green;
+    self.negativeLineColor = KLineColor_Red;
     
     self.upperShadowColor = self.positiveLineColor;
     self.lowerShadowColor = self.negativeLineColor;

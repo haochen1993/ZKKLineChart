@@ -36,6 +36,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"币柒网";
+    self.view.backgroundColor = GlobalColor_Dark;
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"旋转" style:UIBarButtonItemStyleDone target:self action:@selector(rotateScreen)];
     [rightItem setTintColor:[UIColor whiteColor]];
     self.navigationItem.rightBarButtonItem = rightItem;
@@ -60,7 +61,6 @@
     _kLineChartView = [[KLineChartView alloc] initWithFrame:CGRectMake(0, 64, self.view.us_width, self.view.us_height - 64)];
     [self.view addSubview:self.kLineChartView];
     
-    _kLineChartView.backgroundColor = HexRGB(0x292c34);
     _kLineChartView.topMargin = 20.0f;
     _kLineChartView.rightMargin = 1.0;
     _kLineChartView.bottomMargin = 250.0f;

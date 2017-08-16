@@ -27,6 +27,10 @@
 
 #endif
 
+#define KLineColor_Green  HexRGB(0x26e27e)
+#define KLineColor_Red    HexRGB(0xcb292e)
+#define GlobalColor_Blue  HexRGB(0x2187c9)
+#define GlobalColor_Dark  HexRGB(0x292c34)
 
 /** DEBUG RELEASE **/
 #if DEBUG
