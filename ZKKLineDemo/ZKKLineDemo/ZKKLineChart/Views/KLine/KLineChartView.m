@@ -530,10 +530,11 @@ static const CGFloat kChartVerticalMargin = 30.f;
         CGFloat diffHeight = 0;
         if (i == 5) {
             diffHeight = size.height;
-        } else if (i > 0 && i < 5) {
+        }
+        else if (i > 0 && i < 5) {
             diffHeight = size.height/2.0;
         }
-        [attString drawInRect:CGRectMake(self.leftMargin - size.width - 2.0f, MaxYAxis/5.0*i - diffHeight, size.width, size.height)];
+        [attString drawInRect:CGRectMake(self.leftMargin - size.width - 2.0f, self.yAxisHeight / 5 * i + self.topMargin - diffHeight, size.width, size.height)];
     }
 }
 
