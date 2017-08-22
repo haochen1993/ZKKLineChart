@@ -499,9 +499,8 @@
 
 - (void)initWithValues:(NSArray *)arr {
     NSAssert(arr.count == 6, @"数组长度不足");
-
     if (self)  {
-        _date = [NSString stringWithFormat:@"%zd", arr[0]];
+        _date = [self generateFormatTimeViaStamp:[arr[0] integerValue]];
         _openingPrice = [arr[1] floatValue];
         _highestPrice = [arr[2] floatValue];
         _lowestPrice = [arr[3] floatValue];
@@ -509,9 +508,15 @@
         _volume = [arr[5] floatValue];
         self.SumOfLastClose = _closingPrice + self.PreviousKlineModel.SumOfLastClose;
         self.SumOfLastVolume = _volume + self.PreviousKlineModel.SumOfLastVolume;
-//        NSLog(@"%@======%@======%@------%@",_Close,self.MA7,self.MA30,_SumOfLastClose);
- 
     }
+}
+
+- (NSString *)generateFormatTimeViaStamp:(NSTimeInterval)stamp {
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:stamp];
+    NSDateFormatter *format = [NSDateFormatter new];
+    [format setDateFormat:@"HH:mm"];
+    NSString *dateStr = [format stringFromDate:date];
+    return dateStr;
 }
 
 - (void)initFirstModel {
