@@ -500,7 +500,7 @@
 - (void)initWithValues:(NSArray *)arr {
     NSAssert(arr.count == 6, @"数组长度不足");
     if (self)  {
-        _date = [self generateFormatTimeViaStamp:[arr[0] integerValue]];
+        _date = [self generateFormatTimeViaStamp:([arr[0] integerValue])/1000];
         _openingPrice = [arr[1] floatValue];
         _highestPrice = [arr[2] floatValue];
         _lowestPrice = [arr[3] floatValue];
