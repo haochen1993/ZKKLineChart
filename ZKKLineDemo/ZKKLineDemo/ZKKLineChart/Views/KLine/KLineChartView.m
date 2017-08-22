@@ -1038,8 +1038,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
         self.bounds = bounds;
         self.center = center;
     } completion:nil];
-    [self setNeedsDisplay];
-    [self resetDrawNumAndIndex];
+    [self drawChartWithDataSource:_dataSource];
 }
 
 - (void)setBottomMargin:(CGFloat)bottomMargin {
