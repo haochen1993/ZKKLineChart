@@ -29,10 +29,10 @@ static const CGFloat kChartVerticalMargin = 30.f;
 
 @property (nonatomic, assign) CGFloat yAxisHeight;
 @property (nonatomic, assign) CGFloat xAxisWidth;
-@property (nonatomic, strong) NSArray <ZKKLineItem *> *dataSource;
+@property (nonatomic, strong) NSArray <MCKLineModel *> *dataSource;
 @property (nonatomic, assign) NSInteger startDrawIndex;
 @property (nonatomic, assign) NSInteger kLineDrawNum;
-@property (nonatomic, strong) ZKKLineItem *highestItem;
+@property (nonatomic, strong) MCKLineModel *highestItem;
 @property (nonatomic, assign) CGFloat highestPriceOfAll;
 @property (nonatomic, assign) CGFloat lowestPriceOfAll;
 //手势
@@ -221,7 +221,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
 
 #pragma mark - render UI
 
-- (void)drawChartWithDataSource:(NSArray<ZKKLineItem *> *)dataSource {
+- (void)drawChartWithDataSource:(NSArray<MCKLineModel *> *)dataSource {
     self.dataSource = dataSource;
     
     if (self.showBarChart) {
@@ -275,7 +275,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
                        date:(NSString *)date
                         mas:(NSArray *)mas
                       isNew:(BOOL)isNew {
-    ZKKLineItem *item= [ZKKLineItem new];
+    MCKLineModel *item= [MCKLineModel new];
     item.openingPrice = open;
     item.closingPrice = close;
     item.highestPrice = high;
@@ -394,7 +394,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
         if (_kLinePadding+_kLineWidth >= ([xAxisKey floatValue] - touchPoint.x) && ([xAxisKey floatValue] - touchPoint.x) > 0) {
             NSInteger index = [indexObject integerValue];
             // 获取对应的k线数据
-            ZKKLineItem *item = self.dataSource[index];
+            MCKLineModel *item = self.dataSource[index];
             CGFloat open = item.openingPrice;
             CGFloat close = item.closingPrice;
             CGFloat scale = (self.highestPriceOfAll - self.lowestPriceOfAll) / self.yAxisHeight;
@@ -414,7 +414,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
     }];
 }
 
-- (void)configUIWithLineItem:(ZKKLineItem *)item atPoint:(CGPoint)point {
+- (void)configUIWithLineItem:(MCKLineModel *)item atPoint:(CGPoint)point {
     //十字线
     self.verticalCrossLine.hidden = NO;
     self.verticalCrossLine.us_height = self.showBarChart ? SelfHeight - self.topMargin : self.verticalCrossLine.us_height;
@@ -603,7 +603,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
     CGPoint maxPoint, minPoint;
     
     NSArray *items = [self.dataSource subarrayWithRange:NSMakeRange(self.startDrawIndex, self.kLineDrawNum)];
-    for (ZKKLineItem *item in items) {
+    for (MCKLineModel *item in items) {
         self.xAxisMapper[@(xAxis + _kLineWidth)] = @([self.dataSource indexOfObject:item]);
         //通过开盘价、收盘价判断颜色
         CGFloat open = item.openingPrice;
@@ -698,7 +698,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
     if (pricePerHeightUnit != 0 || maLength + 2 < self.dataSource.count) {
         NSArray *drawArrays = [self.dataSource subarrayWithRange:NSMakeRange(self.startDrawIndex, self.kLineDrawNum)];
         for (int i = 0; i < drawArrays.count; i ++) {
-            ZKKLineItem *item = drawArrays[i];
+            MCKLineModel *item = drawArrays[i];
             
             // 不足均线个数，则不需要获取该段均线数据(例如: 均5，个数小于5个，则不需要绘制前四均线，...)
             if ([self.dataSource indexOfObject:item] < maLength - 1) {
@@ -737,7 +737,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
 
 /** MA时间段内的收盘价数组 */
 - (NSMutableArray <NSNumber *> *)closingPricesWithSubrange:(NSRange)range {
-    NSArray<ZKKLineItem *> *subItems =
+    NSArray<MCKLineModel *> *subItems =
     self.dataSource.count >= range.location + range.length ? [self.dataSource subarrayWithRange:range]
                                                             : self.dataSource;
     NSMutableArray *closingPrices = [NSMutableArray array];
@@ -782,7 +782,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
     NSArray *drawContext = self.autoFit ? subChartValues : self.dataSource;
     
     for (int i = 0; i < drawContext.count; i++) {
-        ZKKLineItem *item = drawContext[i];
+        MCKLineModel *item = drawContext[i];
         self.highestPriceOfAll = MAX(item.highestPrice, self.highestPriceOfAll);
         self.lowestPriceOfAll = MIN(item.lowestPrice, self.lowestPriceOfAll);
     }
@@ -981,11 +981,11 @@ static const CGFloat kChartVerticalMargin = 30.f;
 
 #pragma mark - setters 
 
-- (void)setDataSource:(NSArray<ZKKLineItem *> *)chartValues {
+- (void)setDataSource:(NSArray<MCKLineModel *> *)chartValues {
     _dataSource = chartValues;
     
     CGFloat maxHigh = -MAXFLOAT;
-    for (ZKKLineItem *item in self.dataSource) {
+    for (MCKLineModel *item in self.dataSource) {
         if (item.highestPrice > maxHigh) {
             maxHigh = item.highestPrice;
             self.highestItem = item;

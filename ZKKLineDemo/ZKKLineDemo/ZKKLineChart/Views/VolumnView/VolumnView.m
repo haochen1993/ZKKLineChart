@@ -9,7 +9,7 @@
 #import "VolumnView.h"
 #import "KLineListTransformer.h"
 #import "Global+Helper.h"
-#import "ZKKLineItem.h"
+#import "MCKLineModel.h"
 
 @interface VolumnView ()
 
@@ -66,13 +66,13 @@ static const CGFloat kVerticalMargin = 18.f;
     switch (_volStyle) {
         case CandlerstickChartsVolStyleDefault: {
             NSArray *volums = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
-            for (ZKKLineItem *item in volums) {
-                if (self.maxValue < item.vol) {
-                    self.maxValue = item.vol;
+            for (MCKLineModel *item in volums) {
+                if (self.maxValue < item.volume) {
+                    self.maxValue = item.volume;
                 }
                 
-                if (self.minValue > item.vol) {
-                    self.minValue = item.vol;
+                if (self.minValue > item.volume) {
+                    self.minValue = item.volume;
                 }
             }
             break;
@@ -153,13 +153,13 @@ static const CGFloat kVerticalMargin = 18.f;
     CGFloat volumePerUnit = self.maxValue/(boxHeight - kVerticalMargin);
     
     NSArray *contentValues = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
-    for (ZKKLineItem *item in contentValues) {
+    for (MCKLineModel *item in contentValues) {
         CGFloat open = item.openingPrice;
         CGFloat close = item.closingPrice;
         UIColor *fillColor = open > close ? self.positiveVolColor : self.negativeVolColor;
         CGContextSetFillColorWithColor(context, fillColor.CGColor);
         
-        CGFloat height = item.vol/volumePerUnit ?: 1.f;
+        CGFloat height = item.volume/volumePerUnit ?: 1.f;
         CGRect pathRect = CGRectMake(xAxis, boxOriginY + boxHeight - height, self.kLineWidth, height - self.axisShadowWidth);
         CGContextAddRect(context, pathRect);
         CGContextFillPath(context);

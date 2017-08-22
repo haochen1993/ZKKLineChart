@@ -14,6 +14,7 @@
 #import "ZKKLineItem.h"
 #import "ACMacros.h"
 #import "NetWorking.h"
+#import "MCKLineGroupModel.h"
 
 @interface ZKRootViewController ()
 
@@ -71,7 +72,8 @@
     [NetWorking requestWithApi:@"https://www.btc123.com/kline/klineapi" param:param thenSuccess:^(NSDictionary *responseObject) {
         NSLog(@"接口返回数据：%@", responseObject);
         if ([responseObject[@"isSuc"] boolValue]) {
-            
+            MCKLineGroupModel *groupModel = [MCKLineGroupModel groupModelWithDataSource:responseObject[@"datas"]];
+            [self.kLineChartView drawChartWithDataSource:groupModel.models];
         }
     } fail:^{
         
@@ -80,12 +82,12 @@
     
     
     
-    NSString *path = [[NSBundle mainBundle]pathForResource:@"source.json" ofType:nil];
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:path] options:NSJSONReadingMutableContainers error:nil];
-    NSArray *sourceArray = dict[@"data"];
-    
-    self.dataSource = [NSArray yy_modelArrayWithClass:[ZKKLineItem class] json:sourceArray];
-    [self.kLineChartView drawChartWithDataSource:self.dataSource];
+//    NSString *path = [[NSBundle mainBundle]pathForResource:@"source.json" ofType:nil];
+//    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:path] options:NSJSONReadingMutableContainers error:nil];
+//    NSArray *sourceArray = dict[@"data"];
+//
+//    self.dataSource = [NSArray yy_modelArrayWithClass:[ZKKLineItem class] json:sourceArray];
+//    [self.kLineChartView drawChartWithDataSource:self.dataSource];
 }
 
 #pragma mark - private methods

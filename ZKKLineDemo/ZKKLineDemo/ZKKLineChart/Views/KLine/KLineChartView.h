@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ZKKLineItem.h"
+#import "MCKLineModel.h"
 
 @interface KLineChartView : UIView
 
@@ -71,7 +71,7 @@
  */
 @property (nonatomic, assign) BOOL dynamicUpdateIsNew;
 
-- (void)drawChartWithDataSource:(NSArray<ZKKLineItem *> *)dataSource;
+- (void)drawChartWithDataSource:(NSArray <MCKLineModel *> *)dataSource;
 
 // 更新数据
 - (void)updateChartWithOpen:(CGFloat)open

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@class ZKKLineItem;
+@class MCKLineModel;
 
 typedef NS_ENUM(NSInteger, CandlerstickChartsVolStyle) {
     CandlerstickChartsVolStyleDefault = 0,
@@ -97,7 +97,7 @@ typedef NS_ENUM(NSInteger, CandlerstickChartsVolStyle) {
 //默认 YES
 @property (nonatomic, assign) BOOL gestureEnable;
 
-@property (nonatomic, strong) NSArray <ZKKLineItem *> *data;
+@property (nonatomic, strong) NSArray <MCKLineModel *> *data;
 
 /*
  * 柱状图类型
