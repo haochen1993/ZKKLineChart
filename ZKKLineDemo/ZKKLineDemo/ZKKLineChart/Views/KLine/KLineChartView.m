@@ -109,7 +109,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
     
     self.movingAvgLineWidth = 1.f;
     
-    self.MAValues = @[ @5, @10, @30, @60 ];
+    self.MAValues = @[ @7, @12, @26, @30 ];
     self.MAColors = @[ [UIColor lightGrayColor],
                        [UIColor yellowColor],
                        [UIColor purpleColor],
@@ -700,23 +700,30 @@ static const CGFloat kChartVerticalMargin = 30.f;
         for (int i = 0; i < drawArrays.count; i ++) {
             MCKLineModel *item = drawArrays[i];
             
+            CGFloat MAValue = 0;
+            if (maLength == 7) {
+                MAValue = item.MA7;
+            }
+            else if (maLength == 12) {
+                MAValue = item.MA12;
+            }
+            else if (maLength == 26) {
+                MAValue = item.MA26;
+            }
+            else if (maLength == 30) {
+                MAValue = item.MA30;
+            }
             // 不足均线个数，则不需要获取该段均线数据(例如: 均5，个数小于5个，则不需要绘制前四均线，...)
             if ([self.dataSource indexOfObject:item] < maLength - 1) {
                 xAxisValue += self.kLineWidth + self.kLinePadding;
                 continue;
             }
-            NSRange subrange = NSMakeRange([self.dataSource indexOfObject:item] - maLength + 1, maLength);
-            NSArray <NSNumber *> *closingPrices = [self closingPricesWithSubrange:subrange];
-            CGFloat avgClosingPrice = [[closingPrices valueForKeyPath:@"@avg.floatValue"] floatValue];
-            CGFloat deltaToBottomAxis = (avgClosingPrice - self.lowestPriceOfAll) / pricePerHeightUnit + kChartVerticalMargin;
+            CGFloat deltaToBottomAxis = (MAValue - self.lowestPriceOfAll) / pricePerHeightUnit + kChartVerticalMargin;
             CGFloat yAxisValue = MaxYAxis - (deltaToBottomAxis ?: 1);
             
             CGPoint maPoint = CGPointMake(xAxisValue, yAxisValue);
             
-            if (yAxisValue < self.topMargin) {
-                continue;
-            }
-            if (yAxisValue > SelfHeight - self.bottomMargin) {
+            if (yAxisValue < self.topMargin || yAxisValue > MaxYAxis) {
                 xAxisValue += self.kLineWidth + self.kLinePadding;
                 continue;
             }
@@ -733,18 +740,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
     //圆滑
     path = [path mc_smoothedPathWithGranularity:15];
     return path.CGPath;
-}
-
-/** MA时间段内的收盘价数组 */
-- (NSMutableArray <NSNumber *> *)closingPricesWithSubrange:(NSRange)range {
-    NSArray<MCKLineModel *> *subItems =
-    self.dataSource.count >= range.location + range.length ? [self.dataSource subarrayWithRange:range]
-                                                            : self.dataSource;
-    NSMutableArray *closingPrices = [NSMutableArray array];
-    for (int i = 0; i < subItems.count; i ++) {
-        [closingPrices addObject:@(subItems[i].closingPrice)];
-    }
-    return closingPrices;
 }
 
 /** 绘制交易量柱状图 */
