@@ -13,6 +13,7 @@
 #import <YYModel.h>
 #import "ZKKLineItem.h"
 #import "ACMacros.h"
+#import "NetWorking.h"
 
 @interface ZKRootViewController ()
 
@@ -62,6 +63,23 @@
 }
 
 - (void)requestData {
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    param[@"type"] = @"5min";
+    param[@"symbol"] = @"huobibtccny";
+    param[@"size"] = @"300";
+    
+    [NetWorking requestWithApi:@"https://www.btc123.com/kline/klineapi" param:param thenSuccess:^(NSDictionary *responseObject) {
+        NSLog(@"接口返回数据：%@", responseObject);
+        if ([responseObject[@"isSuc"] boolValue]) {
+            
+        }
+    } fail:^{
+        
+    }];
+    
+    
+    
+    
     NSString *path = [[NSBundle mainBundle]pathForResource:@"source.json" ofType:nil];
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:path] options:NSJSONReadingMutableContainers error:nil];
     NSArray *sourceArray = dict[@"data"];
