@@ -65,7 +65,7 @@
 
 - (void)requestData {
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    param[@"type"] = @"5min";
+    param[@"type"] = @"30min";
     param[@"symbol"] = @"huobibtccny";
     param[@"size"] = @"300";
     
