@@ -10,6 +10,12 @@
 		58B5F5BB1F3AE544008DED7E /* UIBezierPath+curved.m in Sources */ = {isa = PBXBuildFile; fileRef = 58B5F5AE1F3AE289008DED7E /* UIBezierPath+curved.m */; };
 		58B5F5BC1F3AE546008DED7E /* UIView+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 58B5F5B01F3AE28A008DED7E /* UIView+Addition.m */; };
 		58B5F5BE1F3AEF6C008DED7E /* source.json in Resources */ = {isa = PBXBuildFile; fileRef = 58B5F5BD1F3AEF6C008DED7E /* source.json */; };
+		58DEA0C51F4C0109008199F0 /* MCKLinePositionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DEA0BC1F4C0108008199F0 /* MCKLinePositionModel.m */; };
+		58DEA0C61F4C0109008199F0 /* MCKLineVolumePositionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DEA0BD1F4C0108008199F0 /* MCKLineVolumePositionModel.m */; };
+		58DEA0C71F4C0109008199F0 /* MCKLineModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DEA0C21F4C0108008199F0 /* MCKLineModel.m */; };
+		58DEA0C81F4C0109008199F0 /* MCKLineGroupModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DEA0C41F4C0109008199F0 /* MCKLineGroupModel.m */; };
+		58DEA0CF1F4C0175008199F0 /* Y_StockChartGlobalVariable.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DEA0CE1F4C0154008199F0 /* Y_StockChartGlobalVariable.m */; };
+		58DEA0D01F4C0179008199F0 /* UIColor+Y_StockChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DEA0CB1F4C0154008199F0 /* UIColor+Y_StockChart.m */; };
 		58F978A51F38182000C756E4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F978A41F38182000C756E4 /* main.m */; };
 		58F978A81F38182000C756E4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F978A71F38182000C756E4 /* AppDelegate.m */; };
 		58F978B01F38182000C756E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58F978AF1F38182000C756E4 /* Assets.xcassets */; };
@@ -40,6 +46,22 @@
 		58B5F5BD1F3AEF6C008DED7E /* source.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = source.json; sourceTree = "<group>"; };
 		58DEA0B81F4BFF02008199F0 /* NetWorking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetWorking.h; sourceTree = "<group>"; };
 		58DEA0B91F4BFF02008199F0 /* NetWorking.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetWorking.m; sourceTree = "<group>"; };
+		58DEA0BA1F4C0107008199F0 /* MCKLineVolumePositionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCKLineVolumePositionModel.h; sourceTree = "<group>"; };
+		58DEA0BB1F4C0108008199F0 /* MCKLinePositionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCKLinePositionModel.h; sourceTree = "<group>"; };
+		58DEA0BC1F4C0108008199F0 /* MCKLinePositionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCKLinePositionModel.m; sourceTree = "<group>"; };
+		58DEA0BD1F4C0108008199F0 /* MCKLineVolumePositionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCKLineVolumePositionModel.m; sourceTree = "<group>"; };
+		58DEA0BE1F4C0108008199F0 /* KDJ介绍.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "KDJ介绍.md"; sourceTree = "<group>"; };
+		58DEA0BF1F4C0108008199F0 /* MA-EMA-MACD介绍.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "MA-EMA-MACD介绍.md"; sourceTree = "<group>"; };
+		58DEA0C01F4C0108008199F0 /* MCKLineGroupModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCKLineGroupModel.h; sourceTree = "<group>"; };
+		58DEA0C11F4C0108008199F0 /* MCKLineModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCKLineModel.h; sourceTree = "<group>"; };
+		58DEA0C21F4C0108008199F0 /* MCKLineModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCKLineModel.m; sourceTree = "<group>"; };
+		58DEA0C31F4C0108008199F0 /* 指标公式.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "指标公式.md"; sourceTree = "<group>"; };
+		58DEA0C41F4C0109008199F0 /* MCKLineGroupModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCKLineGroupModel.m; sourceTree = "<group>"; };
+		58DEA0CA1F4C0154008199F0 /* UIColor+Y_StockChart.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Y_StockChart.h"; sourceTree = "<group>"; };
+		58DEA0CB1F4C0154008199F0 /* UIColor+Y_StockChart.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Y_StockChart.m"; sourceTree = "<group>"; };
+		58DEA0CC1F4C0154008199F0 /* Y_StockChartConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Y_StockChartConstant.h; sourceTree = "<group>"; };
+		58DEA0CD1F4C0154008199F0 /* Y_StockChartGlobalVariable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Y_StockChartGlobalVariable.h; sourceTree = "<group>"; };
+		58DEA0CE1F4C0154008199F0 /* Y_StockChartGlobalVariable.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Y_StockChartGlobalVariable.m; sourceTree = "<group>"; };
 		58F978A01F38182000C756E4 /* ZKKLineDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZKKLineDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58F978A41F38182000C756E4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		58F978A61F38182000C756E4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -125,6 +147,18 @@
 			path = NetWorking;
 			sourceTree = "<group>";
 		};
+		58DEA0C91F4C0154008199F0 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				58DEA0CA1F4C0154008199F0 /* UIColor+Y_StockChart.h */,
+				58DEA0CB1F4C0154008199F0 /* UIColor+Y_StockChart.m */,
+				58DEA0CC1F4C0154008199F0 /* Y_StockChartConstant.h */,
+				58DEA0CD1F4C0154008199F0 /* Y_StockChartGlobalVariable.h */,
+				58DEA0CE1F4C0154008199F0 /* Y_StockChartGlobalVariable.m */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		58F978971F38182000C756E4 = {
 			isa = PBXGroup;
 			children = (
@@ -171,6 +205,7 @@
 		58F9791B1F38302800C756E4 /* ZKKLineChart */ = {
 			isa = PBXGroup;
 			children = (
+				58DEA0C91F4C0154008199F0 /* Config */,
 				58F9791C1F38304000C756E4 /* ACMacros.h */,
 				58B5F5A71F3ADBB9008DED7E /* Categories */,
 				58F979241F38304000C756E4 /* Components */,
@@ -202,6 +237,17 @@
 		58F979421F38304000C756E4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				58DEA0C31F4C0108008199F0 /* 指标公式.md */,
+				58DEA0BE1F4C0108008199F0 /* KDJ介绍.md */,
+				58DEA0BF1F4C0108008199F0 /* MA-EMA-MACD介绍.md */,
+				58DEA0C01F4C0108008199F0 /* MCKLineGroupModel.h */,
+				58DEA0C41F4C0109008199F0 /* MCKLineGroupModel.m */,
+				58DEA0C11F4C0108008199F0 /* MCKLineModel.h */,
+				58DEA0C21F4C0108008199F0 /* MCKLineModel.m */,
+				58DEA0BB1F4C0108008199F0 /* MCKLinePositionModel.h */,
+				58DEA0BC1F4C0108008199F0 /* MCKLinePositionModel.m */,
+				58DEA0BA1F4C0107008199F0 /* MCKLineVolumePositionModel.h */,
+				58DEA0BD1F4C0108008199F0 /* MCKLineVolumePositionModel.m */,
 				58F979431F38304000C756E4 /* DataTransformers */,
 				58F979461F38304000C756E4 /* ZKKLineItem.h */,
 				58F979471F38304000C756E4 /* ZKKLineItem.m */,
@@ -421,13 +467,19 @@
 				58F9796E1F38304000C756E4 /* KLineChartView.m in Sources */,
 				58F979731F38304000C756E4 /* TLineChartView.m in Sources */,
 				58F979721F38304000C756E4 /* TipBoardView.m in Sources */,
+				58DEA0C61F4C0109008199F0 /* MCKLineVolumePositionModel.m in Sources */,
 				58F979701F38304000C756E4 /* MATipView.m in Sources */,
+				58DEA0C71F4C0109008199F0 /* MCKLineModel.m in Sources */,
+				58DEA0D01F4C0179008199F0 /* UIColor+Y_StockChart.m in Sources */,
+				58DEA0C81F4C0109008199F0 /* MCKLineGroupModel.m in Sources */,
+				58DEA0CF1F4C0175008199F0 /* Y_StockChartGlobalVariable.m in Sources */,
 				58F979741F38304000C756E4 /* TLineTipBoardView.m in Sources */,
 				58F9796C1F38304000C756E4 /* KLineListTransformer.m in Sources */,
 				58F9796D1F38304000C756E4 /* ZKKLineItem.m in Sources */,
 				58B5F5BC1F3AE546008DED7E /* UIView+Addition.m in Sources */,
 				58F978A51F38182000C756E4 /* main.m in Sources */,
 				58F9796F1F38304000C756E4 /* KLineTipBoardView.m in Sources */,
+				58DEA0C51F4C0109008199F0 /* MCKLinePositionModel.m in Sources */,
 				58B5F5BB1F3AE544008DED7E /* UIBezierPath+curved.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
