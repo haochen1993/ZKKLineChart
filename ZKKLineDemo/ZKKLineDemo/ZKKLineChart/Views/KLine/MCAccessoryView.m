@@ -14,9 +14,9 @@
 
 @interface MCAccessoryView ()
 
-@property (nonatomic) float maxValue;
+@property (nonatomic) CGFloat highestValue;
 
-@property (nonatomic) float minValue;
+@property (nonatomic) CGFloat lowestValue;
 
 @property (nonatomic, strong) UITapGestureRecognizer *switchGesture;
 
@@ -40,8 +40,8 @@ static const CGFloat kVerticalMargin = 12.f;
 - (void)setup {
     _MAValues = @[ @7, @30 ];
     
-    _maxValue = -MAXFLOAT;
-    _minValue = MAXFLOAT;
+    _highestValue = -MAXFLOAT;
+    _lowestValue = MAXFLOAT;
     [self addGestureRecognizer:self.switchGesture];
 }
 
@@ -75,9 +75,10 @@ static const CGFloat kVerticalMargin = 12.f;
 - (CGPathRef)movingAvgGraphPathForContextAtIndex:(NSInteger)index {
     UIBezierPath *path = nil;
     CGFloat xAxisValue = self.boxOriginX + 0.5*_kLineWidth + _linePadding;
-    CGFloat volumePerHeightUnit = [self getVolumePerHeightUnit];
-    if (volumePerHeightUnit == 0) {
-        volumePerHeightUnit = 1.0f;
+    
+    CGFloat unitValue = (_highestValue - _lowestValue) / (self.frame.size.height);
+    if (unitValue == 0) {
+        unitValue = 1.0f;
     }
     // 均线个数
     NSInteger maLength = [self.MAValues[index] integerValue];
@@ -88,17 +89,17 @@ static const CGFloat kVerticalMargin = 12.f;
         
         CGFloat MAValue = 0;
         if (maLength == 7) {
-            MAValue = item.Volume_MA7;
+            MAValue = item.DEA;
         }
         else if (maLength == 30) {
-            MAValue = item.Volume_MA30;
+            MAValue = item.DIF;
         }
         // 不足均线个数，则不需要获取该段均线数据(例如: 均5，个数小于5个，则不需要绘制前四均线，...)
         if ([self.data indexOfObject:item] < maLength - 1) {
             xAxisValue += self.kLineWidth + self.linePadding;
             continue;
         }
-        CGFloat deltaToBottomAxis = MAValue / volumePerHeightUnit;
+        CGFloat deltaToBottomAxis = (MAValue - _lowestValue) / unitValue;
         CGFloat yAxisValue = self.bounds.size.height - (deltaToBottomAxis ?: 1);
         CGPoint maPoint = CGPointMake(xAxisValue, yAxisValue);
         if (!path) {
@@ -118,24 +119,41 @@ static const CGFloat kVerticalMargin = 12.f;
 #pragma mark - public methods
 
 - (void)update {
-    [self reset];
+    [self resetMaxAndMin];
     [self setNeedsDisplay];
 }
 
 #pragma mark - private methods
 
-- (void)reset {
-    _maxValue = -MAXFLOAT;
-    _minValue = MAXFLOAT;
+- (void)resetMaxAndMin {
+    _highestValue = CGFLOAT_MIN;
+    _lowestValue = CGFLOAT_MAX;
     
     NSArray *volums = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
-    for (MCKLineModel *item in volums) {
-        if (self.maxValue < item.volume) {
-            self.maxValue = item.volume;
+    for (MCKLineModel *model in volums) {
+        if(model.DIF) {
+            if(model.DIF < _lowestValue) {
+                _lowestValue = model.DIF;
+            }
+            if(model.DIF > _highestValue) {
+                _highestValue = model.DIF;
+            }
         }
-        
-        if (self.minValue > item.volume) {
-            self.minValue = item.volume;
+        if(model.DEA) {
+            if (_lowestValue > model.DEA) {
+                _lowestValue = model.DEA;
+            }
+            if (_highestValue < model.DEA) {
+                _highestValue = model.DEA;
+            }
+        }
+        if(model.MACD) {
+            if (_lowestValue > model.MACD) {
+                _lowestValue = model.MACD;
+            }
+            if (_highestValue < model.MACD) {
+                _highestValue = model.MACD;
+            }
         }
     }
 }
@@ -150,7 +168,7 @@ static const CGFloat kVerticalMargin = 12.f;
 }
 
 - (void)drawChart {
-    [self showYAxisTitleWithTitles:@[[NSString stringWithFormat:@"%.f", self.maxValue], [NSString stringWithFormat:@"%.f", self.maxValue/2.0], @"万"]];
+    [self showYAxisTitleWithTitles:@[[NSString stringWithFormat:@"%.f", self.highestValue], [NSString stringWithFormat:@"%.f", self.highestValue/2.0], @"万"]];
     [self drawVolView];
 }
 
@@ -162,45 +180,18 @@ static const CGFloat kVerticalMargin = 12.f;
     CGContextSetLineWidth(context, self.kLineWidth);
     
     __block CGFloat xAxis = self.linePadding + self.boxOriginX;
-    __block CGFloat lowestValue = CGFLOAT_MAX;
-    __block CGFloat highestValue = CGFLOAT_MIN;
     NSArray *kLineModels = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
     
-    [kLineModels enumerateObjectsUsingBlock:^(MCKLineModel *  _Nonnull model, NSUInteger idx, BOOL * _Nonnull stop) {
-        if(model.DIF) {
-            if(model.DIF < lowestValue) {
-                lowestValue = model.DIF;
-            }
-            if(model.DIF > highestValue) {
-                highestValue = model.DIF;
-            }
-        }
-        if(model.DEA) {
-            if (lowestValue > model.DEA) {
-                lowestValue = model.DEA;
-            }
-            if (highestValue < model.DEA) {
-                highestValue = model.DEA;
-            }
-        }
-        if(model.MACD) {
-            if (lowestValue > model.MACD) {
-                lowestValue = model.MACD;
-            }
-            if (highestValue < model.MACD) {
-                highestValue = model.MACD;
-            }
-        }
-    }];
+    [self resetMaxAndMin];
     
-    CGFloat unitValue = (highestValue - lowestValue) / (self.frame.size.height);
+    CGFloat unitValue = (_highestValue - _lowestValue) / (self.frame.size.height);
     
     [kLineModels enumerateObjectsUsingBlock:^(MCKLineModel *  _Nonnull model, NSUInteger idx, BOOL * _Nonnull stop) {
         UIColor *fillColor = model.MACD > 0 ? self.positiveVolColor : self.negativeVolColor;
         CGContextSetFillColorWithColor(context, fillColor.CGColor);
         
         CGRect pathRect = CGRectZero;
-        CGFloat centerY = self.frame.size.height + lowestValue/unitValue;
+        CGFloat centerY = self.frame.size.height + _lowestValue/unitValue;
         
         CGFloat itemHeight = ABS(model.MACD/unitValue);
         if (model.MACD > 0) {
@@ -213,10 +204,6 @@ static const CGFloat kVerticalMargin = 12.f;
         CGContextFillPath(context);
         xAxis += _kLineWidth + _linePadding;
     }];
-}
-
-- (CGFloat)getVolumePerHeightUnit {
-    return self.maxValue/(self.frame.size.height - self.axisShadowWidth - kVerticalMargin);
 }
 
 - (void)showYAxisTitleWithTitles:(NSArray *)yAxis {
