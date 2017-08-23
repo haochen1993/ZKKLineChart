@@ -14,6 +14,7 @@
 #import "ACMacros.h"
 #import "Global+Helper.h"
 #import "VolumnView.h"
+#import "MCAccessoryView.h"
 
 #define MaxYAxis       (self.topMargin + self.yAxisHeight)
 #define MaxBoundSize   (MAX(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)))
@@ -51,7 +52,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
 @property (nonatomic, strong) MATipView * maTipView;
 // 成交量图
 @property (nonatomic, strong) VolumnView *volView;
-@property (nonatomic, strong) VolumnView *MACDView;
+@property (nonatomic, strong) MCAccessoryView *MACDView;
 //时间
 @property (nonatomic, strong) UILabel *timeLabel;
 //价格
@@ -841,7 +842,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
 
 - (VolumnView *)MACDView {
     if (!_MACDView) {
-        _MACDView = [VolumnView new];
+        _MACDView = [MCAccessoryView new];
         _MACDView.backgroundColor  = self.backgroundColor;
         _MACDView.boxRightMargin = self.rightMargin;
         _MACDView.axisShadowColor = self.axisShadowColor;
