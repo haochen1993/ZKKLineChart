@@ -338,7 +338,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
         return;
     }
     
-    self.kLineWidth = _kLineWidth*scale;
+    self.kLineWidth = _kLineWidth * scale;
     
     CGFloat forwardDrawCount = self.kLineDrawNum;
     
@@ -350,7 +350,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
         _kLineDrawNum = _kLineDrawNum + 1;
     }
     
-    _kLineDrawNum = self.dataSource.count > 0 && _kLineDrawNum < self.dataSource.count ? _kLineDrawNum : self.dataSource.count;
+    _kLineDrawNum = (self.dataSource.count > 0 && _kLineDrawNum < self.dataSource.count) ? _kLineDrawNum : self.dataSource.count;
     if (forwardDrawCount == self.kLineDrawNum && self.maxKLineWidth != self.kLineWidth) {
         return;
     }
