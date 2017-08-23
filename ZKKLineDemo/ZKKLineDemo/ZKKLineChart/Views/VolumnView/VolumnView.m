@@ -10,6 +10,7 @@
 #import "KLineListTransformer.h"
 #import "Global+Helper.h"
 #import "MCKLineModel.h"
+#import "UIBezierPath+curved.h"
 
 @interface VolumnView ()
 
@@ -19,9 +20,11 @@
 
 @property (nonatomic, strong) UITapGestureRecognizer *switchGesture;
 
+@property (nonatomic, copy) NSArray *MAValues;
+
 @end
 
-static const CGFloat kVerticalMargin = 18.f;
+static const CGFloat kVerticalMargin = 12.f;
 
 @implementation VolumnView
 
@@ -37,6 +40,8 @@ static const CGFloat kVerticalMargin = 18.f;
 - (void)setup {
     self.volStyle = CandlerstickChartsVolStyleDefault;
     
+    _MAValues = @[ @7, @30 ];
+    
     _maxValue = -MAXFLOAT;
     _minValue = MAXFLOAT;
     [self addGestureRecognizer:self.switchGesture];
@@ -47,8 +52,69 @@ static const CGFloat kVerticalMargin = 18.f;
     [super drawRect:rect];
     
     [self drawAxis];
-    
     [self drawChart];
+    [self drawMALine];
+}
+
+/**
+ *  均线图
+ */
+- (void)drawMALine {
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth(context, 1.f);
+    UIColor *colors[] = { [UIColor whiteColor], [UIColor yellowColor] };
+    for (int i = 0; i < _MAValues.count; i ++) {
+        CGContextSetStrokeColorWithColor(context, colors[i].CGColor);
+        CGPathRef path = [self movingAvgGraphPathForContextAtIndex:i];
+        CGContextAddPath(context, path);
+        CGContextStrokePath(context);
+    }
+}
+
+/**
+ *  均线path
+ */
+- (CGPathRef)movingAvgGraphPathForContextAtIndex:(NSInteger)index {
+    UIBezierPath *path = nil;
+    CGFloat xAxisValue = self.boxOriginX + 0.5*_kLineWidth + _linePadding;
+    CGFloat volumePerHeightUnit = [self getVolumePerHeightUnit];
+    if (volumePerHeightUnit == 0) {
+        volumePerHeightUnit = 1.0f;
+    }
+    // 均线个数
+    NSInteger maLength = [self.MAValues[index] integerValue];
+    
+    NSArray *drawArrays = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
+    for (int i = 0; i < drawArrays.count; i ++) {
+        MCKLineModel *item = drawArrays[i];
+        
+        CGFloat MAValue = 0;
+        if (maLength == 7) {
+            MAValue = item.Volume_MA7;
+        }
+        else if (maLength == 30) {
+            MAValue = item.Volume_MA30;
+        }
+        // 不足均线个数，则不需要获取该段均线数据(例如: 均5，个数小于5个，则不需要绘制前四均线，...)
+        if ([self.data indexOfObject:item] < maLength - 1) {
+            xAxisValue += self.kLineWidth + self.linePadding;
+            continue;
+        }
+        CGFloat deltaToBottomAxis = MAValue / volumePerHeightUnit;
+        CGFloat yAxisValue = self.bounds.size.height - (deltaToBottomAxis ?: 1);
+        CGPoint maPoint = CGPointMake(xAxisValue, yAxisValue);
+        if (!path) {
+            path = [UIBezierPath bezierPath];
+            [path moveToPoint:maPoint];
+        }
+        else {
+            [path addLineToPoint:maPoint];
+        }
+        xAxisValue += self.kLineWidth + self.linePadding;
+    }
+    //圆滑
+    path = [path mc_smoothedPathWithGranularity:15];
+    return path.CGPath;
 }
 
 #pragma mark - public methods
@@ -150,7 +216,7 @@ static const CGFloat kVerticalMargin = 18.f;
     
     CGFloat boxOriginY = self.axisShadowWidth;
     CGFloat boxHeight = rect.size.height - boxOriginY;
-    CGFloat volumePerUnit = self.maxValue/(boxHeight - kVerticalMargin);
+    CGFloat volumePerUnit = [self getVolumePerHeightUnit];
     
     NSArray *contentValues = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
     for (MCKLineModel *item in contentValues) {
@@ -166,6 +232,10 @@ static const CGFloat kVerticalMargin = 18.f;
         
         xAxis += _kLineWidth + _linePadding;
     }
+}
+
+- (CGFloat)getVolumePerHeightUnit {
+    return self.maxValue/(self.frame.size.height - self.axisShadowWidth - kVerticalMargin);
 }
 
 - (void)showYAxisTitleWithTitles:(NSArray *)yAxis {

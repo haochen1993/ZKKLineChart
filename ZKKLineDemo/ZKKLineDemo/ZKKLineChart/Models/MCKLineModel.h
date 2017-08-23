@@ -86,13 +86,11 @@ typedef NS_ENUM(NSInteger, YCoinType) {
 
 //MA（7）=（C1+C2+……CN）/7
 @property (nonatomic, assign) CGFloat MA7;
+@property (nonatomic, assign) CGFloat MA12;
+@property (nonatomic, assign) CGFloat MA26;
 
 //MA（30）=（C1+C2+……CN）/30
 @property (nonatomic, assign) CGFloat MA30;
-
-@property (nonatomic, assign) CGFloat MA12;
-
-@property (nonatomic, assign) CGFloat MA26;
 
 @property (nonatomic, assign) CGFloat Volume_MA7;
 
