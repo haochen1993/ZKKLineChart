@@ -315,7 +315,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
 - (void)panEvent:(UIPanGestureRecognizer *)panGesture {
     [self hideTipsWithAnimated:NO];
     CGPoint touchPoint = [panGesture translationInView:self];
-    NSInteger offsetIndex = fabs(touchPoint.x/(self.kLineWidth > self.maxKLineWidth/2.0 ? 16.0f : 8.0));
+    NSInteger offsetIndex = fabs(touchPoint.x / (self.kLineWidth + self.kLinePadding));
     if (self.dataSource.count == 0 || offsetIndex == 0) {
         return;
     }
