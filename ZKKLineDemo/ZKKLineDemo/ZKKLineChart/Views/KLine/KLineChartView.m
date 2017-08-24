@@ -565,7 +565,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
         if (xAxisValue > self.leftMargin + self.xAxisWidth) {
             break;
         }
-        [self drawDashLineInContext:context movePoint:CGPointMake(xAxisValue, self.topMargin + 1.25) toPoint:CGPointMake(xAxisValue, MaxYAxis - 1.25)];
+        [self drawDashLineInContext:context movePoint:CGPointMake(xAxisValue, self.topMargin + 1.25) toPoint:CGPointMake(xAxisValue, SelfHeight - 10)];
         //x轴坐标
         NSInteger timeIndex = i * lineCountPerGrid + self.startDrawIndex;
         if (timeIndex > self.dataSource.count - 1) {
@@ -825,7 +825,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
 - (VolumnView *)volView {
     if (!_volView) {
         _volView = [VolumnView new];
-        _volView.backgroundColor  = self.backgroundColor;
+        _volView.backgroundColor  = [UIColor clearColor];
         _volView.boxRightMargin = self.rightMargin;
         _volView.axisShadowColor = self.axisShadowColor;
         _volView.axisShadowWidth = self.axisShadowWidth;
@@ -843,7 +843,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
 - (VolumnView *)MACDView {
     if (!_MACDView) {
         _MACDView = [MCAccessoryView new];
-        _MACDView.backgroundColor  = self.backgroundColor;
+        _MACDView.backgroundColor  = [UIColor clearColor];
         _MACDView.boxRightMargin = self.rightMargin;
         _MACDView.axisShadowColor = self.axisShadowColor;
         _MACDView.axisShadowWidth = self.axisShadowWidth;
