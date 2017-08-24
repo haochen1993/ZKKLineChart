@@ -146,7 +146,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
     self.maxKLineWidth = 24;
     self.minKLineWidth = 1.5;
     
-    self.kLineWidth = 8.0;
+    self.kLineWidth = 4.0;
     self.kLinePadding = 2.0;
     
     self.lastPanScale = 1.0;

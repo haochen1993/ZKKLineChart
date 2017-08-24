@@ -69,14 +69,18 @@ static const CGFloat kVerticalMargin = 12.f;
     }
 }
 
+- (CGFloat)calcValuePerHeightUnit {
+    CGFloat unitValue = (_highestValue - _lowestValue) / (self.frame.size.height - kVerticalMargin * 2);
+    return unitValue;
+}
+
 /**
  *  均线path
  */
 - (CGPathRef)movingAvgGraphPathForContextAtIndex:(NSInteger)index {
     UIBezierPath *path = nil;
     CGFloat xAxisValue = self.boxOriginX + 0.5*_kLineWidth + _linePadding;
-    
-    CGFloat unitValue = (_highestValue - _lowestValue) / (self.frame.size.height);
+    CGFloat unitValue = [self calcValuePerHeightUnit];
     if (unitValue == 0) {
         unitValue = 1.0f;
     }
@@ -100,7 +104,7 @@ static const CGFloat kVerticalMargin = 12.f;
             continue;
         }
         CGFloat deltaToBottomAxis = (MAValue - _lowestValue) / unitValue;
-        CGFloat yAxisValue = self.bounds.size.height - (deltaToBottomAxis ?: 1);
+        CGFloat yAxisValue = self.bounds.size.height - (deltaToBottomAxis ?: 1) - kVerticalMargin;
         CGPoint maPoint = CGPointMake(xAxisValue, yAxisValue);
         if (!path) {
             path = [UIBezierPath bezierPath];
@@ -184,14 +188,14 @@ static const CGFloat kVerticalMargin = 12.f;
     
     [self resetMaxAndMin];
     
-    CGFloat unitValue = (_highestValue - _lowestValue) / (self.frame.size.height);
+    CGFloat unitValue = [self calcValuePerHeightUnit];
     
     [kLineModels enumerateObjectsUsingBlock:^(MCKLineModel *  _Nonnull model, NSUInteger idx, BOOL * _Nonnull stop) {
         UIColor *fillColor = model.MACD > 0 ? self.positiveVolColor : self.negativeVolColor;
         CGContextSetFillColorWithColor(context, fillColor.CGColor);
         
         CGRect pathRect = CGRectZero;
-        CGFloat centerY = self.frame.size.height + _lowestValue/unitValue;
+        CGFloat centerY = self.frame.size.height + _lowestValue/unitValue - kVerticalMargin;
         
         CGFloat itemHeight = ABS(model.MACD/unitValue);
         if (model.MACD > 0) {
