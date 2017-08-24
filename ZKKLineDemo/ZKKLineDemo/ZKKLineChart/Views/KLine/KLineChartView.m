@@ -391,8 +391,11 @@ static const CGFloat kChartVerticalMargin = 30.f;
 }
 
 - (void)showTipBoardWithTouchPoint:(CGPoint)touchPoint {
+    CGFloat relativeTouchX = touchPoint.x - _leftMargin;
+    // 注意在_xAxisMapper的xAxisKey值是仅仅是坐标原点开始的横坐标值，不是从视图最左开始计算的。即完整的在视图上的坐标需加上_leftMargin
     [self.xAxisMapper enumerateKeysAndObjectsUsingBlock:^(NSNumber *xAxisKey, NSNumber *indexObject, BOOL *stop) {
-        if (_kLinePadding+_kLineWidth >= ([xAxisKey floatValue] - touchPoint.x) && ([xAxisKey floatValue] - touchPoint.x) > 0) {
+        CGFloat xAxisValue = [xAxisKey floatValue];
+        if (relativeTouchX > xAxisValue - _kLineWidth && relativeTouchX < xAxisValue)  {
             NSInteger index = [indexObject integerValue];
             // 获取对应的k线数据
             MCKLineModel *item = self.dataSource[index];
@@ -401,7 +404,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
             CGFloat scale = (self.highestPriceOfAll - self.lowestPriceOfAll) / self.yAxisHeight;
             scale = scale ?: 1;
             
-            CGFloat xAxis = [xAxisKey floatValue] - _kLineWidth / 2.0 + self.leftMargin;
+            CGFloat xAxis = xAxisValue - _kLineWidth / 2.0 + _leftMargin;
             CGFloat yAxis = self.yAxisHeight - (open - self.lowestPriceOfAll)/scale + self.topMargin;
             
             if (item.highestPrice > item.lowestPrice) {
