@@ -778,9 +778,50 @@ static const CGFloat kChartVerticalMargin = 30.f;
     NSArray *drawContext = self.autoFit ? subChartValues : self.dataSource;
     
     for (int i = 0; i < drawContext.count; i++) {
-        MCKLineModel *item = drawContext[i];
-        self.highestPriceOfAll = MAX(item.highestPrice, self.highestPriceOfAll);
-        self.lowestPriceOfAll = MIN(item.lowestPrice, self.lowestPriceOfAll);
+        MCKLineModel *model = drawContext[i];
+        self.highestPriceOfAll = MAX(model.highestPrice, self.highestPriceOfAll);
+        self.lowestPriceOfAll = MIN(model.lowestPrice, self.lowestPriceOfAll);
+        
+        if(model.MA7) {
+            if(model.MA7 < _lowestPriceOfAll) {
+                _lowestPriceOfAll = model.MA7;
+            }
+            if(model.MA7 > _highestPriceOfAll) {
+                _highestPriceOfAll = model.MA7;
+            }
+        }
+        if(model.MA12) {
+            if (_lowestPriceOfAll > model.MA12) {
+                _lowestPriceOfAll = model.MA12;
+            }
+            if (_highestPriceOfAll < model.MA12) {
+                _highestPriceOfAll = model.MA12;
+            }
+        }
+        if(model.MA20) {
+            if (_lowestPriceOfAll > model.MA20) {
+                _lowestPriceOfAll = model.MA20;
+            }
+            if (_highestPriceOfAll < model.MA20) {
+                _highestPriceOfAll = model.MA20;
+            }
+        }
+        if(model.MA26) {
+            if (_lowestPriceOfAll > model.MA26) {
+                _lowestPriceOfAll = model.MA26;
+            }
+            if (_highestPriceOfAll < model.MA26) {
+                _highestPriceOfAll = model.MA26;
+            }
+        }
+        if(model.MA30) {
+            if (_lowestPriceOfAll > model.MA30) {
+                _lowestPriceOfAll = model.MA30;
+            }
+            if (_highestPriceOfAll < model.MA30) {
+                _highestPriceOfAll = model.MA30;
+            }
+        }
     }
 }
 
