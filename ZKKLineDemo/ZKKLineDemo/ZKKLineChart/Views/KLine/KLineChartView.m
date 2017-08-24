@@ -356,16 +356,22 @@ static const CGFloat kChartVerticalMargin = 30.f;
         return;
     }
     
-    NSInteger diffCount = fabs(self.kLineDrawNum - forwardDrawCount);
-    
-    if (forwardDrawCount > self.startDrawIndex) {
-        // 放大
-        self.startDrawIndex += ceil(diffCount/2.0);
-    } else {
-        // 缩小
-        self.startDrawIndex -= floor(diffCount/2.0);
-        self.startDrawIndex = self.startDrawIndex < 0 ? 0 : self.startDrawIndex;
+    if ((scale < 1 && _kLineWidth == _minKLineWidth) || (scale > 1 && _kLineWidth == _maxKLineWidth)) {
+        return;
     }
+    
+    /**
+     static int i = 0;
+     i ++;
+     if (i % 3 == 0) {
+     if (scale > 1) {
+     _startDrawIndex += 1;
+     }
+     else {
+     _startDrawIndex -= 1;
+     }
+     }
+     */
     
     self.startDrawIndex = self.startDrawIndex + self.kLineDrawNum > self.dataSource.count ? self.dataSource.count - self.kLineDrawNum : self.startDrawIndex;
     
