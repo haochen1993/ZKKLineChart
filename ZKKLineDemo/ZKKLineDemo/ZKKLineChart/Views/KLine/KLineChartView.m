@@ -46,7 +46,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
 //十字线
 @property (nonatomic, strong) UIView *verticalCrossLine;     //垂直十字线
 @property (nonatomic, strong) UIView *horizontalCrossLine;   //水平十字线
-@property (nonatomic, strong) UIView *barVerticalLine;
 // 成交量图
 @property (nonatomic, strong) VolumnView *volView;
 @property (nonatomic, strong) MCAccessoryView *MACDView;
@@ -418,14 +417,11 @@ static const CGFloat kChartVerticalMargin = 30.f;
 - (void)configUIWithLineItem:(MCKLineModel *)item atPoint:(CGPoint)point {
     //十字线
     self.verticalCrossLine.hidden = NO;
-    self.verticalCrossLine.us_height = self.showBarChart ? SelfHeight - self.topMargin : self.verticalCrossLine.us_height;
+    self.verticalCrossLine.us_height = SelfHeight - self.topMargin;
     self.verticalCrossLine.us_left = point.x;
     
     self.horizontalCrossLine.hidden = NO;
     self.horizontalCrossLine.us_top = point.y;
-    
-    self.barVerticalLine.hidden = NO;
-    self.barVerticalLine.us_left = point.x;
 
     self.KLineTitleView.hidden = false;
     [self.KLineTitleView updateWithHigh:item.highestPrice open:item.openingPrice close:item.closingPrice low:item.lowestPrice];
@@ -455,7 +451,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
 - (void)hideTipsWithAnimated:(BOOL)animated {
     self.horizontalCrossLine.hidden = YES;
     self.verticalCrossLine.hidden = YES;
-    self.barVerticalLine.hidden = YES;
     self.priceLabel.hidden = YES;
     self.timeLabel.hidden = YES;
     self.KLineTitleView.hidden = true;
@@ -883,15 +878,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
         [self addSubview:_horizontalCrossLine];
     }
     return _horizontalCrossLine;
-}
-
-- (UIView *)barVerticalLine {
-    if (!_barVerticalLine) {
-        _barVerticalLine = [[UIView alloc] initWithFrame:CGRectMake(self.leftMargin, MaxYAxis + self.timeAxisHeight, 0.5, SelfHeight - (MaxYAxis + self.timeAxisHeight))];
-        _barVerticalLine.backgroundColor = self.crossLineColor;
-        [self addSubview:_barVerticalLine];
-    }
-    return _barVerticalLine;
 }
 
 - (UIButton *)realDataTipBtn {
