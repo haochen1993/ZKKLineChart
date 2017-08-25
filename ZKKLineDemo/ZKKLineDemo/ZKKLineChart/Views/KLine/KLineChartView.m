@@ -10,7 +10,6 @@
 #import "KLineChartView.h"
 #import "UIBezierPath+curved.h"
 #import "KLineTipBoardView.h"
-#import "MATipView.h"
 #import "ACMacros.h"
 #import "Global+Helper.h"
 #import "VolumnView.h"
@@ -50,7 +49,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
 @property (nonatomic, strong) UIView *horizontalCrossLine;   //水平十字线
 @property (nonatomic, strong) UIView *barVerticalLine;
 @property (nonatomic, strong) KLineTipBoardView *tipBoard;
-@property (nonatomic, strong) MATipView * maTipView;
 // 成交量图
 @property (nonatomic, strong) VolumnView *volView;
 @property (nonatomic, strong) MCAccessoryView *MACDView;
@@ -160,15 +158,10 @@ static const CGFloat kChartVerticalMargin = 30.f;
     self.rightMargin = 2.0;
     self.bottomMargin = 250.0f;
     self.leftMargin = 25.0f;
-    
+    self.KLineTitleView.hidden = true;
     //添加手势
     [self addGestures];
     [self registerObserver];
-    
-    _KLineTitleView = [MCKLineTitleView titleView];
-    [self addSubview:_KLineTitleView];
-    _KLineTitleView.frame = CGRectMake(0, _topMargin, SelfWidth, 20);
-    _KLineTitleView.backgroundColor = [UIColor greenColor];
 }
 
 /**
@@ -436,13 +429,9 @@ static const CGFloat kChartVerticalMargin = 30.f;
     self.barVerticalLine.hidden = NO;
     self.barVerticalLine.us_left = point.x;
 
-    //均值
-    self.maTipView.hidden = !self.showAvgLine;
-    if (self.showAvgLine) {
-        self.maTipView.minAvgPrice = [NSString stringWithFormat:@"MA5：%.2f", [self.MAValues[0] doubleValue]];
-        self.maTipView.midAvgPrice = [NSString stringWithFormat:@"MA10：%.2f", [self.MAValues[1] doubleValue]];
-        self.maTipView.maxAvgPrice = [NSString stringWithFormat:@"MA20：%.2f", [self.MAValues[2] doubleValue]];
-    }
+    self.KLineTitleView.hidden = false;
+    [self.KLineTitleView updateWithHigh:item.highestPrice open:item.openingPrice close:item.closingPrice low:item.lowestPrice];
+    
     //提示版
     self.tipBoard.openingPrice = [self dealDecimalWithNum:item.openingPrice];
     self.tipBoard.closingPrice = [self dealDecimalWithNum:item.closingPrice];
@@ -492,7 +481,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
     self.horizontalCrossLine.hidden = YES;
     self.verticalCrossLine.hidden = YES;
     self.barVerticalLine.hidden = YES;
-    self.maTipView.hidden = YES;
     self.priceLabel.hidden = YES;
     self.timeLabel.hidden = YES;
     if (animated) {
@@ -500,6 +488,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
     } else {
         self.tipBoard.hidden = YES;
     }
+    self.KLineTitleView.hidden = true;
 }
 
 #pragma mark - private methods
@@ -945,17 +934,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
     return _tipBoard;
 }
 
-- (MATipView *)maTipView {
-    if (!_maTipView) {
-        _maTipView = [[MATipView alloc] initWithFrame:CGRectMake(self.leftMargin + 20, self.topMargin - 18.0f, SelfWidth - self.leftMargin - self.rightMargin - 20, 13.0f)];
-        _maTipView.layer.masksToBounds = YES;
-        _maTipView.layer.cornerRadius = 7.0f;
-        _maTipView.backgroundColor = [UIColor colorWithWhite:0.35 alpha:1.0];
-        [self addSubview:_maTipView];
-    }
-    return _maTipView;
-}
-
 - (UIButton *)realDataTipBtn {
     if (!_realDataTipBtn) {
         _realDataTipBtn = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -995,6 +973,15 @@ static const CGFloat kChartVerticalMargin = 30.f;
         [self addSubview:_priceLabel];
     }
     return _priceLabel;
+}
+
+- (MCKLineTitleView *)KLineTitleView {
+    if (!_KLineTitleView) {
+        _KLineTitleView = [MCKLineTitleView titleView];
+        [self addSubview:_KLineTitleView];
+    }
+    _KLineTitleView.frame = CGRectMake(_leftMargin + 10, _topMargin, SelfWidth, 20);
+    return _KLineTitleView;
 }
 
 - (UITapGestureRecognizer *)tapGesture {

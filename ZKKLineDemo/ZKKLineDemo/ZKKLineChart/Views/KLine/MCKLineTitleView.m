@@ -45,47 +45,65 @@
 - (void)setup {
     _label_0 = [self generateLabel];
     [_label_0 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.mas_equalTo(0);
-        make.height.mas_equalTo(20);
+        make.left.mas_equalTo(0);
         make.width.mas_equalTo(20);
+        make.centerY.mas_equalTo(self);
     }];
     
     _label_1 = [self generateLabel];
     [_label_1 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(20);
         make.width.mas_equalTo(20);
-        make.top.mas_equalTo(0);
         make.left.mas_equalTo(_label_0.mas_right).offset(10);
+        make.centerY.mas_equalTo(self);
     }];
     
     _label_2 = [self generateLabel];
     [_label_2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
-        make.height.mas_equalTo(20);
         make.width.mas_equalTo(20);
         make.left.mas_equalTo(_label_1.mas_right).offset(10);
+        make.centerY.mas_equalTo(self);
     }];
     
     _label_3 = [self generateLabel];
     [_label_3 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
-        make.height.mas_equalTo(20);
         make.width.mas_equalTo(20);
         make.left.mas_equalTo(_label_2.mas_right).offset(10);
+        make.centerY.mas_equalTo(self);
     }];
 }
 
 - (UILabel *)generateLabel {
     UILabel *label = [UILabel new];
-    label.font = [UIFont systemFontOfSize:11];
+    label.font = [UIFont systemFontOfSize:8];
     label.textColor = KLineTextColor_Gray;
     [self addSubview:label];
-    label.backgroundColor = [UIColor redColor];
+    label.backgroundColor = [UIColor clearColor];
     return label;
 }
 
-- (void)updateWithHigh:(CGFloat)high open:(CGFloat)open close:(CGFloat)close lower:(CGFloat)lower {
-    
+- (void)updateWithHigh:(CGFloat)high open:(CGFloat)open close:(CGFloat)close low:(CGFloat)low {
+    NSAssert(high && open && close && low, @"value error");
+    [self updateLabel:_label_0 text:[@"开盘价: " stringByAppendingString:[self decimalValue:high]]];
+    [self updateLabel:_label_1 text:[@"最高价: " stringByAppendingString:[self decimalValue:open]]];
+    [self updateLabel:_label_2 text:[@"收盘价: " stringByAppendingString:[self decimalValue:close]]];
+    [self updateLabel:_label_3 text:[@"最低价: " stringByAppendingString:[self decimalValue:low]]];
+}
+
+- (void)updateLabel:(UILabel *)label text:(NSString *)text {
+    label.text = text;
+    CGFloat labelWidth = [text stringWidthWithFont:label.font height:CGFLOAT_MAX];
+    [label mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(labelWidth);
+    }];
+    [UIView animateWithDuration:.2 animations:^{
+        [self layoutIfNeeded];
+    }];
+}
+
+- (NSString *)decimalValue:(CGFloat)value {
+    NSString *str = nil;
+    str = [NSString stringWithFormat:@"%.2f", value];
+    return str;
 }
 
 @end

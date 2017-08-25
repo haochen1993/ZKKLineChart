@@ -12,6 +12,6 @@
 
 + (instancetype)titleView;
 
-- (void)updateWithHigh:(CGFloat)high open:(CGFloat)open close:(CGFloat)close lower:(CGFloat)lower;
+- (void)updateWithHigh:(CGFloat)high open:(CGFloat)open close:(CGFloat)close low:(CGFloat)low;
 
 @end
