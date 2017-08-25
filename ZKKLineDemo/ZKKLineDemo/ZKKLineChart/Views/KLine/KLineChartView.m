@@ -11,7 +11,7 @@
 #import "UIBezierPath+curved.h"
 #import "ACMacros.h"
 #import "Global+Helper.h"
-#import "VolumnView.h"
+#import "MCVolumeView.h"
 #import "MCAccessoryView.h"
 #import "MCKLineTitleView.h"
 #import "NSString+Common.h"
@@ -48,7 +48,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
 @property (nonatomic, strong) UIView *verticalCrossLine;     //垂直十字线
 @property (nonatomic, strong) UIView *horizontalCrossLine;   //水平十字线
 // 成交量图
-@property (nonatomic, strong) VolumnView *volView;
+@property (nonatomic, strong) MCVolumeView *volView;
 @property (nonatomic, strong) MCAccessoryView *MACDView;
 //时间
 @property (nonatomic, strong) UILabel *timeLabel;
@@ -818,9 +818,9 @@ static const CGFloat kChartVerticalMargin = 30.f;
 
 #pragma mark - getters
 
-- (VolumnView *)volView {
+- (MCVolumeView *)volView {
     if (!_volView) {
-        _volView = [VolumnView new];
+        _volView = [MCVolumeView new];
         _volView.backgroundColor  = [UIColor clearColor];
         _volView.boxRightMargin = self.rightMargin;
         _volView.axisShadowColor = self.axisShadowColor;

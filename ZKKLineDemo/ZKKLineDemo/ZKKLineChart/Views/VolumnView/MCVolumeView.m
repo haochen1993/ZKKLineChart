@@ -6,13 +6,13 @@
 //  Copyright © 2016年 ZhouKang. All rights reserved.
 //
 
-#import "VolumnView.h"
+#import "MCVolumeView.h"
 #import "KLineListTransformer.h"
 #import "Global+Helper.h"
 #import "MCKLineModel.h"
 #import "UIBezierPath+curved.h"
 
-@interface VolumnView ()
+@interface MCVolumeView ()
 
 @property (nonatomic) float maxValue;
 
@@ -26,7 +26,7 @@
 
 static const CGFloat kVerticalMargin = 12.f;
 
-@implementation VolumnView
+@implementation MCVolumeView
 
 #pragma mark - life cycle
 

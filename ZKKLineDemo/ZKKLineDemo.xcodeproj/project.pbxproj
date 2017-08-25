@@ -36,7 +36,7 @@
 		58F979721F38304000C756E4 /* TipBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979551F38304000C756E4 /* TipBoardView.m */; };
 		58F979731F38304000C756E4 /* TLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979581F38304000C756E4 /* TLineChartView.m */; };
 		58F979741F38304000C756E4 /* TLineTipBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9795A1F38304000C756E4 /* TLineTipBoardView.m */; };
-		58F979751F38304000C756E4 /* VolumnView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9795D1F38304000C756E4 /* VolumnView.m */; };
+		58F979751F38304000C756E4 /* MCVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9795D1F38304000C756E4 /* MCVolumeView.m */; };
 		AB26E2B785F6FE5E3AED116D /* libPods-ZKKLineDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B09A0CC9BE963C75FB1DC0 /* libPods-ZKKLineDemo.a */; };
 /* End PBXBuildFile section */
 
@@ -103,8 +103,8 @@
 		58F979581F38304000C756E4 /* TLineChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLineChartView.m; sourceTree = "<group>"; };
 		58F979591F38304000C756E4 /* TLineTipBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLineTipBoardView.h; sourceTree = "<group>"; };
 		58F9795A1F38304000C756E4 /* TLineTipBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLineTipBoardView.m; sourceTree = "<group>"; };
-		58F9795C1F38304000C756E4 /* VolumnView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VolumnView.h; sourceTree = "<group>"; };
-		58F9795D1F38304000C756E4 /* VolumnView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VolumnView.m; sourceTree = "<group>"; };
+		58F9795C1F38304000C756E4 /* MCVolumeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCVolumeView.h; sourceTree = "<group>"; };
+		58F9795D1F38304000C756E4 /* MCVolumeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCVolumeView.m; sourceTree = "<group>"; };
 		ED8965BAFB928DF0A7BF814B /* Pods-ZKKLineDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZKKLineDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZKKLineDemo/Pods-ZKKLineDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -337,8 +337,8 @@
 		58F9795B1F38304000C756E4 /* VolumnView */ = {
 			isa = PBXGroup;
 			children = (
-				58F9795C1F38304000C756E4 /* VolumnView.h */,
-				58F9795D1F38304000C756E4 /* VolumnView.m */,
+				58F9795C1F38304000C756E4 /* MCVolumeView.h */,
+				58F9795D1F38304000C756E4 /* MCVolumeView.m */,
 			);
 			path = VolumnView;
 			sourceTree = "<group>";
@@ -480,7 +480,7 @@
 				58F979711F38304000C756E4 /* StatusView.m in Sources */,
 				58C4DFED1F4D8DFD005E5002 /* MCAccessoryView.m in Sources */,
 				58F9796A1F38304000C756E4 /* Global+Helper.m in Sources */,
-				58F979751F38304000C756E4 /* VolumnView.m in Sources */,
+				58F979751F38304000C756E4 /* MCVolumeView.m in Sources */,
 				5888BC001F4FFC730033737C /* NSString+Common.m in Sources */,
 				58F9796E1F38304000C756E4 /* KLineChartView.m in Sources */,
 				58F979731F38304000C756E4 /* TLineChartView.m in Sources */,

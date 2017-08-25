@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, CandlerstickChartsVolStyle) {
     CandlerstickChartsVolStyleBIAS
 };
 
-@interface VolumnView : UIView
+@interface MCVolumeView : UIView
 
 /*
  * 边框开始坐标点
