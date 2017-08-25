@@ -78,6 +78,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
 @property (nonatomic, strong) UIColor *timeAndPriceTextColor; //!< 时间和价格提示的字体颜色
 @property (nonatomic, strong) UIColor *timeAndPriceTipsBackgroundColor; //!< 时间和价格提示背景颜色
 @property (nonatomic, assign) CGFloat movingAvgLineWidth; //!< 均线宽度
+@property (nonatomic, assign) NSInteger lastDrawNum; //!< 缩放手势 记录上次的绘制个数
 
 @end
 
@@ -360,27 +361,19 @@ static const CGFloat kChartVerticalMargin = 30.f;
         return;
     }
     
-    /**
-     static int i = 0;
-     i ++;
-     if (i % 3 == 0) {
-     if (scale > 1) {
-     _startDrawIndex += 1;
-     }
-     else {
-     _startDrawIndex -= 1;
-     }
-     }
-     */
-    
-    self.startDrawIndex = self.startDrawIndex + self.kLineDrawNum > self.dataSource.count ? self.dataSource.count - self.kLineDrawNum : self.startDrawIndex;
-    
-    [self resetMaxAndMin];
+    NSInteger offset = (NSInteger)((_lastDrawNum - _kLineDrawNum) / 2);
+    if (ABS(offset)) {
+        _lastDrawNum = _kLineDrawNum;
+        if (ABS(offset) < 1.5) {
+            _startDrawIndex += offset;
+            self.startDrawIndex = self.startDrawIndex + self.kLineDrawNum > self.dataSource.count ? self.dataSource.count - self.kLineDrawNum : self.startDrawIndex;
+            [self resetMaxAndMin];
+            [self setNeedsDisplay];
+        }
+    }
     
     pinchEvent.scale = scale;
     self.lastPanScale = pinchEvent.scale;
-    
-    [self setNeedsDisplay];
 }
 
 - (void)longPressEvent:(UILongPressGestureRecognizer *)longGesture {
