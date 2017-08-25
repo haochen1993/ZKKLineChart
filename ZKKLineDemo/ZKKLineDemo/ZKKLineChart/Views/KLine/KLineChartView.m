@@ -9,7 +9,6 @@
 
 #import "KLineChartView.h"
 #import "UIBezierPath+curved.h"
-#import "KLineTipBoardView.h"
 #import "ACMacros.h"
 #import "Global+Helper.h"
 #import "VolumnView.h"
@@ -48,7 +47,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
 @property (nonatomic, strong) UIView *verticalCrossLine;     //垂直十字线
 @property (nonatomic, strong) UIView *horizontalCrossLine;   //水平十字线
 @property (nonatomic, strong) UIView *barVerticalLine;
-@property (nonatomic, strong) KLineTipBoardView *tipBoard;
 // 成交量图
 @property (nonatomic, strong) VolumnView *volView;
 @property (nonatomic, strong) MCAccessoryView *MACDView;
@@ -432,29 +430,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
     self.KLineTitleView.hidden = false;
     [self.KLineTitleView updateWithHigh:item.highestPrice open:item.openingPrice close:item.closingPrice low:item.lowestPrice];
     
-    //提示版
-    self.tipBoard.openingPrice = [self dealDecimalWithNum:item.openingPrice];
-    self.tipBoard.closingPrice = [self dealDecimalWithNum:item.closingPrice];
-    self.tipBoard.highestPrice = [self dealDecimalWithNum:item.highestPrice];
-    self.tipBoard.lowestPrice = [self dealDecimalWithNum:item.lowestPrice];
-    
-    if (point.y - self.topMargin - self.tipBoard.frame.size.height/2.0 < 0) {
-        point.y = self.topMargin;
-    }
-    else if ((point.y - self.tipBoard.frame.size.height/2.0) > MaxYAxis - self.tipBoard.frame.size.height*3/2.0f) {
-        point.y = MaxYAxis - self.tipBoard.frame.size.height*3/2.0f;
-    }
-    else {
-        point.y -= self.tipBoard.frame.size.height / 2.0;
-    }
-    
-    NSAttributedString *maxText = [Global_Helper attributeText:[NSString stringWithFormat:@"最高价：%@", [self dealDecimalWithNum:self.highestPriceOfAll]] textColor:HexRGB(0xffffff) font:self.tipBoard.font];
-    CGSize size = [Global_Helper attributeString:maxText boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
-    
-    self.tipBoard.us_width = size.width + Adaptor_Value(20.0f);
-    
-    [self.tipBoard showWithTipPoint:CGPointMake(point.x, point.y)];
-    
     //时间，价额
     self.priceLabel.hidden = NO;
     self.priceLabel.text = item.openingPrice > item.closingPrice ? [self dealDecimalWithNum:item.openingPrice] : [self dealDecimalWithNum:item.closingPrice] ;
@@ -483,11 +458,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
     self.barVerticalLine.hidden = YES;
     self.priceLabel.hidden = YES;
     self.timeLabel.hidden = YES;
-    if (animated) {
-        [self.tipBoard hide];
-    } else {
-        self.tipBoard.hidden = YES;
-    }
     self.KLineTitleView.hidden = true;
 }
 
@@ -922,16 +892,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
         [self addSubview:_barVerticalLine];
     }
     return _barVerticalLine;
-}
-
-- (KLineTipBoardView *)tipBoard {
-    if (!_tipBoard) {
-        _tipBoard = [[KLineTipBoardView alloc] initWithFrame:CGRectMake(self.leftMargin, self.topMargin, 115.0f, 24.0f + [UIFont systemFontOfSize:14.0f].lineHeight*4.0f)];
-        _tipBoard.backgroundColor = [UIColor clearColor];
-        _tipBoard.font = [UIFont systemFontOfSize:14.0f];
-        [self addSubview:_tipBoard];
-    }
-    return _tipBoard;
 }
 
 - (UIButton *)realDataTipBtn {
