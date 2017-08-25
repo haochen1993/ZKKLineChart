@@ -14,6 +14,7 @@
 #import "VolumnView.h"
 #import "MCAccessoryView.h"
 #import "MCKLineTitleView.h"
+#import "NSString+Common.h"
 
 #define MaxYAxis       (self.topMargin + self.yAxisHeight)
 #define MaxBoundSize   (MAX(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)))
@@ -100,7 +101,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
 - (void)setup {
     self.backgroundColor = GlobalColor_Dark;
     
-    self.timeAxisHeight = 20.0;
+    self.timeAxisHeight = 14.0;
     _landscapeMode = false;
     
     self.positiveLineColor = KLineColor_Green;
@@ -138,8 +139,8 @@ static const CGFloat kChartVerticalMargin = 30.f;
     
     self.saveDecimalPlaces = 2;
     
-    self.timeAndPriceTipsBackgroundColor = HexRGB(0xD70002);
-    self.timeAndPriceTextColor = [UIColor colorWithWhite:1.0 alpha:0.95];
+    self.timeAndPriceTipsBackgroundColor = HexRGBA(0xf6f6f6, .8);
+    self.timeAndPriceTextColor = HexRGB(0x333333);
     
     self.maxKLineWidth = 24;
     self.minKLineWidth = 1.5;
@@ -306,7 +307,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
     if (self.dataSource.count == 0 || !self.dataSource) {
         return;
     }
-    
     CGPoint touchPoint = [tapGesture locationInView:self];
     [self showTipBoardWithTouchPoint:touchPoint];
 }
@@ -395,20 +395,8 @@ static const CGFloat kChartVerticalMargin = 30.f;
             NSInteger index = [indexObject integerValue];
             // 获取对应的k线数据
             MCKLineModel *item = self.dataSource[index];
-            CGFloat open = item.openingPrice;
-            CGFloat close = item.closingPrice;
-            CGFloat scale = (self.highestPriceOfAll - self.lowestPriceOfAll) / self.yAxisHeight;
-            scale = scale ?: 1;
-            
             CGFloat xAxis = xAxisValue - _kLineWidth / 2.0 + _leftMargin;
-            CGFloat yAxis = self.yAxisHeight - (open - self.lowestPriceOfAll)/scale + self.topMargin;
-            
-            if (item.highestPrice > item.lowestPrice) {
-                yAxis = self.yAxisHeight - (close - self.lowestPriceOfAll)/scale + self.topMargin;
-            }
-            
-            [self configUIWithLineItem:item atPoint:CGPointMake(xAxis, yAxis)];
-            
+            [self configUIWithLineItem:item atPoint:CGPointMake(xAxis, touchPoint.y)];
             *stop = YES;
         }
     }];
@@ -425,26 +413,30 @@ static const CGFloat kChartVerticalMargin = 30.f;
 
     self.KLineTitleView.hidden = false;
     [self.KLineTitleView updateWithHigh:item.highestPrice open:item.openingPrice close:item.closingPrice low:item.lowestPrice];
-    
+    [self getPricePerHeightUnit];
     //时间，价额
     self.priceLabel.hidden = NO;
-    self.priceLabel.text = item.openingPrice > item.closingPrice ? [self dealDecimalWithNum:item.openingPrice] : [self dealDecimalWithNum:item.closingPrice] ;
+    self.priceLabel.text = item.openingPrice > item.closingPrice ? [self dealDecimalWithNum:item.openingPrice] : [self dealDecimalWithNum:item.closingPrice];
     
-    CGFloat priceLabelY = MIN(self.horizontalCrossLine.us_top - (self.timeAxisHeight*2/3.0 - self.separatorWidth*2)/2.0, MaxYAxis - self.timeAxisHeight);
+    CGFloat priceLabelHeight = self.timeAxisHeight * .6;
+    CGFloat priceLabelY = point.y - priceLabelHeight / 2;
     self.priceLabel.frame = CGRectMake(0.5,
                                        priceLabelY,
                                        self.leftMargin - self.separatorWidth,
-                                       self.timeAxisHeight*2/3.0 - self.separatorWidth*2);
+                                       priceLabelHeight);
     [self bringSubviewToFront:self.priceLabel];
     
-    NSString *date = item.date;
+    NSString *date = item.fullDate;
     self.timeLabel.text = date;
     self.timeLabel.hidden = !date.length;
     [self bringSubviewToFront:self.timeLabel];
     if (date.length > 0) {
         CGSize size = [date boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.xAxisTitleFont} context:nil].size;
         CGFloat originX = MIN(MAX(0, point.x - size.width/2.0 - 2), SelfWidth - self.rightMargin - size.width - 4);
-        self.timeLabel.frame = CGRectMake(originX, MaxYAxis + self.separatorWidth, size.width + 4, self.timeAxisHeight - self.separatorWidth*2);
+        self.timeLabel.frame = CGRectMake(originX,
+                                          MaxYAxis + self.separatorWidth,
+                                          size.width + 4,
+                                          self.timeAxisHeight - self.separatorWidth*2);
     }
 }
 
@@ -914,7 +906,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
         _priceLabel = [UILabel new];
         _priceLabel.backgroundColor = self.timeAndPriceTipsBackgroundColor;
         _priceLabel.textAlignment = NSTextAlignmentCenter;
-        _priceLabel.font = [UIFont systemFontOfSize:self.xAxisTitleFont.pointSize + 2.0];
+        _priceLabel.font = [UIFont systemFontOfSize:self.xAxisTitleFont.pointSize];
         _priceLabel.textColor = self.timeAndPriceTextColor;
         [self addSubview:_priceLabel];
     }

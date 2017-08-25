@@ -48,6 +48,7 @@ typedef NS_ENUM(NSInteger, YCoinType) {
  *  日期
  */
 @property (nonatomic, copy) NSString *date;
+@property (nonatomic, copy) NSString *fullDate;
 
 /**
  *  开盘价

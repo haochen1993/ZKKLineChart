@@ -500,7 +500,9 @@
 - (void)initWithValues:(NSArray *)arr {
     NSAssert(arr.count == 6, @"数组长度不足");
     if (self)  {
-        _date = [self generateFormatTimeViaStamp:([arr[0] integerValue])/1000];
+        NSTimeInterval timestamp = ([arr[0] integerValue]) / 1000;
+        _date = [self generateFormatTimeViaStamp:timestamp isFull:false];
+        _fullDate = [self generateFormatTimeViaStamp:timestamp isFull:true];
         _openingPrice = [arr[1] floatValue];
         _highestPrice = [arr[2] floatValue];
         _lowestPrice = [arr[3] floatValue];
@@ -511,10 +513,15 @@
     }
 }
 
-- (NSString *)generateFormatTimeViaStamp:(NSTimeInterval)stamp {
+- (NSString *)generateFormatTimeViaStamp:(NSTimeInterval)stamp isFull:(BOOL)full {
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:stamp];
     NSDateFormatter *format = [NSDateFormatter new];
-    [format setDateFormat:@"HH:mm"];
+    if (full) {
+        [format setDateFormat:@"yyyy-MM-dd HH:mm"];
+    }
+    else {
+        [format setDateFormat:@"HH:mm"];
+    }
     NSString *dateStr = [format stringFromDate:date];
     return dateStr;
 }
