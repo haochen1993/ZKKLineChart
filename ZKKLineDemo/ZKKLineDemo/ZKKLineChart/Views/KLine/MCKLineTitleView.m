@@ -22,6 +22,8 @@
 
 @end
 
+static const CGFloat kDefaultMargin = 8.f;
+
 @implementation MCKLineTitleView
 
 + (instancetype)titleView {
@@ -53,21 +55,21 @@
     _label_1 = [self generateLabel];
     [_label_1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(20);
-        make.left.mas_equalTo(_label_0.mas_right).offset(10);
+        make.left.mas_equalTo(_label_0.mas_right).offset(kDefaultMargin);
         make.centerY.mas_equalTo(self);
     }];
     
     _label_2 = [self generateLabel];
     [_label_2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(20);
-        make.left.mas_equalTo(_label_1.mas_right).offset(10);
+        make.left.mas_equalTo(_label_1.mas_right).offset(kDefaultMargin);
         make.centerY.mas_equalTo(self);
     }];
     
     _label_3 = [self generateLabel];
     [_label_3 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(20);
-        make.left.mas_equalTo(_label_2.mas_right).offset(10);
+        make.left.mas_equalTo(_label_2.mas_right).offset(kDefaultMargin);
         make.centerY.mas_equalTo(self);
     }];
 }
@@ -96,6 +98,13 @@
     [self updateLabel:_label_2 text:[@"MA10: " stringByAppendingString:[self decimalValue:MA10]] color: [UIColor yellowColor]];
 }
 
+- (void)updateWithMACD:(CGFloat)MACD DIF:(CGFloat)DIF DEA:(CGFloat)DEA {
+    [self updateLabel:_label_0 text:@"MACD(12,26,9)" color: nil];
+    [self updateLabel:_label_1 text:[@"DIF: " stringByAppendingString:[self decimalValue:DIF]] color: [UIColor whiteColor]];
+    [self updateLabel:_label_2 text:[@"DEA: " stringByAppendingString:[self decimalValue:DEA]] color: [UIColor yellowColor]];
+    [self updateLabel:_label_3 text:[@"MACD: " stringByAppendingString:[self decimalValue:MACD]] color: [UIColor redColor]];
+}
+
 - (void)updateLabel:(UILabel *)label text:(NSString *)text color:(UIColor *)color {
     label.text = text;
     if (color) {
@@ -105,7 +114,7 @@
     [label mas_updateConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(labelWidth);
     }];
-    [UIView animateWithDuration:.2 animations:^{
+    [UIView animateWithDuration:.15 animations:^{
         [self layoutIfNeeded];
     }];
 }

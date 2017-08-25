@@ -11,6 +11,7 @@
 #import "Global+Helper.h"
 #import "MCKLineModel.h"
 #import "UIBezierPath+curved.h"
+#import "MCKLineTitleView.h"
 
 @interface MCAccessoryView ()
 
@@ -21,6 +22,8 @@
 @property (nonatomic, strong) UITapGestureRecognizer *switchGesture;
 
 @property (nonatomic, copy) NSArray *MAValues;
+
+@property (nonatomic, strong) MCKLineTitleView *titleView;
 
 @end
 
@@ -248,6 +251,26 @@ static const CGFloat kVerticalMargin = 12.f;
     
     CGContextStrokePath(context);
 }
+
+- (void)showTitleView:(MCKLineModel *)model {
+    self.titleView.hidden = false;
+    [self.titleView updateWithMACD:model.MACD DIF:model.DIF DEA:model.DEA];
+}
+
+- (void)hideTitleView {
+    self.titleView.hidden = true;
+}
+
+- (MCKLineTitleView *)titleView {
+    if (!_titleView) {
+        _titleView = [MCKLineTitleView titleView];
+        _titleView.hidden = true;
+        [self addSubview:_titleView];
+    }
+    _titleView.frame = CGRectMake(_boxOriginX + 8, 0, self.bounds.size.width, 16);
+    return _titleView;
+}
+
 
 #pragma mark - events
 

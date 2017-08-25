@@ -440,6 +440,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
     }
     
     [self.volView showTitleView:item];
+    [self.MACDView showTitleView:item];
 }
 
 - (void)hideTipsWithAnimated:(BOOL)animated {
@@ -449,6 +450,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
     self.timeLabel.hidden = YES;
     self.KLineTitleView.hidden = true;
     [self.volView hideTitleView];
+    [self.MACDView hideTitleView];
 }
 
 #pragma mark - private methods

@@ -84,6 +84,9 @@
 //默认 YES
 @property (nonatomic, assign) BOOL gestureEnable;
 
+- (void)showTitleView:(MCKLineModel *)model;
+- (void)hideTitleView;
+
 @property (nonatomic, strong) NSArray <MCKLineModel *> *data;
 
 - (void)update;
