@@ -93,7 +93,7 @@ static const CGFloat kDefaultMargin = 8.f;
 
 - (void)updateWithVolume:(CGFloat)volume MA5:(CGFloat)MA5 MA10:(CGFloat)MA10 {
     NSAssert(volume && MA5 && MA10, @"value error");
-    [self updateLabel:_label_0 text:[@"交易量: " stringByAppendingString:[self decimalValue:volume]] color: nil];
+    [self updateLabel:_label_0 text:[@"交易量: " stringByAppendingString:[self decimalValue:volume count:4]] color: nil];
     [self updateLabel:_label_1 text:[@"MA5: " stringByAppendingString:[self decimalValue:MA5]] color: [UIColor whiteColor]];
     [self updateLabel:_label_2 text:[@"MA10: " stringByAppendingString:[self decimalValue:MA10]] color: [UIColor yellowColor]];
 }
@@ -120,8 +120,13 @@ static const CGFloat kDefaultMargin = 8.f;
 }
 
 - (NSString *)decimalValue:(CGFloat)value {
+    return [self decimalValue:value count:2];
+}
+
+- (NSString *)decimalValue:(CGFloat)value count:(NSUInteger)count {
     NSString *str = nil;
-    str = [NSString stringWithFormat:@"%.2f", value];
+    NSString *strFormat = [NSString stringWithFormat:@"%%.%zdf", count];
+    str = [NSString stringWithFormat:strFormat, value];
     return str;
 }
 
