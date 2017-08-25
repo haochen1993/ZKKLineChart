@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5888BBFD1F4FF8020033737C /* MCKLineTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5888BBFC1F4FF8020033737C /* MCKLineTitleView.m */; };
+		5888BC001F4FFC730033737C /* NSString+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 5888BBFF1F4FFC700033737C /* NSString+Common.m */; };
 		58B5F5BB1F3AE544008DED7E /* UIBezierPath+curved.m in Sources */ = {isa = PBXBuildFile; fileRef = 58B5F5AE1F3AE289008DED7E /* UIBezierPath+curved.m */; };
 		58B5F5BC1F3AE546008DED7E /* UIView+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 58B5F5B01F3AE28A008DED7E /* UIView+Addition.m */; };
 		58B5F5BE1F3AEF6C008DED7E /* source.json in Resources */ = {isa = PBXBuildFile; fileRef = 58B5F5BD1F3AEF6C008DED7E /* source.json */; };
@@ -41,6 +43,10 @@
 /* Begin PBXFileReference section */
 		07F17BE73EFFA96CC6DB34EA /* Pods-ZKKLineDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZKKLineDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZKKLineDemo/Pods-ZKKLineDemo.release.xcconfig"; sourceTree = "<group>"; };
 		52B09A0CC9BE963C75FB1DC0 /* libPods-ZKKLineDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ZKKLineDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5888BBFB1F4FF8020033737C /* MCKLineTitleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCKLineTitleView.h; sourceTree = "<group>"; };
+		5888BBFC1F4FF8020033737C /* MCKLineTitleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCKLineTitleView.m; sourceTree = "<group>"; };
+		5888BBFE1F4FFC660033737C /* NSString+Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Common.h"; sourceTree = "<group>"; };
+		5888BBFF1F4FFC700033737C /* NSString+Common.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Common.m"; sourceTree = "<group>"; };
 		58B5F5AE1F3AE289008DED7E /* UIBezierPath+curved.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+curved.m"; sourceTree = "<group>"; };
 		58B5F5AF1F3AE28A008DED7E /* UIView+Addition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Addition.h"; sourceTree = "<group>"; };
 		58B5F5B01F3AE28A008DED7E /* UIView+Addition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Addition.m"; sourceTree = "<group>"; };
@@ -126,6 +132,8 @@
 		58B5F5A71F3ADBB9008DED7E /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				5888BBFE1F4FFC660033737C /* NSString+Common.h */,
+				5888BBFF1F4FFC700033737C /* NSString+Common.m */,
 				58B5F5B11F3AE28A008DED7E /* UIBezierPath+curved.h */,
 				58B5F5AE1F3AE289008DED7E /* UIBezierPath+curved.m */,
 				58B5F5AF1F3AE28A008DED7E /* UIView+Addition.h */,
@@ -285,6 +293,8 @@
 			children = (
 				58F9794A1F38304000C756E4 /* KLineChartView.h */,
 				58F9794B1F38304000C756E4 /* KLineChartView.m */,
+				5888BBFB1F4FF8020033737C /* MCKLineTitleView.h */,
+				5888BBFC1F4FF8020033737C /* MCKLineTitleView.m */,
 				58F9794C1F38304000C756E4 /* KLineTipBoardView.h */,
 				58F9794D1F38304000C756E4 /* KLineTipBoardView.m */,
 				58F9794E1F38304000C756E4 /* MATipView.h */,
@@ -471,6 +481,7 @@
 				58C4DFED1F4D8DFD005E5002 /* MCAccessoryView.m in Sources */,
 				58F9796A1F38304000C756E4 /* Global+Helper.m in Sources */,
 				58F979751F38304000C756E4 /* VolumnView.m in Sources */,
+				5888BC001F4FFC730033737C /* NSString+Common.m in Sources */,
 				58F9796E1F38304000C756E4 /* KLineChartView.m in Sources */,
 				58F979731F38304000C756E4 /* TLineChartView.m in Sources */,
 				58DEA0D11F4C0274008199F0 /* NetWorking.m in Sources */,
@@ -478,6 +489,7 @@
 				58DEA0C61F4C0109008199F0 /* MCKLineVolumePositionModel.m in Sources */,
 				58F979701F38304000C756E4 /* MATipView.m in Sources */,
 				58DEA0C71F4C0109008199F0 /* MCKLineModel.m in Sources */,
+				5888BBFD1F4FF8020033737C /* MCKLineTitleView.m in Sources */,
 				58DEA0D01F4C0179008199F0 /* UIColor+Y_StockChart.m in Sources */,
 				58DEA0C81F4C0109008199F0 /* MCKLineGroupModel.m in Sources */,
 				58DEA0CF1F4C0175008199F0 /* Y_StockChartGlobalVariable.m in Sources */,

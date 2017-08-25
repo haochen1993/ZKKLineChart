@@ -13,7 +13,7 @@
 #define PATH_OF_APP_HOME    NSHomeDirectory()
 #define PATH_OF_TEMP        NSTemporaryDirectory()
 #define PATH_OF_DOCUMENT    [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
-
+#define KLineTextColor_Gray HexRGB(0x606b76)
 
 /* ****************************************************************************************************************** */
 /** DEBUG LOG **/
@@ -42,6 +42,158 @@
 #define MCRelease(x)            [x release], x = nil
 
 #endif
+
+
+
+#define IS_IPAD              (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+#define IS_IPHONE            (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+#define IS_RETINA            ([[UIScreen mainScreen] scale] >= 2.0)
+
+#define SCREEN_WIDTH         [[UIScreen mainScreen] bounds].size.width
+#define SCREEN_HEIGHT        [[UIScreen mainScreen] bounds].size.height
+#define SCREEN_MAX_LENGTH    (MAX(SCREEN_WIDTH, SCREEN_HEIGHT))
+#define SCREEN_MIN_LENGTH    (MIN(SCREEN_WIDTH, SCREEN_HEIGHT))
+
+
+#define IS_IPHONE_4          (IS_IPHONE && SCREEN_MAX_LENGTH < 568.0)
+#define IS_IPHONE_5          (IS_IPHONE && SCREEN_MAX_LENGTH == 568.0)
+#define IS_IPHONE_6          (IS_IPHONE && SCREEN_MAX_LENGTH == 667.0)
+#define IS_IPHONE_6P         (IS_IPHONE && SCREEN_MAX_LENGTH == 736.0)
+
+#define ScreenScale         [UIScreen mainScreen].scale
+#define userDefaults        [NSUserDefaults standardUserDefaults]
+#define KeyWindow           [[[UIApplication sharedApplication] delegate] window]
+#define WindowZoomScale     (SCREEN_WIDTH/320.f)
+#define UniversalZoomScale  (MIN(1.8, WindowZoomScale))  //适配iPad
+
+FOUNDATION_EXPORT NSString *NSDocumentPath();
+FOUNDATION_EXPORT NSString *NSResourcePath();
+FOUNDATION_EXPORT UIImage *UIImageNamed(NSString *imageName);
+
+FOUNDATION_EXPORT UIColor *HexColor(unsigned int hexValue);
+FOUNDATION_EXPORT UIColor *HexAlphaColor(unsigned int hexValue, float alpha);
+FOUNDATION_EXPORT UIColor *RGBCOLOR(CGFloat read, CGFloat green, CGFloat blue);
+FOUNDATION_EXPORT UIColor *RGBACOLOR(CGFloat read, CGFloat green, CGFloat blue, CGFloat alpha);
+
+FOUNDATION_EXPORT BOOL SystemVersionEqualTo(NSString *version);
+FOUNDATION_EXPORT BOOL SystemVersionGreaterThan(NSString *version);
+FOUNDATION_EXPORT BOOL SystemVersionGreaterThanOrEqualTo(NSString *version);
+FOUNDATION_EXPORT BOOL SystemVersionLessThan(NSString *version);
+FOUNDATION_EXPORT BOOL SystemVersionLessThanOrEqualTo(NSString *version);
+FOUNDATION_EXPORT UIFont *MCFontWithSize (CGFloat basePointSize);
+
+#define XcodeBundleVersion  [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]
+#define XcodeAppVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
+
+
+#define _loginUser          [AuthData loginUser]
+#define _applicationContext [ApplicationContext sharedContext]
+
+#ifdef DEBUG
+#define USTakeTimeCountBegin       NSDate *takeTimeCountDate = [NSDate date];
+#define USTakeTimeCountEnd(flag)   DLOG(@"%@耗时 %.4f 秒",flag,[[NSDate date] timeIntervalSinceDate:takeTimeCountDate]);
+#else
+#define USTakeTimeCountBegin       ((void)0);
+#define USTakeTimeCountEnd(flag)   ((void)0);
+#endif
+
+/**
+ * Fixes colors in Storyboard and XIB files that are using the wrong colorspace
+ *
+ * find . \( -name "*.xib" -or -name "*.storyboard" \) -print0 | xargs -0 sed -i '' -e 's/colorSpace="custom" customColorSpace="sRGB"/colorSpace="calibratedRGB"/g'
+ */
+
+//获取随机数
+#define Random(from, to) (int)(from + (arc4random() % (to - from + 1))) //+1,result is [from to]; else is [from, to)!!!!!!!
+#define ARC4RANDOM_MAX (0x100000000 * 20)
+
+// 注释掉 暂用YYKit
+//#import <pthread.h>
+///**
+// Whether in main queue/thread.
+// */
+//static inline bool dispatch_is_main_queue() {
+//    return pthread_main_np() != 0;
+//}
+//
+///**
+// Submits a block for asynchronous execution on a main queue and returns immediately.
+// */
+//static inline void dispatch_async_on_main_queue(void (^block)()) {
+//    if (pthread_main_np()) {
+//        block();
+//    } else {
+//        dispatch_async(dispatch_get_main_queue(), block);
+//    }
+//}
+//
+///**
+// Submits a block for execution on a main queue and waits until the block completes.
+// */
+//static inline void dispatch_sync_on_main_queue(void (^block)()) {
+//    if (pthread_main_np()) {
+//        block();
+//    } else {
+//        dispatch_sync(dispatch_get_main_queue(), block);
+//    }
+//}
+//
+static inline void dispatch_after_on_main_queue(int64_t delayInSeconds, void (^block)()) {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC)), dispatch_get_main_queue(), block);
+}
+
+/**
+ Synthsize a weak or strong reference.
+ 
+ Example:
+ @weakify(self)
+ [self doSomething^{
+ @strongify(self)
+ if (!self) return;
+ ...
+ }];
+ 
+ */
+#ifndef weakify
+#if DEBUG
+#if __has_feature(objc_arc)
+#define weakify(object) autoreleasepool{} __weak __typeof__(object) weak##_##object = object;
+#else
+#define weakify(object) autoreleasepool{} __block __typeof__(object) block##_##object = object;
+#endif
+#else
+#if __has_feature(objc_arc)
+#define weakify(object) try{} @finally{} {} __weak __typeof__(object) weak##_##object = object;
+#else
+#define weakify(object) try{} @finally{} {} __block __typeof__(object) block##_##object = object;
+#endif
+#endif
+#endif
+
+#ifndef strongify
+#if DEBUG
+#if __has_feature(objc_arc)
+#define strongify(object) autoreleasepool{} __typeof__(object) object = weak##_##object;
+#else
+#define strongify(object) autoreleasepool{} __typeof__(object) object = block##_##object;
+#endif
+#else
+#if __has_feature(objc_arc)
+#define strongify(object) try{} @finally{} __typeof__(object) object = weak##_##object;
+#else
+#define strongify(object) try{} @finally{} __typeof__(object) object = block##_##object;
+#endif
+#endif
+#endif
+
+// 去除方法调用警告
+#define USPerformSelectorLeakWarning(Stuff) \
+do { \
+_Pragma("clang diagnostic push") \
+_Pragma("clang diagnostic ignored \"-Warc-performSelector-leaks\"") \
+Stuff; \
+_Pragma("clang diagnostic pop") \
+} while (0);
 
 
 /** NIL RELEASE **/

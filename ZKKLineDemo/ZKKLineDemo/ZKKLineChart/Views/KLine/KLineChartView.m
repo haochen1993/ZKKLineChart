@@ -15,6 +15,7 @@
 #import "Global+Helper.h"
 #import "VolumnView.h"
 #import "MCAccessoryView.h"
+#import "MCKLineTitleView.h"
 
 #define MaxYAxis       (self.topMargin + self.yAxisHeight)
 #define MaxBoundSize   (MAX(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)))
@@ -79,6 +80,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
 @property (nonatomic, strong) UIColor *timeAndPriceTipsBackgroundColor; //!< 时间和价格提示背景颜色
 @property (nonatomic, assign) CGFloat movingAvgLineWidth; //!< 均线宽度
 @property (nonatomic, assign) NSInteger lastDrawNum; //!< 缩放手势 记录上次的绘制个数
+@property (nonatomic, strong) MCKLineTitleView *KLineTitleView;
 
 @end
 
@@ -162,6 +164,11 @@ static const CGFloat kChartVerticalMargin = 30.f;
     //添加手势
     [self addGestures];
     [self registerObserver];
+    
+    _KLineTitleView = [MCKLineTitleView titleView];
+    [self addSubview:_KLineTitleView];
+    _KLineTitleView.frame = CGRectMake(0, _topMargin, SelfWidth, 20);
+    _KLineTitleView.backgroundColor = [UIColor greenColor];
 }
 
 /**
@@ -883,7 +890,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
     return _volView;
 }
 
-- (VolumnView *)MACDView {
+- (MCAccessoryView *)MACDView {
     if (!_MACDView) {
         _MACDView = [MCAccessoryView new];
         _MACDView.backgroundColor  = [UIColor clearColor];
