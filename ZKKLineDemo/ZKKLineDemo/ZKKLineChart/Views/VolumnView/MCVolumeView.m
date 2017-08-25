@@ -11,6 +11,7 @@
 #import "Global+Helper.h"
 #import "MCKLineModel.h"
 #import "UIBezierPath+curved.h"
+#import "MCKLineTitleView.h"
 
 @interface MCVolumeView ()
 
@@ -21,6 +22,8 @@
 @property (nonatomic, strong) UITapGestureRecognizer *switchGesture;
 
 @property (nonatomic, copy) NSArray *MAValues;
+
+@property (nonatomic, strong) MCKLineTitleView *titleView;
 
 @end
 
@@ -335,6 +338,25 @@ static const CGFloat kVerticalMargin = 12.f;
     
     [self update];
     [self setNeedsDisplay];
+}
+
+- (void)showTitleView:(MCKLineModel *)model {
+    self.titleView.hidden = false;
+    [self.titleView updateWithVolume:model.volume MA5:model.MA7 MA10:model.MA20];
+}
+
+- (void)hideTitleView {
+    self.titleView.hidden = true;
+}
+
+- (MCKLineTitleView *)titleView {
+    if (!_titleView) {
+        _titleView = [MCKLineTitleView titleView];
+        _titleView.hidden = true;
+        [self addSubview:_titleView];
+    }
+    _titleView.frame = CGRectMake(_boxOriginX + 8, 0, self.bounds.size.width, 16);
+    return _titleView;
 }
 
 #pragma mark - getters

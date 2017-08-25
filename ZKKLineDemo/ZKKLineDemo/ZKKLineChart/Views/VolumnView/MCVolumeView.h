@@ -106,4 +106,8 @@ typedef NS_ENUM(NSInteger, CandlerstickChartsVolStyle) {
 
 - (void)update;
 
+- (void)showTitleView:(MCKLineModel *)model;
+
+- (void)hideTitleView;
+
 @end
