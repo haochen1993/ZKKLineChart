@@ -91,4 +91,6 @@
 
 - (void)clear;
 
+- (void)showTipBoardWithTouchPoint:(CGPoint)point;
+
 @end

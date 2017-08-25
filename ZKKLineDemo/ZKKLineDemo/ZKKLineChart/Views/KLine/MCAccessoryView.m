@@ -11,7 +11,6 @@
 #import "Global+Helper.h"
 #import "MCKLineModel.h"
 #import "UIBezierPath+curved.h"
-#import "MCKLineTitleView.h"
 
 @interface MCAccessoryView ()
 
@@ -19,11 +18,7 @@
 
 @property (nonatomic) CGFloat lowestValue;
 
-@property (nonatomic, strong) UITapGestureRecognizer *switchGesture;
-
 @property (nonatomic, copy) NSArray *MAValues;
-
-@property (nonatomic, strong) MCKLineTitleView *titleView;
 
 @end
 
@@ -45,7 +40,6 @@ static const CGFloat kVerticalMargin = 12.f;
     
     _highestValue = -MAXFLOAT;
     _lowestValue = MAXFLOAT;
-    [self addGestureRecognizer:self.switchGesture];
 }
 
 // overrite
@@ -82,7 +76,7 @@ static const CGFloat kVerticalMargin = 12.f;
  */
 - (CGPathRef)movingAvgGraphPathForContextAtIndex:(NSInteger)index {
     UIBezierPath *path = nil;
-    CGFloat xAxisValue = self.boxOriginX + 0.5*_kLineWidth + _linePadding;
+    CGFloat xAxisValue = self.boxOriginX + 0.5*self.kLineWidth + self.linePadding;
     CGFloat unitValue = [self calcValuePerHeightUnit];
     if (unitValue == 0) {
         unitValue = 1.0f;
@@ -128,6 +122,11 @@ static const CGFloat kVerticalMargin = 12.f;
 - (void)update {
     [self resetMaxAndMin];
     [self setNeedsDisplay];
+}
+
+- (void)showTitleView:(MCKLineModel *)model {
+    self.titleView.hidden = false;
+    [self.titleView updateWithMACD:model.MACD DIF:model.DIF DEA:model.DEA];
 }
 
 #pragma mark - private methods
@@ -209,7 +208,7 @@ static const CGFloat kVerticalMargin = 12.f;
         }
         CGContextAddRect(context, pathRect);
         CGContextFillPath(context);
-        xAxis += _kLineWidth + _linePadding;
+        xAxis += self.kLineWidth + self.linePadding;
     }];
 }
 
@@ -220,7 +219,7 @@ static const CGFloat kVerticalMargin = 12.f;
     //交易量边框
     CGContextSetLineWidth(context, self.axisShadowWidth);
     CGContextSetStrokeColorWithColor(context, self.axisShadowColor.CGColor);
-    CGRect strokeRect = CGRectMake(self.boxOriginX, self.axisShadowWidth/2.0, rect.size.width - _boxOriginX - self.boxRightMargin, rect.size.height);
+    CGRect strokeRect = CGRectMake(self.boxOriginX, self.axisShadowWidth/2.0, rect.size.width - self.boxOriginX - self.boxRightMargin, rect.size.height);
     CGContextStrokeRect(context, strokeRect);
     
     [self drawDashLineInContext:context movePoint:CGPointMake(self.boxOriginX + 1.25, rect.size.height/2.0)
@@ -250,50 +249,6 @@ static const CGFloat kVerticalMargin = 12.f;
     CGContextAddLineToPoint(context, toPoint.x, toPoint.y);
     
     CGContextStrokePath(context);
-}
-
-- (void)showTitleView:(MCKLineModel *)model {
-    self.titleView.hidden = false;
-    [self.titleView updateWithMACD:model.MACD DIF:model.DIF DEA:model.DEA];
-}
-
-- (void)hideTitleView {
-    self.titleView.hidden = true;
-}
-
-- (MCKLineTitleView *)titleView {
-    if (!_titleView) {
-        _titleView = [MCKLineTitleView titleView];
-        _titleView.hidden = true;
-        [self addSubview:_titleView];
-    }
-    _titleView.frame = CGRectMake(_boxOriginX + 8, 0, self.bounds.size.width, 16);
-    return _titleView;
-}
-
-
-#pragma mark - events
-
-- (void)switchEvent:(UITapGestureRecognizer *)tapGesture {
-    return;
-    
-    [self update];
-    [self setNeedsDisplay];
-}
-
-#pragma mark - getters
-
-- (UITapGestureRecognizer *)switchGesture {
-    if (!_switchGesture) {
-        _switchGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(switchEvent:)];
-    }
-    return _switchGesture;
-}
-
-#pragma mark - setters
-
-- (void)setGestureEnable:(BOOL)gestureEnable {
-    self.switchGesture.enabled = gestureEnable;
 }
 
 @end

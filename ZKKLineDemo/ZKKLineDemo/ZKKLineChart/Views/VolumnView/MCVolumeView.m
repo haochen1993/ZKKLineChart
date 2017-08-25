@@ -19,11 +19,7 @@
 
 @property (nonatomic) float minValue;
 
-@property (nonatomic, strong) UITapGestureRecognizer *switchGesture;
-
 @property (nonatomic, copy) NSArray *MAValues;
-
-@property (nonatomic, strong) MCKLineTitleView *titleView;
 
 @end
 
@@ -47,7 +43,6 @@ static const CGFloat kVerticalMargin = 12.f;
     
     _maxValue = -MAXFLOAT;
     _minValue = MAXFLOAT;
-    [self addGestureRecognizer:self.switchGesture];
 }
 
 // overrite
@@ -57,6 +52,11 @@ static const CGFloat kVerticalMargin = 12.f;
     [self drawAxis];
     [self drawChart];
     [self drawMALine];
+}
+
+- (void)showTitleView:(MCKLineModel *)model {
+    [super showTitleView:model];
+    [self.titleView updateWithVolume:model.volume MA5:model.MA7 MA10:model.MA20];
 }
 
 /**
@@ -79,7 +79,7 @@ static const CGFloat kVerticalMargin = 12.f;
  */
 - (CGPathRef)movingAvgGraphPathForContextAtIndex:(NSInteger)index {
     UIBezierPath *path = nil;
-    CGFloat xAxisValue = self.boxOriginX + 0.5*_kLineWidth + _linePadding;
+    CGFloat xAxisValue = self.boxOriginX + 0.5*self.kLineWidth + self.linePadding;
     CGFloat volumePerHeightUnit = [self getVolumePerHeightUnit];
     if (volumePerHeightUnit == 0) {
         volumePerHeightUnit = 1.0f;
@@ -132,7 +132,7 @@ static const CGFloat kVerticalMargin = 12.f;
 - (void)reset {
     _maxValue = -MAXFLOAT;
     _minValue = MAXFLOAT;
-    switch (_volStyle) {
+    switch (self.volStyle) {
         case CandlerstickChartsVolStyleDefault: {
             NSArray *volums = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
             for (MCKLineModel *item in volums) {
@@ -161,7 +161,7 @@ static const CGFloat kVerticalMargin = 12.f;
 }
 
 - (void)drawChart {
-    switch (_volStyle) {
+    switch (self.volStyle) {
         case CandlerstickChartsVolStyleDefault: {
             [self showYAxisTitleWithTitles:@[[NSString stringWithFormat:@"%.f", self.maxValue], [NSString stringWithFormat:@"%.f", self.maxValue/2.0], @"万"]];
             [self drawVolView];
@@ -233,7 +233,7 @@ static const CGFloat kVerticalMargin = 12.f;
         CGContextAddRect(context, pathRect);
         CGContextFillPath(context);
         
-        xAxis += _kLineWidth + _linePadding;
+        xAxis += self.kLineWidth + self.linePadding;
     }
 }
 
@@ -248,7 +248,7 @@ static const CGFloat kVerticalMargin = 12.f;
     //交易量边框
     CGContextSetLineWidth(context, self.axisShadowWidth);
     CGContextSetStrokeColorWithColor(context, self.axisShadowColor.CGColor);
-    CGRect strokeRect = CGRectMake(self.boxOriginX, self.axisShadowWidth/2.0, rect.size.width - _boxOriginX - self.boxRightMargin, rect.size.height);
+    CGRect strokeRect = CGRectMake(self.boxOriginX, self.axisShadowWidth/2.0, rect.size.width - self.boxOriginX - self.boxRightMargin, rect.size.height);
     CGContextStrokeRect(context, strokeRect);
     
     [self drawDashLineInContext:context movePoint:CGPointMake(self.boxOriginX + 1.25, rect.size.height/2.0)
@@ -284,52 +284,52 @@ static const CGFloat kVerticalMargin = 12.f;
 
 - (void)switchEvent:(UITapGestureRecognizer *)tapGesture {
     return;
-    switch (_volStyle) {
+    switch (self.volStyle) {
         case CandlerstickChartsVolStyleDefault: {
-            _volStyle = CandlerstickChartsVolStyleRSV9;
+            self.volStyle = CandlerstickChartsVolStyleRSV9;
             break;
         }
         case CandlerstickChartsVolStyleRSV9: {
-            _volStyle = CandlerstickChartsVolStyleKDJ;
+            self.volStyle = CandlerstickChartsVolStyleKDJ;
             break;
         }
             
         case CandlerstickChartsVolStyleKDJ: {
-            _volStyle = CandlerstickChartsVolStyleMACD;
+            self.volStyle = CandlerstickChartsVolStyleMACD;
             break;
         }
             
         case CandlerstickChartsVolStyleMACD: {
-            _volStyle = CandlerstickChartsVolStyleRSI;
+            self.volStyle = CandlerstickChartsVolStyleRSI;
             break;
         }
             
         case CandlerstickChartsVolStyleRSI: {
-            _volStyle = CandlerstickChartsVolStyleBOLL;
+            self.volStyle = CandlerstickChartsVolStyleBOLL;
             break;
         }
             
         case CandlerstickChartsVolStyleBOLL: {
-            _volStyle = CandlerstickChartsVolStyleDMA;
+            self.volStyle = CandlerstickChartsVolStyleDMA;
             break;
         }
             
         case CandlerstickChartsVolStyleDMA: {
-            _volStyle = CandlerstickChartsVolStyleCCI;
+            self.volStyle = CandlerstickChartsVolStyleCCI;
             break;
         }
             
         case CandlerstickChartsVolStyleCCI: {
-            _volStyle = CandlerstickChartsVolStyleWR;
+            self.volStyle = CandlerstickChartsVolStyleWR;
             break;
         }
             
         case CandlerstickChartsVolStyleWR: {
-            _volStyle = CandlerstickChartsVolStyleBIAS;
+            self.volStyle = CandlerstickChartsVolStyleBIAS;
             break;
         }
         case CandlerstickChartsVolStyleBIAS: {
-            _volStyle = CandlerstickChartsVolStyleDefault;
+            self.volStyle = CandlerstickChartsVolStyleDefault;
             break;
         }
         default:
@@ -338,40 +338,6 @@ static const CGFloat kVerticalMargin = 12.f;
     
     [self update];
     [self setNeedsDisplay];
-}
-
-- (void)showTitleView:(MCKLineModel *)model {
-    self.titleView.hidden = false;
-    [self.titleView updateWithVolume:model.volume MA5:model.MA7 MA10:model.MA20];
-}
-
-- (void)hideTitleView {
-    self.titleView.hidden = true;
-}
-
-- (MCKLineTitleView *)titleView {
-    if (!_titleView) {
-        _titleView = [MCKLineTitleView titleView];
-        _titleView.hidden = true;
-        [self addSubview:_titleView];
-    }
-    _titleView.frame = CGRectMake(_boxOriginX + 8, 0, self.bounds.size.width, 16);
-    return _titleView;
-}
-
-#pragma mark - getters
-
-- (UITapGestureRecognizer *)switchGesture {
-    if (!_switchGesture) {
-        _switchGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(switchEvent:)];
-    }
-    return _switchGesture;
-}
-
-#pragma mark - setters
-
-- (void)setGestureEnable:(BOOL)gestureEnable {
-    self.switchGesture.enabled = gestureEnable;
 }
 
 @end

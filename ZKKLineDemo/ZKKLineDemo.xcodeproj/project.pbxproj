@@ -20,6 +20,7 @@
 		58DEA0CF1F4C0175008199F0 /* Y_StockChartGlobalVariable.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DEA0CE1F4C0154008199F0 /* Y_StockChartGlobalVariable.m */; };
 		58DEA0D01F4C0179008199F0 /* UIColor+Y_StockChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DEA0CB1F4C0154008199F0 /* UIColor+Y_StockChart.m */; };
 		58DEA0D11F4C0274008199F0 /* NetWorking.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DEA0B91F4BFF02008199F0 /* NetWorking.m */; };
+		58ED07DA1F5035B800E8BA30 /* MCAssistantBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58ED07D91F5035B800E8BA30 /* MCAssistantBaseView.m */; };
 		58F978A51F38182000C756E4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F978A41F38182000C756E4 /* main.m */; };
 		58F978A81F38182000C756E4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F978A71F38182000C756E4 /* AppDelegate.m */; };
 		58F978B01F38182000C756E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58F978AF1F38182000C756E4 /* Assets.xcassets */; };
@@ -72,6 +73,8 @@
 		58DEA0CC1F4C0154008199F0 /* Y_StockChartConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Y_StockChartConstant.h; sourceTree = "<group>"; };
 		58DEA0CD1F4C0154008199F0 /* Y_StockChartGlobalVariable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Y_StockChartGlobalVariable.h; sourceTree = "<group>"; };
 		58DEA0CE1F4C0154008199F0 /* Y_StockChartGlobalVariable.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Y_StockChartGlobalVariable.m; sourceTree = "<group>"; };
+		58ED07D81F5035B800E8BA30 /* MCAssistantBaseView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCAssistantBaseView.h; sourceTree = "<group>"; };
+		58ED07D91F5035B800E8BA30 /* MCAssistantBaseView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCAssistantBaseView.m; sourceTree = "<group>"; };
 		58F978A01F38182000C756E4 /* ZKKLineDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZKKLineDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58F978A41F38182000C756E4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		58F978A61F38182000C756E4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -339,6 +342,8 @@
 			children = (
 				58F9795C1F38304000C756E4 /* MCVolumeView.h */,
 				58F9795D1F38304000C756E4 /* MCVolumeView.m */,
+				58ED07D81F5035B800E8BA30 /* MCAssistantBaseView.h */,
+				58ED07D91F5035B800E8BA30 /* MCAssistantBaseView.m */,
 			);
 			path = VolumnView;
 			sourceTree = "<group>";
@@ -477,6 +482,7 @@
 			files = (
 				58F978A81F38182000C756E4 /* AppDelegate.m in Sources */,
 				58F978BC1F38186800C756E4 /* ZKRootViewController.m in Sources */,
+				58ED07DA1F5035B800E8BA30 /* MCAssistantBaseView.m in Sources */,
 				58F979711F38304000C756E4 /* StatusView.m in Sources */,
 				58C4DFED1F4D8DFD005E5002 /* MCAccessoryView.m in Sources */,
 				58F9796A1F38304000C756E4 /* Global+Helper.m in Sources */,

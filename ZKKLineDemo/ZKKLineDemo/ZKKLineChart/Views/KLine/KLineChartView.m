@@ -836,6 +836,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
         _volView.yAxisTitleColor = self.yAxisTitleColor;
         _volView.separatorWidth = self.separatorWidth;
         _volView.separatorColor = self.separatorColor;
+        _volView.baseChartView = self;
         [self addSubview:_volView];
     }
     return _volView;
@@ -854,6 +855,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
         _MACDView.yAxisTitleColor = self.yAxisTitleColor;
         _MACDView.separatorWidth = self.separatorWidth;
         _MACDView.separatorColor = self.separatorColor;
+        _MACDView.baseChartView = self;
         [self addSubview:_MACDView];
     }
     return _MACDView;
