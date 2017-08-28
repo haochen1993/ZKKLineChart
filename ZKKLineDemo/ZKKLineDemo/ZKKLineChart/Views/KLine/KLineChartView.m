@@ -443,14 +443,13 @@ static const CGFloat kAccessoryMargin = 6.f;
     self.timeLabel.hidden = !date.length;
     [self bringSubviewToFront:self.timeLabel];
     if (date.length > 0) {
-        CGSize size = [date boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.xAxisTitleFont} context:nil].size;
-        CGFloat originX = MIN(MAX(0, point.x - size.width/2.0 - 2), SelfWidth - self.rightMargin - size.width - 4);
+        CGFloat textWidth = [date stringWidthWithFont:self.xAxisTitleFont height:MAXFLOAT];
+        CGFloat originX = MIN(MAX(0, point.x - textWidth/2.0 - 2), SelfWidth - self.rightMargin - textWidth - 4);
         self.timeLabel.frame = CGRectMake(originX,
                                           MaxYAxis + self.separatorWidth,
-                                          size.width + 4,
+                                          textWidth + 4,
                                           kTimeAxisHeight - self.separatorWidth*2);
     }
-    
     [self.volView showTitleView:item];
     [self.MACDView showTitleView:item];
 }
