@@ -23,8 +23,9 @@
 #define SelfHeight     (_landscapeMode ? MinBoundSize : MaxBoundSize)
 
 static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
-static const CGFloat kBarChartHeightRatio = .182f;
-static const CGFloat kChartVerticalMargin = 30.f;
+static const CGFloat kBarChartHeightRatio = .182f; //!< 副图的高度占比
+static const CGFloat kChartVerticalMargin = 30.f;  //!< 图表上下各留的间隙
+static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
 
 @interface KLineChartView ()
 
@@ -65,7 +66,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
 @property (nonatomic, strong) UIColor *yAxisTitleColor; //!< y坐标轴标题颜色
 @property (nonatomic, strong) UIFont *xAxisTitleFont; //!< x坐标轴字体
 @property (nonatomic, strong) UIColor *xAxisTitleColor; //!< x坐标轴标题颜色
-@property (nonatomic, assign) CGFloat timeAxisHeight; //!< 时间轴高度（默认20.0f）
 @property (nonatomic, strong) UIColor *axisShadowColor; //!< 坐标轴边框颜色
 @property (nonatomic, assign) CGFloat axisShadowWidth; //!< 坐标轴边框宽度
 @property (nonatomic, assign) CGFloat separatorWidth; //!< 分割线宽度
@@ -100,8 +100,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
 
 - (void)setup {
     self.backgroundColor = GlobalColor_Dark;
-    
-    self.timeAxisHeight = 14.0;
     _landscapeMode = false;
     
     self.positiveLineColor = KLineColor_Green;
@@ -154,7 +152,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
     
     self.topMargin = 20.0f;
     self.rightMargin = 2.0;
-    self.bottomMargin = 250.0f;
     self.leftMargin = 25.0f;
     self.KLineTitleView.hidden = true;
     //添加手势
@@ -433,7 +430,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
     self.priceLabel.hidden = NO;
     self.priceLabel.text = item.openingPrice > item.closingPrice ? [self dealDecimalWithNum:item.openingPrice] : [self dealDecimalWithNum:item.closingPrice];
     
-    CGFloat priceLabelHeight = self.timeAxisHeight * .6;
+    CGFloat priceLabelHeight = kTimeAxisHeight * .6;
     CGFloat priceLabelY = point.y - priceLabelHeight / 2;
     self.priceLabel.frame = CGRectMake(0.5,
                                        priceLabelY,
@@ -451,7 +448,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
         self.timeLabel.frame = CGRectMake(originX,
                                           MaxYAxis + self.separatorWidth,
                                           size.width + 4,
-                                          self.timeAxisHeight - self.separatorWidth*2);
+                                          kTimeAxisHeight - self.separatorWidth*2);
     }
     
     [self.volView showTitleView:item];
@@ -728,7 +725,7 @@ static const CGFloat kChartVerticalMargin = 30.f;
     
     CGRect rect = self.bounds;
     
-    CGFloat boxOriginY = MaxYAxis + self.timeAxisHeight;
+    CGFloat boxOriginY = MaxYAxis + kTimeAxisHeight;
     self.volView.frame = CGRectMake(0, boxOriginY, rect.size.width, rect.size.height * kBarChartHeightRatio);
     self.volView.kLineWidth = self.kLineWidth;
     self.volView.linePadding = self.kLinePadding;
@@ -1037,10 +1034,6 @@ static const CGFloat kChartVerticalMargin = 30.f;
         self.center = center;
     } completion:nil];
     [self drawChartWithDataSource:_dataSource];
-}
-
-- (void)setBottomMargin:(CGFloat)bottomMargin {
-    _bottomMargin = bottomMargin < _timeAxisHeight ? _timeAxisHeight : bottomMargin;
 }
 
 - (void)dealloc {

@@ -41,8 +41,6 @@
 
 @property (nonatomic, assign) CGFloat rightMargin; //!< 内容距离父试图右边距离
 
-@property (nonatomic, assign) CGFloat bottomMargin; //!< 内容距离父试图底部距离
-
 @property (nonatomic, strong) UIColor *positiveLineColor; //!< 阳线颜色(negative line)
 
 @property (nonatomic, strong) UIColor *negativeLineColor; //!< 阴线颜色
