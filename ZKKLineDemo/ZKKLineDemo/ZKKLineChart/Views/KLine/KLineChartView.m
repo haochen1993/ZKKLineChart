@@ -10,7 +10,6 @@
 #import "KLineChartView.h"
 #import "UIBezierPath+curved.h"
 #import "ACMacros.h"
-#import "Global+Helper.h"
 #import "MCVolumeView.h"
 #import "MCAccessoryView.h"
 #import "MCKLineTitleView.h"
@@ -27,6 +26,8 @@ static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
 static const CGFloat kBarChartHeightRatio = .182f; //!< 副图的高度占比
 static const CGFloat kChartVerticalMargin = 30.f;  //!< 图表上下各留的间隙
 static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
+static const CGFloat kBottomSegmentViewHeight = 35.f;
+static const CGFloat kAccessoryMargin = 6.f;
 
 @interface KLineChartView ()
 
@@ -193,7 +194,8 @@ static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
     self.xAxisWidth = rect.size.width - self.rightMargin - self.leftMargin;
     
     //y坐标轴高度
-    self.yAxisHeight = rect.size.height - (rect.size.height * kBarChartHeightRatio * 2) - self.topMargin - 30.f;
+    CGFloat accessoryViewTotalHeight = rect.size.height * kBarChartHeightRatio * 2;
+    self.yAxisHeight = rect.size.height - self.topMargin - kTimeAxisHeight - accessoryViewTotalHeight - kBottomSegmentViewHeight;
     
     //坐标轴
     [self drawAxisInRect:rect];
@@ -490,12 +492,14 @@ static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
 }
 
 - (void)drawYAxisTitle {
-    //k线y坐标
-    CGFloat avgValue = (self.highestPriceOfAll - self.lowestPriceOfAll) / 5.0;
+    CGFloat unitValue = [self getPricePerHeightUnit];
+    CGFloat avgValue = (self.highestPriceOfAll - self.lowestPriceOfAll + kChartVerticalMargin * 2 * unitValue) / 5.0;
+    CGFloat lowest = self.lowestPriceOfAll - kChartVerticalMargin * unitValue;
+    CGFloat highetst = self.highestPriceOfAll + kChartVerticalMargin * unitValue;
+    
     for (int i = 0; i < 6; i ++) {
-        float yAxisValue = i == 5 ? self.lowestPriceOfAll : self.highestPriceOfAll - avgValue*i;
-        
-        NSAttributedString *attString = [Global_Helper attributeText:[MCStockChartUtil decimalValue:yAxisValue] textColor:self.yAxisTitleColor font:self.yAxisTitleFont];
+        CGFloat yAxisValue = i == 5 ? lowest : (highetst - avgValue * i);
+        NSAttributedString *attString = [MCStockChartUtil attributeText:[MCStockChartUtil decimalValue:yAxisValue] textColor:self.yAxisTitleColor font:self.yAxisTitleFont];
         CGSize size = [attString boundingRectWithSize:CGSizeMake(self.leftMargin, self.yAxisTitleFont.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
         
         CGFloat diffHeight = 0;
@@ -542,8 +546,8 @@ static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
             xAxisValue += lineCountPerGrid * (_kLinePadding + _kLineWidth);
             continue;
         }
-        NSAttributedString *attString = [Global_Helper attributeText:self.dataSource[timeIndex].date textColor:self.xAxisTitleColor font:self.xAxisTitleFont lineSpacing:2];
-        CGSize size = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+        NSAttributedString *attString = [MCStockChartUtil attributeText:self.dataSource[timeIndex].date textColor:self.xAxisTitleColor font:self.xAxisTitleFont lineSpacing:2];
+        CGSize size = [MCStockChartUtil attributeString:attString boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
         CGFloat originX = MAX(MIN(xAxisValue - size.width/2.0, SelfWidth - self.rightMargin - size.width), 0);
         [attString drawInRect:CGRectMake(originX, MaxYAxis + 2.0, size.width, size.height)];
         
@@ -613,16 +617,16 @@ static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
         xAxis += _kLineWidth + _kLinePadding;
     }
     
-    NSAttributedString *attString = [Global_Helper attributeText:[MCStockChartUtil decimalValue:self.highestPriceOfAll] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
-    CGSize textSize = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(100, 100)];
+    NSAttributedString *attString = [MCStockChartUtil attributeText:[MCStockChartUtil decimalValue:self.highestPriceOfAll] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
+    CGSize textSize = [MCStockChartUtil attributeString:attString boundingRectWithSize:CGSizeMake(100, 100)];
     CGFloat originX = maxPoint.x - textSize.width - self.kLineWidth - 2 < self.leftMargin + self.kLineWidth + 2.0 ? maxPoint.x + self.kLineWidth : maxPoint.x - textSize.width - self.kLineWidth;
     [attString drawInRect:CGRectMake(originX,
                                      maxPoint.y - kChartVerticalMargin,
                                      textSize.width,
                                      textSize.height)];
     
-    attString = [Global_Helper attributeText:[MCStockChartUtil decimalValue:self.lowestPriceOfAll] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
-    textSize = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(100, 100)];
+    attString = [MCStockChartUtil attributeText:[MCStockChartUtil decimalValue:self.lowestPriceOfAll] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
+    textSize = [MCStockChartUtil attributeString:attString boundingRectWithSize:CGSizeMake(100, 100)];
     originX = minPoint.x - textSize.width - self.kLineWidth - 2 < self.leftMargin + self.kLineWidth + 2.0 ?  minPoint.x + self.kLineWidth : minPoint.x - textSize.width - self.kLineWidth;
     [attString drawInRect:CGRectMake(originX,
                                      self.yAxisHeight - textSize.height + self.topMargin - kChartVerticalMargin,
@@ -732,7 +736,7 @@ static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
     self.volView.numberOfDrawCount = self.kLineDrawNum;
     [self.volView update];
     
-    self.MACDView.frame = CGRectMake(0, CGRectGetMaxY(self.volView.frame), rect.size.width, rect.size.height * kBarChartHeightRatio);
+    self.MACDView.frame = CGRectMake(0, CGRectGetMaxY(self.volView.frame) + kAccessoryMargin, rect.size.width, rect.size.height * kBarChartHeightRatio);
     self.MACDView.kLineWidth = self.kLineWidth;
     self.MACDView.linePadding = self.kLinePadding;
     self.MACDView.boxOriginX = self.leftMargin;

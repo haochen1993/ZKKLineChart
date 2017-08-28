@@ -6,8 +6,8 @@
 #ifndef ACMacros_h
 #define ACMacros_h
 
-#import "Global+Helper.h"
 #import "UIView+Addition.h"
+#import "MCStockChartUtil.h"
 
 //** 沙盒路径 ***********************************************************************************
 #define PATH_OF_APP_HOME    NSHomeDirectory()
@@ -377,7 +377,7 @@ do { \
 
 // nil替换为空字符串
 #define SAFE_STRING(aString)                       SAFE_STRING_PLACEHODER(aString, @"")
-#define SAFE_STRING_PLACEHODER(aString, pString)   [Global_Helper safeString:aString placeHolder:pString]
+#define SAFE_STRING_PLACEHODER(aString, pString)   [MCStockChartUtil safeString:aString placeHolder:pString]
 
 #if TARGET_OS_IPHONE
 /** iPhone Device */
@@ -520,6 +520,6 @@ do { \
 
 #define AttributeTCF(text, textColor, font) AttributeTCFL(text, textColor, font, 0.0f)
 
-#define AttributeTCFL(text, textColor, font, lineSpacing) [Global_Helper attributeText:text textColor:textColor font:font lineSpacing:lineSpacing]
+#define AttributeTCFL(text, textColor, font, lineSpacing) [MCStockChartUtil attributeText:text textColor:textColor font:font lineSpacing:lineSpacing]
 
 #endif

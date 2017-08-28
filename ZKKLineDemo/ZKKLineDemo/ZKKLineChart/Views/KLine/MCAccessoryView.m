@@ -8,9 +8,9 @@
 
 #import "MCAccessoryView.h"
 #import "KLineListTransformer.h"
-#import "Global+Helper.h"
 #import "MCKLineModel.h"
 #import "UIBezierPath+curved.h"
+#import "MCStockChartUtil.h"
 
 @interface MCAccessoryView ()
 
@@ -229,8 +229,8 @@ static const CGFloat kVerticalMargin = 12.f;
     CGContextSetLineDash(context, 0, 0, 0);
     
     for (int i = 0; i < yAxis.count; i ++) {
-        NSAttributedString *attString = [Global_Helper attributeText:yAxis[i] textColor:self.yAxisTitleColor font:self.yAxisTitleFont];
-        CGSize size = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(self.boxOriginX, self.yAxisTitleFont.lineHeight)];
+        NSAttributedString *attString = [MCStockChartUtil attributeText:yAxis[i] textColor:self.yAxisTitleColor font:self.yAxisTitleFont];
+        CGSize size = [MCStockChartUtil attributeString:attString boundingRectWithSize:CGSizeMake(self.boxOriginX, self.yAxisTitleFont.lineHeight)];
         
         [attString drawInRect:CGRectMake(self.boxOriginX - size.width - 2.0f, strokeRect.origin.y + i*strokeRect.size.height/2.0 - size.height/2.0*i - (i==0?2 : 0), size.width, size.height)];
     }

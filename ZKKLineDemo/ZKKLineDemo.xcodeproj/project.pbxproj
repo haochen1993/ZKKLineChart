@@ -28,7 +28,6 @@
 		58F978B01F38182000C756E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58F978AF1F38182000C756E4 /* Assets.xcassets */; };
 		58F978B31F38182000C756E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58F978B11F38182000C756E4 /* LaunchScreen.storyboard */; };
 		58F978BC1F38186800C756E4 /* ZKRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F978BB1F38186800C756E4 /* ZKRootViewController.m */; };
-		58F9796A1F38304000C756E4 /* Global+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979401F38304000C756E4 /* Global+Helper.m */; };
 		58F9796B1F38304000C756E4 /* data.plist in Resources */ = {isa = PBXBuildFile; fileRef = 58F979411F38304000C756E4 /* data.plist */; };
 		58F9796C1F38304000C756E4 /* KLineListTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979451F38304000C756E4 /* KLineListTransformer.m */; };
 		58F9796D1F38304000C756E4 /* ZKKLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979471F38304000C756E4 /* ZKKLineItem.m */; };
@@ -91,8 +90,6 @@
 		58F978BA1F38186800C756E4 /* ZKRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKRootViewController.h; sourceTree = "<group>"; };
 		58F978BB1F38186800C756E4 /* ZKRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKRootViewController.m; sourceTree = "<group>"; };
 		58F9791C1F38304000C756E4 /* ACMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACMacros.h; sourceTree = "<group>"; };
-		58F9793F1F38304000C756E4 /* Global+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Global+Helper.h"; sourceTree = "<group>"; };
-		58F979401F38304000C756E4 /* Global+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Global+Helper.m"; sourceTree = "<group>"; };
 		58F979411F38304000C756E4 /* data.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = data.plist; sourceTree = "<group>"; };
 		58F979441F38304000C756E4 /* KLineListTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLineListTransformer.h; sourceTree = "<group>"; };
 		58F979451F38304000C756E4 /* KLineListTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLineListTransformer.m; sourceTree = "<group>"; };
@@ -239,7 +236,6 @@
 				58DEA0C91F4C0154008199F0 /* Config */,
 				58F9791C1F38304000C756E4 /* ACMacros.h */,
 				58B5F5A71F3ADBB9008DED7E /* Categories */,
-				58F979241F38304000C756E4 /* Components */,
 				58F979411F38304000C756E4 /* data.plist */,
 				58D64D581F54096A00B4A0F8 /* MCStockChartContext.h */,
 				58D64D591F54096A00B4A0F8 /* MCStockChartContext.m */,
@@ -248,23 +244,6 @@
 				58B5F5BD1F3AEF6C008DED7E /* source.json */,
 			);
 			path = ZKKLineChart;
-			sourceTree = "<group>";
-		};
-		58F979241F38304000C756E4 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				58F9793E1F38304000C756E4 /* Utils */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		58F9793E1F38304000C756E4 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				58F9793F1F38304000C756E4 /* Global+Helper.h */,
-				58F979401F38304000C756E4 /* Global+Helper.m */,
-			);
-			path = Utils;
 			sourceTree = "<group>";
 		};
 		58F979421F38304000C756E4 /* Models */ = {
@@ -504,7 +483,6 @@
 				58F979711F38304000C756E4 /* StatusView.m in Sources */,
 				58D64D5A1F54096A00B4A0F8 /* MCStockChartContext.m in Sources */,
 				58C4DFED1F4D8DFD005E5002 /* MCAccessoryView.m in Sources */,
-				58F9796A1F38304000C756E4 /* Global+Helper.m in Sources */,
 				58F979751F38304000C756E4 /* MCVolumeView.m in Sources */,
 				5888BC001F4FFC730033737C /* NSString+Common.m in Sources */,
 				58F9796E1F38304000C756E4 /* KLineChartView.m in Sources */,
