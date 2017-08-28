@@ -91,6 +91,6 @@
 
 - (void)clear;
 
-- (void)showTipBoardWithTouchPoint:(CGPoint)point;
+- (void)showTipBoardWithOuterViewTouchPoint:(CGPoint)touchPoint;
 
 @end

@@ -386,8 +386,21 @@ static const CGFloat kChartVerticalMargin = 30.f;
     }
 }
 
-- (void)showTipBoardWithTouchPoint:(CGPoint)touchPoint {
+- (void)showTipBoardWithOuterViewTouchPoint:(CGPoint)touchPoint {
+    [self showTipBoardWithTouchPoint:touchPoint isInMainView:false];
+}
+
+- (void)showTipBoardWithTouchPoint:(CGPoint)point {
+    [self showTipBoardWithTouchPoint:point isInMainView:true];
+}
+
+- (void)showTipBoardWithTouchPoint:(CGPoint)touchPoint isInMainView:(BOOL)inMainView {
     CGFloat relativeTouchX = touchPoint.x - _leftMargin;
+    // 如果是来自外部的点击事件，Y坐标防止跨到其他图层
+    if (!inMainView) {
+        touchPoint.y = _topMargin + _yAxisHeight;
+    }
+    
     // 注意在_xAxisMapper的xAxisKey值是仅仅是坐标原点开始的横坐标值，不是从视图最左开始计算的。即完整的在视图上的坐标需加上_leftMargin
     [self.xAxisMapper enumerateKeysAndObjectsUsingBlock:^(NSNumber *xAxisKey, NSNumber *indexObject, BOOL *stop) {
         CGFloat xAxisValue = [xAxisKey floatValue];

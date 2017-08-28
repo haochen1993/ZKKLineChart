@@ -25,7 +25,7 @@
 
 - (void)handleTap:(UITapGestureRecognizer *)tapGesture {
     CGPoint touchPoint = [tapGesture locationInView:self];
-    [self.baseChartView showTipBoardWithTouchPoint:touchPoint];
+    [self.baseChartView showTipBoardWithOuterViewTouchPoint:touchPoint];
 }
 
 - (void)showTitleView:(MCKLineModel *)model {
