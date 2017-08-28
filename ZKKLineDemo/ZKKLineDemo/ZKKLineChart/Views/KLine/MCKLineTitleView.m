@@ -11,6 +11,7 @@
 #import "ACMacros.h"
 #import "UIView+Addition.h"
 #import <Masonry.h>
+#import "MCStockChartUtil.h"
 
 @interface MCKLineTitleView ()
 
@@ -85,24 +86,24 @@ static const CGFloat kDefaultMargin = 8.f;
 
 - (void)updateWithHigh:(CGFloat)high open:(CGFloat)open close:(CGFloat)close low:(CGFloat)low {
     NSAssert(high && open && close && low, @"value error");
-    [self updateLabel:_label_0 text:[@"开盘价: " stringByAppendingString:[self decimalValue:high]] color: nil];
-    [self updateLabel:_label_1 text:[@"最高价: " stringByAppendingString:[self decimalValue:open]] color: nil];
-    [self updateLabel:_label_2 text:[@"收盘价: " stringByAppendingString:[self decimalValue:close]] color: nil];
-    [self updateLabel:_label_3 text:[@"最低价: " stringByAppendingString:[self decimalValue:low]] color: nil];
+    [self updateLabel:_label_0 text:[@"开盘价: " stringByAppendingString:[MCStockChartUtil decimalValue:high]] color: nil];
+    [self updateLabel:_label_1 text:[@"最高价: " stringByAppendingString:[MCStockChartUtil decimalValue:open]] color: nil];
+    [self updateLabel:_label_2 text:[@"收盘价: " stringByAppendingString:[MCStockChartUtil decimalValue:close]] color: nil];
+    [self updateLabel:_label_3 text:[@"最低价: " stringByAppendingString:[MCStockChartUtil decimalValue:low]] color: nil];
 }
 
 - (void)updateWithVolume:(CGFloat)volume MA5:(CGFloat)MA5 MA10:(CGFloat)MA10 {
     NSAssert(volume && MA5 && MA10, @"value error");
-    [self updateLabel:_label_0 text:[@"交易量: " stringByAppendingString:[self decimalValue:volume count:4]] color: nil];
-    [self updateLabel:_label_1 text:[@"MA5: " stringByAppendingString:[self decimalValue:MA5]] color: [UIColor whiteColor]];
-    [self updateLabel:_label_2 text:[@"MA10: " stringByAppendingString:[self decimalValue:MA10]] color: [UIColor yellowColor]];
+    [self updateLabel:_label_0 text:[@"交易量: " stringByAppendingString:[MCStockChartUtil decimalValue:volume count:4]] color: nil];
+    [self updateLabel:_label_1 text:[@"MA5: " stringByAppendingString:[MCStockChartUtil decimalValue:MA5]] color: [UIColor whiteColor]];
+    [self updateLabel:_label_2 text:[@"MA10: " stringByAppendingString:[MCStockChartUtil decimalValue:MA10]] color: [UIColor yellowColor]];
 }
 
 - (void)updateWithMACD:(CGFloat)MACD DIF:(CGFloat)DIF DEA:(CGFloat)DEA {
     [self updateLabel:_label_0 text:@"MACD(12,26,9)" color: nil];
-    [self updateLabel:_label_1 text:[@"DIF: " stringByAppendingString:[self decimalValue:DIF]] color: [UIColor whiteColor]];
-    [self updateLabel:_label_2 text:[@"DEA: " stringByAppendingString:[self decimalValue:DEA]] color: [UIColor yellowColor]];
-    [self updateLabel:_label_3 text:[@"MACD: " stringByAppendingString:[self decimalValue:MACD]] color: [UIColor redColor]];
+    [self updateLabel:_label_1 text:[@"DIF: " stringByAppendingString:[MCStockChartUtil decimalValue:DIF]] color: [UIColor whiteColor]];
+    [self updateLabel:_label_2 text:[@"DEA: " stringByAppendingString:[MCStockChartUtil decimalValue:DEA]] color: [UIColor yellowColor]];
+    [self updateLabel:_label_3 text:[@"MACD: " stringByAppendingString:[MCStockChartUtil decimalValue:MACD]] color: [UIColor redColor]];
 }
 
 - (void)updateLabel:(UILabel *)label text:(NSString *)text color:(UIColor *)color {
@@ -117,17 +118,6 @@ static const CGFloat kDefaultMargin = 8.f;
     [UIView animateWithDuration:.15 animations:^{
         [self layoutIfNeeded];
     }];
-}
-
-- (NSString *)decimalValue:(CGFloat)value {
-    return [self decimalValue:value count:2];
-}
-
-- (NSString *)decimalValue:(CGFloat)value count:(NSUInteger)count {
-    NSString *str = nil;
-    NSString *strFormat = [NSString stringWithFormat:@"%%.%zdf", count];
-    str = [NSString stringWithFormat:strFormat, value];
-    return str;
 }
 
 @end

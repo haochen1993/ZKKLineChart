@@ -13,6 +13,8 @@
 		58B5F5BC1F3AE546008DED7E /* UIView+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 58B5F5B01F3AE28A008DED7E /* UIView+Addition.m */; };
 		58B5F5BE1F3AEF6C008DED7E /* source.json in Resources */ = {isa = PBXBuildFile; fileRef = 58B5F5BD1F3AEF6C008DED7E /* source.json */; };
 		58C4DFED1F4D8DFD005E5002 /* MCAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C4DFEC1F4D8DFA005E5002 /* MCAccessoryView.m */; };
+		58D64D571F54088B00B4A0F8 /* MCStockChartUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D64D561F54088B00B4A0F8 /* MCStockChartUtil.m */; };
+		58D64D5A1F54096A00B4A0F8 /* MCStockChartContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D64D591F54096A00B4A0F8 /* MCStockChartContext.m */; };
 		58DEA0C51F4C0109008199F0 /* MCKLinePositionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DEA0BC1F4C0108008199F0 /* MCKLinePositionModel.m */; };
 		58DEA0C61F4C0109008199F0 /* MCKLineVolumePositionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DEA0BD1F4C0108008199F0 /* MCKLineVolumePositionModel.m */; };
 		58DEA0C71F4C0109008199F0 /* MCKLineModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DEA0C21F4C0108008199F0 /* MCKLineModel.m */; };
@@ -55,6 +57,10 @@
 		58B5F5BD1F3AEF6C008DED7E /* source.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = source.json; sourceTree = "<group>"; };
 		58C4DFEB1F4D8DFA005E5002 /* MCAccessoryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCAccessoryView.h; sourceTree = "<group>"; };
 		58C4DFEC1F4D8DFA005E5002 /* MCAccessoryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCAccessoryView.m; sourceTree = "<group>"; };
+		58D64D551F54088B00B4A0F8 /* MCStockChartUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCStockChartUtil.h; sourceTree = "<group>"; };
+		58D64D561F54088B00B4A0F8 /* MCStockChartUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCStockChartUtil.m; sourceTree = "<group>"; };
+		58D64D581F54096A00B4A0F8 /* MCStockChartContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCStockChartContext.h; sourceTree = "<group>"; };
+		58D64D591F54096A00B4A0F8 /* MCStockChartContext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCStockChartContext.m; sourceTree = "<group>"; };
 		58DEA0B81F4BFF02008199F0 /* NetWorking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetWorking.h; sourceTree = "<group>"; };
 		58DEA0B91F4BFF02008199F0 /* NetWorking.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetWorking.m; sourceTree = "<group>"; };
 		58DEA0BA1F4C0107008199F0 /* MCKLineVolumePositionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCKLineVolumePositionModel.h; sourceTree = "<group>"; };
@@ -145,6 +151,15 @@
 			path = Categories;
 			sourceTree = "<group>";
 		};
+		58D64D541F54083700B4A0F8 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				58D64D551F54088B00B4A0F8 /* MCStockChartUtil.h */,
+				58D64D561F54088B00B4A0F8 /* MCStockChartUtil.m */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		58DEA0B61F4BFF02008199F0 /* Vendors */ = {
 			isa = PBXGroup;
 			children = (
@@ -220,11 +235,14 @@
 		58F9791B1F38302800C756E4 /* ZKKLineChart */ = {
 			isa = PBXGroup;
 			children = (
+				58D64D541F54083700B4A0F8 /* Utils */,
 				58DEA0C91F4C0154008199F0 /* Config */,
 				58F9791C1F38304000C756E4 /* ACMacros.h */,
 				58B5F5A71F3ADBB9008DED7E /* Categories */,
 				58F979241F38304000C756E4 /* Components */,
 				58F979411F38304000C756E4 /* data.plist */,
+				58D64D581F54096A00B4A0F8 /* MCStockChartContext.h */,
+				58D64D591F54096A00B4A0F8 /* MCStockChartContext.m */,
 				58F979421F38304000C756E4 /* Models */,
 				58F979481F38304000C756E4 /* Views */,
 				58B5F5BD1F3AEF6C008DED7E /* source.json */,
@@ -484,6 +502,7 @@
 				58F978BC1F38186800C756E4 /* ZKRootViewController.m in Sources */,
 				58ED07DA1F5035B800E8BA30 /* MCAssistantBaseView.m in Sources */,
 				58F979711F38304000C756E4 /* StatusView.m in Sources */,
+				58D64D5A1F54096A00B4A0F8 /* MCStockChartContext.m in Sources */,
 				58C4DFED1F4D8DFD005E5002 /* MCAccessoryView.m in Sources */,
 				58F9796A1F38304000C756E4 /* Global+Helper.m in Sources */,
 				58F979751F38304000C756E4 /* MCVolumeView.m in Sources */,
@@ -497,6 +516,7 @@
 				58DEA0C71F4C0109008199F0 /* MCKLineModel.m in Sources */,
 				5888BBFD1F4FF8020033737C /* MCKLineTitleView.m in Sources */,
 				58DEA0D01F4C0179008199F0 /* UIColor+Y_StockChart.m in Sources */,
+				58D64D571F54088B00B4A0F8 /* MCStockChartUtil.m in Sources */,
 				58DEA0C81F4C0109008199F0 /* MCKLineGroupModel.m in Sources */,
 				58DEA0CF1F4C0175008199F0 /* Y_StockChartGlobalVariable.m in Sources */,
 				58F979741F38304000C756E4 /* TLineTipBoardView.m in Sources */,

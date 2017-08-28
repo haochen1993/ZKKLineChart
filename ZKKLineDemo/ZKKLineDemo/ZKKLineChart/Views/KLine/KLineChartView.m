@@ -15,6 +15,7 @@
 #import "MCAccessoryView.h"
 #import "MCKLineTitleView.h"
 #import "NSString+Common.h"
+#import "MCStockChartUtil.h"
 
 #define MaxYAxis       (self.topMargin + self.yAxisHeight)
 #define MaxBoundSize   (MAX(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)))
@@ -71,7 +72,6 @@ static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
 @property (nonatomic, assign) CGFloat separatorWidth; //!< 分割线宽度
 @property (nonatomic, strong) UIColor *separatorColor; //!< 分割线颜色
 @property (nonatomic, strong) UIColor *crossLineColor; //!< 十字线颜色
-@property (nonatomic, assign) NSInteger saveDecimalPlaces; //!< 保留小数点位数，默认保留两位(最多两位)
 @property (nonatomic, strong) UIColor *timeAndPriceTextColor; //!< 时间和价格提示的字体颜色
 @property (nonatomic, strong) UIColor *timeAndPriceTipsBackgroundColor; //!< 时间和价格提示背景颜色
 @property (nonatomic, assign) CGFloat movingAvgLineWidth; //!< 均线宽度
@@ -134,8 +134,6 @@ static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
     self.showBarChart = YES;
     
     self.autoFit = YES;
-    
-    self.saveDecimalPlaces = 2;
     
     self.timeAndPriceTipsBackgroundColor = HexRGBA(0xf6f6f6, .8);
     self.timeAndPriceTextColor = HexRGB(0x333333);
@@ -428,7 +426,7 @@ static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
     [self getPricePerHeightUnit];
     //时间，价额
     self.priceLabel.hidden = NO;
-    self.priceLabel.text = item.openingPrice > item.closingPrice ? [self dealDecimalWithNum:item.openingPrice] : [self dealDecimalWithNum:item.closingPrice];
+    self.priceLabel.text = item.openingPrice > item.closingPrice ? [MCStockChartUtil decimalValue:item.openingPrice] : [MCStockChartUtil decimalValue:item.closingPrice];
     
     CGFloat priceLabelHeight = kTimeAxisHeight * .6;
     CGFloat priceLabelY = point.y - priceLabelHeight / 2;
@@ -497,7 +495,7 @@ static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
     for (int i = 0; i < 6; i ++) {
         float yAxisValue = i == 5 ? self.lowestPriceOfAll : self.highestPriceOfAll - avgValue*i;
         
-        NSAttributedString *attString = [Global_Helper attributeText:[self dealDecimalWithNum:yAxisValue] textColor:self.yAxisTitleColor font:self.yAxisTitleFont];
+        NSAttributedString *attString = [Global_Helper attributeText:[MCStockChartUtil decimalValue:yAxisValue] textColor:self.yAxisTitleColor font:self.yAxisTitleFont];
         CGSize size = [attString boundingRectWithSize:CGSizeMake(self.leftMargin, self.yAxisTitleFont.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
         
         CGFloat diffHeight = 0;
@@ -615,7 +613,7 @@ static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
         xAxis += _kLineWidth + _kLinePadding;
     }
     
-    NSAttributedString *attString = [Global_Helper attributeText:[self dealDecimalWithNum:self.highestPriceOfAll] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
+    NSAttributedString *attString = [Global_Helper attributeText:[MCStockChartUtil decimalValue:self.highestPriceOfAll] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
     CGSize textSize = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(100, 100)];
     CGFloat originX = maxPoint.x - textSize.width - self.kLineWidth - 2 < self.leftMargin + self.kLineWidth + 2.0 ? maxPoint.x + self.kLineWidth : maxPoint.x - textSize.width - self.kLineWidth;
     [attString drawInRect:CGRectMake(originX,
@@ -623,7 +621,7 @@ static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
                                      textSize.width,
                                      textSize.height)];
     
-    attString = [Global_Helper attributeText:[self dealDecimalWithNum:self.lowestPriceOfAll] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
+    attString = [Global_Helper attributeText:[MCStockChartUtil decimalValue:self.lowestPriceOfAll] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
     textSize = [Global_Helper attributeString:attString boundingRectWithSize:CGSizeMake(100, 100)];
     originX = minPoint.x - textSize.width - self.kLineWidth - 2 < self.leftMargin + self.kLineWidth + 2.0 ?  minPoint.x + self.kLineWidth : minPoint.x - textSize.width - self.kLineWidth;
     [attString drawInRect:CGRectMake(originX,
@@ -795,29 +793,6 @@ static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
             }
         }
     }
-}
-
-- (NSString *)dealDecimalWithNum:(CGFloat)num {
-    NSString *dealString = nil;
-    
-    switch (self.saveDecimalPlaces) {
-        case 0: {
-            dealString = [NSString stringWithFormat:@"%ld", lroundf(num)];
-        }
-            break;
-        case 1: {
-            dealString = [NSString stringWithFormat:@"%.1f", num];
-        }
-            break;
-        case 2: {
-            dealString = [NSString stringWithFormat:@"%.2f", num];
-        }
-            break;
-        default:
-            break;
-    }
-    
-    return dealString;
 }
 
 #pragma mark -  public methods
