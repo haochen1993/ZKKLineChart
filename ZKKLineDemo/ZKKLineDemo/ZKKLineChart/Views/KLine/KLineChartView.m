@@ -23,6 +23,7 @@
 #define SelfHeight     (_landscapeMode ? MinBoundSize : MaxBoundSize)
 
 static const NSUInteger kXAxisCutCount = 5; //!< X轴切割份数
+static const NSUInteger kYAxisCutCount = 5; //!< Y轴切割份数
 static const CGFloat kBarChartHeightRatio = .182f; //!< 副图的高度占比
 static const CGFloat kChartVerticalMargin = 30.f;  //!< 图表上下各留的间隙
 static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
@@ -179,29 +180,32 @@ static const CGFloat kAccessoryMargin = 6.f;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    [self hideTipsWithAnimated:NO];
+- (void)removeCrossLine {
     [_verticalCrossLine removeFromSuperview];
     _verticalCrossLine = nil;
     [_horizontalCrossLine removeFromSuperview];
     _horizontalCrossLine = nil;
+}
+
+- (void)drawRect:(CGRect)rect {
+    [super drawRect:rect];
+    [self hideTipsWithAnimated:NO];
+    [self removeCrossLine];
     
     if (!self.dataSource || self.dataSource.count == 0) {
         return;
     }
-    //x坐标轴长度
     self.xAxisWidth = rect.size.width - self.rightMargin - self.leftMargin;
     
-    //y坐标轴高度
     CGFloat accessoryViewTotalHeight = rect.size.height * kBarChartHeightRatio * 2;
     self.yAxisHeight = rect.size.height - self.topMargin - kTimeAxisHeight - accessoryViewTotalHeight - kBottomSegmentViewHeight;
     
-    //坐标轴
-    [self drawAxisInRect:rect];
+    // 纵轴的分割线
+    [self drawYAxisInRect:rect];
+    [self drawYAxisTitle];
     
     //时间轴
-    [self drawTimeAxis];
+    [self drawXAxis];
     
     //k线
     [self drawKLine];
@@ -209,11 +213,7 @@ static const CGFloat kAccessoryMargin = 6.f;
     //均线
     [self drawMALine];
     
-    //y坐标标题
-    [self drawYAxisTitle];
-    
-    //交易量
-    [self drawVol];
+    [self drawVolAndMACD];
 }
 
 #pragma mark - render UI
@@ -465,11 +465,7 @@ static const CGFloat kAccessoryMargin = 6.f;
 }
 
 #pragma mark - private methods
-
-/**
- *  网格（坐标图）
- */
-- (void)drawAxisInRect:(CGRect)rect {
+- (void)drawYAxisInRect:(CGRect)rect {
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     //k线边框
@@ -479,8 +475,8 @@ static const CGFloat kAccessoryMargin = 6.f;
     CGContextStrokeRect(context, strokeRect);
     
     //k线分割线
-    CGFloat avgHeight = strokeRect.size.height/5.0;
-    for (int i = 1; i <= 4; i ++) {
+    CGFloat avgHeight = strokeRect.size.height/kYAxisCutCount;
+    for (int i = 1; i < kYAxisCutCount; i ++) {
         [self drawDashLineInContext:context
                           movePoint:CGPointMake(self.leftMargin + 1.25, self.topMargin + avgHeight*i)
                             toPoint:CGPointMake(rect.size.width  - self.rightMargin - 0.8, self.topMargin + avgHeight*i)];
@@ -491,24 +487,25 @@ static const CGFloat kAccessoryMargin = 6.f;
 }
 
 - (void)drawYAxisTitle {
+    NSUInteger cutNum = 5; // 纵坐标均分成5份
     CGFloat unitValue = [self getPricePerHeightUnit];
-    CGFloat avgValue = (self.highestPriceOfAll - self.lowestPriceOfAll + kChartVerticalMargin * 2 * unitValue) / 5.0;
+    CGFloat avgValue = (self.highestPriceOfAll - self.lowestPriceOfAll + kChartVerticalMargin * 2 * unitValue) / cutNum;
     CGFloat lowest = self.lowestPriceOfAll - kChartVerticalMargin * unitValue;
     CGFloat highetst = self.highestPriceOfAll + kChartVerticalMargin * unitValue;
     
-    for (int i = 0; i < 6; i ++) {
-        CGFloat yAxisValue = i == 5 ? lowest : (highetst - avgValue * i);
+    for (int i = 0; i < cutNum+1; i ++) {
+        CGFloat yAxisValue = (i == cutNum) ? lowest : (highetst - avgValue * i);
         NSAttributedString *attString = [MCStockChartUtil attributeText:[MCStockChartUtil decimalValue:yAxisValue] textColor:self.yAxisTitleColor font:self.yAxisTitleFont];
         CGSize size = [attString boundingRectWithSize:CGSizeMake(self.leftMargin, self.yAxisTitleFont.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
         
         CGFloat diffHeight = 0;
-        if (i == 5) {
+        if (i == cutNum) {
             diffHeight = size.height;
         }
-        else if (i > 0 && i < 5) {
+        else if (i > 0 && i < cutNum) {
             diffHeight = size.height/2.0;
         }
-        [attString drawInRect:CGRectMake(self.leftMargin - size.width - 2.0f, self.yAxisHeight / 5 * i + self.topMargin - diffHeight, size.width, size.height)];
+        [attString drawInRect:CGRectMake(self.leftMargin - size.width - 2.0f, self.yAxisHeight / cutNum * i + self.topMargin - diffHeight, size.width, size.height)];
     }
 }
 
@@ -526,7 +523,7 @@ static const CGFloat kAccessoryMargin = 6.f;
     CGContextStrokePath(context);
 }
 
-- (void)drawTimeAxis {
+- (void)drawXAxis {
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGFloat widthPerGrid = self.xAxisWidth / kXAxisCutCount;
@@ -538,13 +535,18 @@ static const CGFloat kAccessoryMargin = 6.f;
         if (xAxisValue > self.leftMargin + self.xAxisWidth) {
             break;
         }
-        [self drawDashLineInContext:context movePoint:CGPointMake(xAxisValue, self.topMargin + 1.25) toPoint:CGPointMake(xAxisValue, SelfHeight - 10)];
+        [self drawDashLineInContext:context movePoint:CGPointMake(xAxisValue, self.topMargin + 1.25) toPoint:CGPointMake(xAxisValue, SelfHeight - kBottomSegmentViewHeight + 5)];
         //x轴坐标
         NSInteger timeIndex = i * lineCountPerGrid + self.startDrawIndex;
         if (timeIndex > self.dataSource.count - 1) {
             xAxisValue += lineCountPerGrid * (_kLinePadding + _kLineWidth);
             continue;
         }
+        CGContextSetFillColorWithColor(context, self.backgroundColor.CGColor);
+        CGRect textBgRect = CGRectMake(xAxisValue - 5, MaxYAxis + _separatorWidth, 10, kTimeAxisHeight - 2 * _separatorWidth);
+        CGContextAddRect(context, textBgRect);
+        CGContextFillPath(context);
+        
         NSAttributedString *attString = [MCStockChartUtil attributeText:self.dataSource[timeIndex].date textColor:self.xAxisTitleColor font:self.xAxisTitleFont lineSpacing:2];
         CGSize size = [MCStockChartUtil attributeString:attString boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
         CGFloat originX = MAX(MIN(xAxisValue - size.width/2.0, SelfWidth - self.rightMargin - size.width), 0);
@@ -552,6 +554,7 @@ static const CGFloat kAccessoryMargin = 6.f;
         
         xAxisValue += lineCountPerGrid * (_kLinePadding + _kLineWidth);
     }
+    
     CGContextSetLineDash(context, 0, 0, 0);
 }
 
@@ -716,8 +719,7 @@ static const CGFloat kAccessoryMargin = 6.f;
     return path.CGPath;
 }
 
-/** 绘制交易量柱状图 */
-- (void)drawVol {
+- (void)drawVolAndMACD {
     if (!self.showBarChart) {
         return;
     }
