@@ -32,12 +32,7 @@
 		58F9796C1F38304000C756E4 /* KLineListTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979451F38304000C756E4 /* KLineListTransformer.m */; };
 		58F9796D1F38304000C756E4 /* ZKKLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979471F38304000C756E4 /* ZKKLineItem.m */; };
 		58F9796E1F38304000C756E4 /* KLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9794B1F38304000C756E4 /* KLineChartView.m */; };
-		58F9796F1F38304000C756E4 /* KLineTipBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9794D1F38304000C756E4 /* KLineTipBoardView.m */; };
 		58F979701F38304000C756E4 /* MATipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9794F1F38304000C756E4 /* MATipView.m */; };
-		58F979711F38304000C756E4 /* StatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979521F38304000C756E4 /* StatusView.m */; };
-		58F979721F38304000C756E4 /* TipBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979551F38304000C756E4 /* TipBoardView.m */; };
-		58F979731F38304000C756E4 /* TLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F979581F38304000C756E4 /* TLineChartView.m */; };
-		58F979741F38304000C756E4 /* TLineTipBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9795A1F38304000C756E4 /* TLineTipBoardView.m */; };
 		58F979751F38304000C756E4 /* MCVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F9795D1F38304000C756E4 /* MCVolumeView.m */; };
 		AB26E2B785F6FE5E3AED116D /* libPods-ZKKLineDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B09A0CC9BE963C75FB1DC0 /* libPods-ZKKLineDemo.a */; };
 /* End PBXBuildFile section */
@@ -97,18 +92,8 @@
 		58F979471F38304000C756E4 /* ZKKLineItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKKLineItem.m; sourceTree = "<group>"; };
 		58F9794A1F38304000C756E4 /* KLineChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLineChartView.h; sourceTree = "<group>"; };
 		58F9794B1F38304000C756E4 /* KLineChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLineChartView.m; sourceTree = "<group>"; };
-		58F9794C1F38304000C756E4 /* KLineTipBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLineTipBoardView.h; sourceTree = "<group>"; };
-		58F9794D1F38304000C756E4 /* KLineTipBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLineTipBoardView.m; sourceTree = "<group>"; };
 		58F9794E1F38304000C756E4 /* MATipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MATipView.h; sourceTree = "<group>"; };
 		58F9794F1F38304000C756E4 /* MATipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MATipView.m; sourceTree = "<group>"; };
-		58F979511F38304000C756E4 /* StatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusView.h; sourceTree = "<group>"; };
-		58F979521F38304000C756E4 /* StatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusView.m; sourceTree = "<group>"; };
-		58F979541F38304000C756E4 /* TipBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TipBoardView.h; sourceTree = "<group>"; };
-		58F979551F38304000C756E4 /* TipBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TipBoardView.m; sourceTree = "<group>"; };
-		58F979571F38304000C756E4 /* TLineChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLineChartView.h; sourceTree = "<group>"; };
-		58F979581F38304000C756E4 /* TLineChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLineChartView.m; sourceTree = "<group>"; };
-		58F979591F38304000C756E4 /* TLineTipBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLineTipBoardView.h; sourceTree = "<group>"; };
-		58F9795A1F38304000C756E4 /* TLineTipBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLineTipBoardView.m; sourceTree = "<group>"; };
 		58F9795C1F38304000C756E4 /* MCVolumeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCVolumeView.h; sourceTree = "<group>"; };
 		58F9795D1F38304000C756E4 /* MCVolumeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCVolumeView.m; sourceTree = "<group>"; };
 		ED8965BAFB928DF0A7BF814B /* Pods-ZKKLineDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZKKLineDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZKKLineDemo/Pods-ZKKLineDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -280,9 +265,6 @@
 			isa = PBXGroup;
 			children = (
 				58F979491F38304000C756E4 /* KLine */,
-				58F979501F38304000C756E4 /* StatusView */,
-				58F979531F38304000C756E4 /* TipViews */,
-				58F979561F38304000C756E4 /* TLine */,
 				58F9795B1F38304000C756E4 /* VolumnView */,
 			);
 			path = Views;
@@ -295,43 +277,12 @@
 				58F9794B1F38304000C756E4 /* KLineChartView.m */,
 				5888BBFB1F4FF8020033737C /* MCKLineTitleView.h */,
 				5888BBFC1F4FF8020033737C /* MCKLineTitleView.m */,
-				58F9794C1F38304000C756E4 /* KLineTipBoardView.h */,
-				58F9794D1F38304000C756E4 /* KLineTipBoardView.m */,
 				58F9794E1F38304000C756E4 /* MATipView.h */,
 				58F9794F1F38304000C756E4 /* MATipView.m */,
 				58C4DFEB1F4D8DFA005E5002 /* MCAccessoryView.h */,
 				58C4DFEC1F4D8DFA005E5002 /* MCAccessoryView.m */,
 			);
 			path = KLine;
-			sourceTree = "<group>";
-		};
-		58F979501F38304000C756E4 /* StatusView */ = {
-			isa = PBXGroup;
-			children = (
-				58F979511F38304000C756E4 /* StatusView.h */,
-				58F979521F38304000C756E4 /* StatusView.m */,
-			);
-			path = StatusView;
-			sourceTree = "<group>";
-		};
-		58F979531F38304000C756E4 /* TipViews */ = {
-			isa = PBXGroup;
-			children = (
-				58F979541F38304000C756E4 /* TipBoardView.h */,
-				58F979551F38304000C756E4 /* TipBoardView.m */,
-			);
-			path = TipViews;
-			sourceTree = "<group>";
-		};
-		58F979561F38304000C756E4 /* TLine */ = {
-			isa = PBXGroup;
-			children = (
-				58F979571F38304000C756E4 /* TLineChartView.h */,
-				58F979581F38304000C756E4 /* TLineChartView.m */,
-				58F979591F38304000C756E4 /* TLineTipBoardView.h */,
-				58F9795A1F38304000C756E4 /* TLineTipBoardView.m */,
-			);
-			path = TLine;
 			sourceTree = "<group>";
 		};
 		58F9795B1F38304000C756E4 /* VolumnView */ = {
@@ -480,15 +431,12 @@
 				58F978A81F38182000C756E4 /* AppDelegate.m in Sources */,
 				58F978BC1F38186800C756E4 /* ZKRootViewController.m in Sources */,
 				58ED07DA1F5035B800E8BA30 /* MCAssistantBaseView.m in Sources */,
-				58F979711F38304000C756E4 /* StatusView.m in Sources */,
 				58D64D5A1F54096A00B4A0F8 /* MCStockChartContext.m in Sources */,
 				58C4DFED1F4D8DFD005E5002 /* MCAccessoryView.m in Sources */,
 				58F979751F38304000C756E4 /* MCVolumeView.m in Sources */,
 				5888BC001F4FFC730033737C /* NSString+Common.m in Sources */,
 				58F9796E1F38304000C756E4 /* KLineChartView.m in Sources */,
-				58F979731F38304000C756E4 /* TLineChartView.m in Sources */,
 				58DEA0D11F4C0274008199F0 /* NetWorking.m in Sources */,
-				58F979721F38304000C756E4 /* TipBoardView.m in Sources */,
 				58DEA0C61F4C0109008199F0 /* MCKLineVolumePositionModel.m in Sources */,
 				58F979701F38304000C756E4 /* MATipView.m in Sources */,
 				58DEA0C71F4C0109008199F0 /* MCKLineModel.m in Sources */,
@@ -497,12 +445,10 @@
 				58D64D571F54088B00B4A0F8 /* MCStockChartUtil.m in Sources */,
 				58DEA0C81F4C0109008199F0 /* MCKLineGroupModel.m in Sources */,
 				58DEA0CF1F4C0175008199F0 /* Y_StockChartGlobalVariable.m in Sources */,
-				58F979741F38304000C756E4 /* TLineTipBoardView.m in Sources */,
 				58F9796C1F38304000C756E4 /* KLineListTransformer.m in Sources */,
 				58F9796D1F38304000C756E4 /* ZKKLineItem.m in Sources */,
 				58B5F5BC1F3AE546008DED7E /* UIView+Addition.m in Sources */,
 				58F978A51F38182000C756E4 /* main.m in Sources */,
-				58F9796F1F38304000C756E4 /* KLineTipBoardView.m in Sources */,
 				58DEA0C51F4C0109008199F0 /* MCKLinePositionModel.m in Sources */,
 				58B5F5BB1F3AE544008DED7E /* UIBezierPath+curved.m in Sources */,
 			);

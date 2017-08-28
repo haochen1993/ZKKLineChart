@@ -9,7 +9,6 @@
 #import "ZKRootViewController.h"
 #import "KLineChartView.h"
 #import "KLineListTransformer.h"
-#import "StatusView.h"
 #import <YYModel.h>
 #import "ZKKLineItem.h"
 #import "ACMacros.h"
@@ -20,8 +19,6 @@
 
 @property (nonatomic, strong) KLineListTransformer *lineListTransformer;
 @property (nonatomic, strong) KLineChartView *kLineChartView;
-
-@property (nonatomic, strong) StatusView *kStatusView;
 
 /**
  *  (模拟)实时测试
@@ -78,16 +75,6 @@
     } fail:^{
         
     }];
-    
-    
-    
-    
-//    NSString *path = [[NSBundle mainBundle]pathForResource:@"source.json" ofType:nil];
-//    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:path] options:NSJSONReadingMutableContainers error:nil];
-//    NSArray *sourceArray = dict[@"data"];
-//
-//    self.dataSource = [NSArray yy_modelArrayWithClass:[ZKKLineItem class] json:sourceArray];
-//    [self.kLineChartView drawChartWithDataSource:self.dataSource];
 }
 
 #pragma mark - private methods
@@ -106,15 +93,6 @@
 }
 
 - (void)realTimeData:(id)timer {
-}
-
-#pragma mark - getters
-
-- (StatusView *)kStatusView {
-    if (!_kStatusView) {
-        _kStatusView = [[StatusView alloc] initWithFrame:_kLineChartView.bounds];
-    }
-    return _kStatusView;
 }
 
 - (KLineListTransformer *)lineListTransformer {
