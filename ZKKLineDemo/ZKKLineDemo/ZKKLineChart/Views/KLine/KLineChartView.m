@@ -401,6 +401,8 @@ static const CGFloat kChartVerticalMargin = 30.f;
         touchPoint.y = _topMargin + _yAxisHeight;
     }
     
+    touchPoint.y = MIN(_topMargin + _yAxisHeight, touchPoint.y);
+    
     // 注意在_xAxisMapper的xAxisKey值是仅仅是坐标原点开始的横坐标值，不是从视图最左开始计算的。即完整的在视图上的坐标需加上_leftMargin
     [self.xAxisMapper enumerateKeysAndObjectsUsingBlock:^(NSNumber *xAxisKey, NSNumber *indexObject, BOOL *stop) {
         CGFloat xAxisValue = [xAxisKey floatValue];
