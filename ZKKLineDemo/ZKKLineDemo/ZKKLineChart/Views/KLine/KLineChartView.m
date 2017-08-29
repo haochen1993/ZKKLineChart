@@ -31,7 +31,7 @@ static const CGFloat kChartVerticalMargin = 30.f;  //!< 图表上下各留的间
 static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
 static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 
-@interface KLineChartView ()
+@interface KLineChartView () <MCStockSegmentViewDelegate>
 
 @property (nonatomic, assign) CGFloat yAxisHeight;
 @property (nonatomic, assign) CGFloat xAxisWidth;
@@ -118,6 +118,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 - (void)setupBottomSegmentView {
     _segmentView = [MCStockSegmentView segmentView];
     [self addSubview:_segmentView];
+    _segmentView.delegate = self;
 }
 
 - (void)initDate {
@@ -1007,6 +1008,56 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         self.center = center;
     } completion:nil];
     [self drawChartWithDataSource:_dataSource];
+}
+
+#pragma mark - <MCStockSegmentViewDelegate>
+
+- (void)stockSegmentView:(MCStockSegmentView *)segmentView didSelectModel:(MCStockSegmentSelectedModel *)model {
+    if (model.subType == MCStockSegmentViewSubTypeMain) {
+        if (model.mainChartType == MCStockMainChartTypeMA) {
+            DLog(@"点击主图 == MCStockMainChartTypeMA");
+        }
+        else if (model.mainChartType == MCStockMainChartTypeBOLL) {
+            DLog(@"点击主图 == MCStockMainChartTypeBOLL");
+        }
+        else if (model.mainChartType == MCStockMainChartTypeClose) {
+            DLog(@"点击主图 == 关闭");
+        }
+    }
+    else if (model.subType == MCStockSegmentViewSubTypeAccessory) {
+        if (model.accessoryChartType == MCStockAccessoryChartTypeMACD) {
+            DLog(@"点击副图 == MCStockAccessoryChartTypeMACD");
+        }
+        else if (model.accessoryChartType == MCStockAccessoryChartTypeKDJ) {
+            DLog(@"点击副图 == MCStockAccessoryChartTypeKDJ");
+        }
+        else if (model.accessoryChartType == MCStockAccessoryChartTypeRSI) {
+            DLog(@"点击副图 == MCStockAccessoryChartTypeRSI");
+        }
+        else if (model.accessoryChartType == MCStockAccessoryChartTypeWR) {
+            DLog(@"点击副图 == MCStockAccessoryChartTypeWR");
+        }
+        else if (model.accessoryChartType == MCStockAccessoryChartTypeClose) {
+            DLog(@"点击副图 == MCStockAccessoryChartTypeClose");
+        }
+    }
+    else if (model.subType == MCStockSegmentViewSubTypeTime) {
+        if (model.targetTimeType == MCStockTargetTimeTypeTiming) {
+            DLog(@"点击时间轴 == MCStockTargetTimeTypeTiming");
+        }
+        else if (model.targetTimeType == MCStockTargetTimeTypeMin_5) {
+            DLog(@"点击时间轴 == MCStockTargetTimeTypeMin_5");
+        }
+        else if (model.targetTimeType == MCStockTargetTimeTypeMin_30) {
+            DLog(@"点击时间轴 == MCStockTargetTimeTypeMin_30");
+        }
+        else if (model.targetTimeType == MCStockTargetTimeTypeMin_60) {
+            DLog(@"点击时间轴 == MCStockTargetTimeTypeMin_60");
+        }
+        else if (model.targetTimeType == MCStockTargetTimeTypeDay) {
+            DLog(@"点击时间轴 == MCStockTargetTimeTypeDay");
+        }
+    }
 }
 
 - (void)dealloc {

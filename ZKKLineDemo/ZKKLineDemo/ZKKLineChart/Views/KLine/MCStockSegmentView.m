@@ -52,6 +52,10 @@ static NSString *cellID = @"MCStockSegmentViewCell";
 
 // ---------
 
+@implementation MCStockSegmentSelectedModel
+
+@end
+
 @interface MCStockSegmentView () <UICollectionViewDelegate, UICollectionViewDataSource>
 
 @property (nonatomic, strong) UICollectionView *collectionView;
@@ -122,6 +126,7 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
         UIButton *btn = [self generateBtn:topBtnTitles[i]];
         btn.us_top = CGRectGetMaxY(topTitleLabel.frame);
         btn.us_left = i * btnWidth;
+        [btn addTarget:self action:@selector(mainChartBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [_popupPanel addSubview:btn];
     }
     
@@ -142,6 +147,7 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
         UIButton *btn = [self generateBtn:bottomBtnTitles[i]];
         btn.us_top = CGRectGetMaxY(bottomTitleLabel.frame);
         btn.us_left = i * btnWidth;
+        [btn addTarget:self action:@selector(accessoryChartBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [_popupPanel addSubview:btn];
     }
 }
@@ -153,7 +159,6 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     btn.titleLabel.font = [UIFont systemFontOfSize:12];
     btn.us_size = CGSizeMake(60, 35);
     [btn setTitleColor:TitleColor_HL forState:UIControlStateSelected];
-    [btn addTarget:self action:@selector(popupBtnDidClick:) forControlEvents:UIControlEventTouchUpInside];
     return btn;
 }
 
@@ -221,8 +226,50 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     } completion:nil];
 }
 
-- (void)popupBtnDidClick:(UIButton *)btn {
+- (void)accessoryChartBtnClick:(UIButton *)btn {
     btn.selected = !btn.selected;
+    
+    MCStockSegmentSelectedModel *model = [MCStockSegmentSelectedModel new];
+    model.subType = MCStockSegmentViewSubTypeAccessory;
+    
+    if ([btn.currentTitle isEqualToString:@"MACD"]) {
+        model.accessoryChartType = MCStockAccessoryChartTypeMACD;
+    }
+    else if ([btn.currentTitle isEqualToString:@"KDJ"]) {
+        model.accessoryChartType = MCStockAccessoryChartTypeKDJ;
+    }
+    else if ([btn.currentTitle isEqualToString:@"RSI"]) {
+        model.accessoryChartType = MCStockAccessoryChartTypeRSI;
+    }
+    else if ([btn.currentTitle isEqualToString:@"WR"]) {
+        model.accessoryChartType = MCStockAccessoryChartTypeWR;
+    }
+    else if ([btn.currentTitle isEqualToString:@"关闭"]) {
+        model.accessoryChartType = MCStockAccessoryChartTypeClose;
+    }
+    if ([self.delegate respondsToSelector:@selector(stockSegmentView:didSelectModel:)]) {
+        [self.delegate stockSegmentView:self didSelectModel:model];
+    }
+}
+
+- (void)mainChartBtnClick:(UIButton *)btn {
+    btn.selected = !btn.selected;
+    
+    MCStockSegmentSelectedModel *model = [MCStockSegmentSelectedModel new];
+    model.subType = MCStockSegmentViewSubTypeMain;
+    
+    if ([btn.currentTitle isEqualToString:@"MA"]) {
+        model.mainChartType = MCStockMainChartTypeMA;
+    }
+    else if ([btn.currentTitle isEqualToString:@"BOLL"]) {
+        model.mainChartType = MCStockMainChartTypeBOLL;
+    }
+    else if ([btn.currentTitle isEqualToString:@"关闭"]) {
+        model.mainChartType = MCStockMainChartTypeClose;
+    }
+    if ([self.delegate respondsToSelector:@selector(stockSegmentView:didSelectModel:)]) {
+        [self.delegate stockSegmentView:self didSelectModel:model];
+    }
 }
 
 #pragma mark - <UICollectionViewDelegate, UICollectionViewDataSource>
@@ -241,6 +288,32 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     _selectedIndex = indexPath.item;
     [_collectionView reloadData];
+    
+    MCStockSegmentSelectedModel *model = [MCStockSegmentSelectedModel new];
+    model.subType = MCStockSegmentViewSubTypeTime;
+    
+    switch (indexPath.item) {
+        case 0: {
+            model.targetTimeType = MCStockTargetTimeTypeTiming;
+        } break;
+        case 1: {
+            model.targetTimeType = MCStockTargetTimeTypeMin_5;
+        } break;
+        case 2: {
+            model.targetTimeType = MCStockTargetTimeTypeMin_30;
+        } break;
+        case 3: {
+            model.targetTimeType = MCStockTargetTimeTypeMin_60;
+        } break;
+        case 4: {
+            model.targetTimeType = MCStockTargetTimeTypeDay;
+        } break;
+        default:
+            break;
+    }
+    if ([self.delegate respondsToSelector:@selector(stockSegmentView:didSelectModel:)]) {
+        [self.delegate stockSegmentView:self didSelectModel:model];
+    }
 }
 
 @end
