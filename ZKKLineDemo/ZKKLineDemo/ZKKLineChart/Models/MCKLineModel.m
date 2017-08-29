@@ -24,14 +24,14 @@
 
 - (CGFloat)KDJ_K {
     if (!_KDJ_K) {
-        _KDJ_K = (self.RSV_9 + 2 * (self.PreviousKlineModel.KDJ_K ? self.PreviousKlineModel.KDJ_K : 50) )/3;
+        _KDJ_K = (self.RSV_9 + 2 * (self.previousKlineModel.KDJ_K ? self.previousKlineModel.KDJ_K : 50) )/3;
     }
     return _KDJ_K;
 }
 
 - (CGFloat)KDJ_D {
     if(!_KDJ_D) {
-        _KDJ_D = (self.KDJ_K + 2 * (self.PreviousKlineModel.KDJ_D ? self.PreviousKlineModel.KDJ_D : 50))/3;
+        _KDJ_D = (self.KDJ_K + 2 * (self.previousKlineModel.KDJ_D ? self.previousKlineModel.KDJ_D : 50))/3;
     }
     return _KDJ_D;
 }
@@ -44,38 +44,40 @@
 }
 
 - (CGFloat)MA7 {
-    if([Y_StockChartGlobalVariable isEMALine] == Y_StockChartTargetLineStatusMA)
-    {
+    if([Y_StockChartGlobalVariable isEMALine] == Y_StockChartTargetLineStatusMA) {
         if (!_MA7) {
-            NSInteger index = [self.ParentGroupModel.models indexOfObject:self];
+            NSInteger index = [self.parentGroupModel.models indexOfObject:self];
             if (index >= 6) {
                 if (index > 6) {
-                    _MA7 = (self.SumOfLastClose - self.ParentGroupModel.models[index - 7].SumOfLastClose) / 7;
-                } else {
-                    _MA7 = self.SumOfLastClose / 7;
+                    _MA7 = (self.sumOfLastClose - self.parentGroupModel.models[index - 7].sumOfLastClose) / 7;
+                }
+                else {
+                    _MA7 = self.sumOfLastClose / 7;
                 }
             }
         }
-    } else {
+    }
+    else {
         return self.EMA7;
     }
     return _MA7;
 }
 
 - (CGFloat)Volume_MA7 {
-    if([Y_StockChartGlobalVariable isEMALine] == Y_StockChartTargetLineStatusMA)
-    {
+    if([Y_StockChartGlobalVariable isEMALine] == Y_StockChartTargetLineStatusMA) {
         if (!_Volume_MA7) {
-            NSInteger index = [self.ParentGroupModel.models indexOfObject:self];
+            NSInteger index = [self.parentGroupModel.models indexOfObject:self];
             if (index >= 6) {
                 if (index > 6) {
-                    _Volume_MA7 = (self.SumOfLastVolume - self.ParentGroupModel.models[index - 7].SumOfLastVolume) / 7;
-                } else {
-                    _Volume_MA7 = self.SumOfLastVolume / 7;
+                    _Volume_MA7 = (self.sumOfLastVolume - self.parentGroupModel.models[index - 7].sumOfLastVolume) / 7;
+                }
+                else {
+                    _Volume_MA7 = self.sumOfLastVolume / 7;
                 }
             }
         }
-    } else {
+    }
+    else {
         return self.Volume_EMA7;
     }
     return _Volume_MA7;
@@ -83,35 +85,36 @@
 
 - (CGFloat)Volume_EMA7 {
     if(!_Volume_EMA7) {
-        _Volume_EMA7 = (self.volume + 3 * self.PreviousKlineModel.Volume_EMA7)/4;
+        _Volume_EMA7 = (self.volume + 3 * self.previousKlineModel.Volume_EMA7)/4;
     }
     return _Volume_EMA7;
 }
+
 //// EMA（N）=2/（N+1）*（C-昨日EMA）+昨日EMA；
 - (CGFloat)EMA7 {
     if(!_EMA7) {
-        _EMA7 = (self.closingPrice + 3 * self.PreviousKlineModel.EMA7)/4;
+        _EMA7 = (self.closingPrice + 3 * self.previousKlineModel.EMA7)/4;
     }
     return _EMA7;
 }
 
 - (CGFloat)EMA30 {
     if(!_EMA30) {
-        _EMA30 = (2 * self.closingPrice + 29 * self.PreviousKlineModel.EMA30)/31;
+        _EMA30 = (2 * self.closingPrice + 29 * self.previousKlineModel.EMA30)/31;
     }
     return _EMA30;
 }
 
 - (CGFloat)EMA12 {
     if(!_EMA12) {
-        _EMA12 = (2 * self.closingPrice + 11 * self.PreviousKlineModel.EMA12)/13;
+        _EMA12 = (2 * self.closingPrice + 11 * self.previousKlineModel.EMA12)/13;
     }
     return _EMA12;
 }
 
 - (CGFloat)EMA26 {
     if (!_EMA26) {
-        _EMA26 = (2 * self.closingPrice + 25 * self.PreviousKlineModel.EMA26)/27;
+        _EMA26 = (2 * self.closingPrice + 25 * self.previousKlineModel.EMA26)/27;
     }
     return _EMA26;
 }
@@ -119,12 +122,13 @@
 - (CGFloat)MA30 {
     if([Y_StockChartGlobalVariable isEMALine] == Y_StockChartTargetLineStatusMA) {
         if (!_MA30) {
-            NSInteger index = [self.ParentGroupModel.models indexOfObject:self];
+            NSInteger index = [self.parentGroupModel.models indexOfObject:self];
             if (index >= 29) {
                 if (index > 29) {
-                    _MA30 = (self.SumOfLastClose - self.ParentGroupModel.models[index - 30].SumOfLastClose) / 30;
-                } else {
-                    _MA30 = self.SumOfLastClose / 30;
+                    _MA30 = (self.sumOfLastClose - self.parentGroupModel.models[index - 30].sumOfLastClose) / 30;
+                }
+                else {
+                    _MA30 = self.sumOfLastClose / 30;
                 }
             }
         }
@@ -138,12 +142,13 @@
 - (CGFloat)Volume_MA30 {
     if([Y_StockChartGlobalVariable isEMALine] == Y_StockChartTargetLineStatusMA) {
         if (!_Volume_MA30) {
-            NSInteger index = [self.ParentGroupModel.models indexOfObject:self];
+            NSInteger index = [self.parentGroupModel.models indexOfObject:self];
             if (index >= 29) {
                 if (index > 29) {
-                    _Volume_MA30 = (self.SumOfLastVolume - self.ParentGroupModel.models[index - 30].SumOfLastVolume) / 30;
-                } else {
-                    _Volume_MA30 = self.SumOfLastVolume / 30;
+                    _Volume_MA30 = (self.sumOfLastVolume - self.parentGroupModel.models[index - 30].sumOfLastVolume) / 30;
+                }
+                else {
+                    _Volume_MA30 = self.sumOfLastVolume / 30;
                 }
             }
         }
@@ -155,19 +160,20 @@
 
 - (CGFloat)Volume_EMA30 {
     if(!_Volume_EMA30) {
-        _Volume_EMA30 = (2 * self.volume + 29 * self.PreviousKlineModel.Volume_EMA30)/31;
+        _Volume_EMA30 = (2 * self.volume + 29 * self.previousKlineModel.Volume_EMA30)/31;
     }
     return _Volume_EMA30;
 }
 
 - (CGFloat)MA12 {
     if (!_MA12) {
-        NSInteger index = [self.ParentGroupModel.models indexOfObject:self];
+        NSInteger index = [self.parentGroupModel.models indexOfObject:self];
         if (index >= 11) {
             if (index > 11) {
-                _MA12 = (self.SumOfLastClose - self.ParentGroupModel.models[index - 12].SumOfLastClose) / 12;
-            } else {
-                _MA12 = self.SumOfLastClose / 12;
+                _MA12 = (self.sumOfLastClose - self.parentGroupModel.models[index - 12].sumOfLastClose) / 12;
+            }
+            else {
+                _MA12 = self.sumOfLastClose / 12;
             }
         }
     }
@@ -176,37 +182,38 @@
 
 - (CGFloat)MA26 {
     if (!_MA26) {
-        NSInteger index = [self.ParentGroupModel.models indexOfObject:self];
+        NSInteger index = [self.parentGroupModel.models indexOfObject:self];
         if (index >= 25) {
             if (index > 25) {
-                _MA26 = (self.SumOfLastClose - self.ParentGroupModel.models[index - 26].SumOfLastClose) / 26;
-            } else {
-                _MA26 = self.SumOfLastClose / 26;
+                _MA26 = (self.sumOfLastClose - self.parentGroupModel.models[index - 26].sumOfLastClose) / 26;
+            }
+            else {
+                _MA26 = self.sumOfLastClose / 26;
             }
         }
     }
     return _MA26;
 }
 
-- (CGFloat)SumOfLastClose {
-    if(!_SumOfLastClose) {
-        _SumOfLastClose = self.PreviousKlineModel.SumOfLastClose + self.closingPrice;
+- (CGFloat)sumOfLastClose {
+    if(!_sumOfLastClose) {
+        _sumOfLastClose = self.previousKlineModel.sumOfLastClose + self.closingPrice;
     }
-    return _SumOfLastClose;
+    return _sumOfLastClose;
 }
 
-- (CGFloat)SumOfLastVolume {
-    if(!_SumOfLastVolume) {
-        _SumOfLastVolume = self.PreviousKlineModel.SumOfLastVolume + self.volume;
+- (CGFloat)sumOfLastVolume {
+    if(!_sumOfLastVolume) {
+        _sumOfLastVolume = self.previousKlineModel.sumOfLastVolume + self.volume;
     }
-    return _SumOfLastVolume;
+    return _sumOfLastVolume;
 }
 
 - (CGFloat)NineClocksMinPrice {
     if (!_NineClocksMinPrice) {
 //        if([self.ParentGroupModel.models indexOfObject:self] >= 8)
 //        {
-            [self rangeLastNinePriceByArray:self.ParentGroupModel.models condition:NSOrderedDescending];
+            [self rangeLastNinePriceByArray:self.parentGroupModel.models condition:NSOrderedDescending];
 //        } else {
 //            _NineClocksMinPrice = @0;
 //        }
@@ -216,16 +223,15 @@
 
 - (CGFloat)NineClocksMaxPrice {
     if (!_NineClocksMaxPrice) {
-        if([self.ParentGroupModel.models indexOfObject:self] >= 8)
+        if([self.parentGroupModel.models indexOfObject:self] >= 8)
         {
-            [self rangeLastNinePriceByArray:self.ParentGroupModel.models condition:NSOrderedAscending];
+            [self rangeLastNinePriceByArray:self.parentGroupModel.models condition:NSOrderedAscending];
         } else {
             _NineClocksMaxPrice = 0;
         }
     }
     return _NineClocksMaxPrice;
 }
-
 
 ////DIF=EMA（12）-EMA（26）         DIF的值即为红绿柱；
 //
@@ -241,7 +247,7 @@
 //已验证
 -(CGFloat)DEA {
     if(!_DEA) {
-        _DEA = self.PreviousKlineModel.DEA * 0.8 + 0.2*self.DIF;
+        _DEA = self.previousKlineModel.DEA * 0.8 + 0.2*self.DIF;
     }
     return _DEA;
 }
@@ -260,12 +266,12 @@
     
     if (!_MA20) {
         
-        NSInteger index = [self.ParentGroupModel.models indexOfObject:self];
+        NSInteger index = [self.parentGroupModel.models indexOfObject:self];
         if (index >= 19) {
             if (index > 19) {
-                _MA20 = (self.SumOfLastClose - self.ParentGroupModel.models[index - 20].SumOfLastClose) / 20;
+                _MA20 = (self.sumOfLastClose - self.parentGroupModel.models[index - 20].sumOfLastClose) / 20;
             } else {
-                _MA20 = self.SumOfLastClose / 20;
+                _MA20 = self.sumOfLastClose / 20;
             }
         }
     }
@@ -277,15 +283,15 @@
     
     if(!_BOLL_MB) {
         
-        NSInteger index = [self.ParentGroupModel.models indexOfObject:self];
+        NSInteger index = [self.parentGroupModel.models indexOfObject:self];
         if (index >= 19) {
             
             if (index > 19) {
-                _BOLL_MB = (self.SumOfLastClose - self.ParentGroupModel.models[index - 19].SumOfLastClose) / 19;
+                _BOLL_MB = (self.sumOfLastClose - self.parentGroupModel.models[index - 19].sumOfLastClose) / 19;
                 
             } else {
                 
-                _BOLL_MB = self.SumOfLastClose / index;
+                _BOLL_MB = self.sumOfLastClose / index;
                 
             }
         }
@@ -301,11 +307,11 @@
     
     if (!_BOLL_MD) {
         
-        NSInteger index = [self.ParentGroupModel.models indexOfObject:self];
+        NSInteger index = [self.parentGroupModel.models indexOfObject:self];
         
         if (index >= 20) {
             
-            _BOLL_MD = sqrt((self.PreviousKlineModel.BOLL_SUBMD_SUM - self.ParentGroupModel.models[index - 20].BOLL_SUBMD_SUM)/ 20);
+            _BOLL_MD = sqrt((self.previousKlineModel.BOLL_SUBMD_SUM - self.parentGroupModel.models[index - 20].BOLL_SUBMD_SUM)/ 20);
             
         }
         
@@ -318,7 +324,7 @@
 
 - (CGFloat)BOLL_UP {
     if (!_BOLL_UP) {
-        NSInteger index = [self.ParentGroupModel.models indexOfObject:self];
+        NSInteger index = [self.parentGroupModel.models indexOfObject:self];
         if (index >= 20) {
             _BOLL_UP = self.BOLL_MB + 2 * self.BOLL_MD;
         }
@@ -331,7 +337,7 @@
 
 - (CGFloat)BOLL_DN {
     if (!_BOLL_DN) {
-        NSInteger index = [self.ParentGroupModel.models indexOfObject:self];
+        NSInteger index = [self.parentGroupModel.models indexOfObject:self];
         if (index >= 20) {
             _BOLL_DN = self.BOLL_MB - 2 * self.BOLL_MD;
         }
@@ -346,10 +352,10 @@
     
     if (!_BOLL_SUBMD_SUM) {
         
-        NSInteger index = [self.ParentGroupModel.models indexOfObject:self];
+        NSInteger index = [self.parentGroupModel.models indexOfObject:self];
         if (index >= 20) {
             
-            _BOLL_SUBMD_SUM = self.PreviousKlineModel.BOLL_SUBMD_SUM + self.BOLL_SUBMD;
+            _BOLL_SUBMD_SUM = self.previousKlineModel.BOLL_SUBMD_SUM + self.BOLL_SUBMD;
             
         }
     }
@@ -363,7 +369,7 @@
     
     if (!_BOLL_SUBMD) {
         
-        NSInteger index = [self.ParentGroupModel.models indexOfObject:self];
+        NSInteger index = [self.parentGroupModel.models indexOfObject:self];
         
         if (index >= 20) {
             
@@ -414,11 +420,11 @@
 //    return _PreviousKlineModel;
 //}
 
-- (MCKLineGroupModel *)ParentGroupModel {
-    if(!_ParentGroupModel) {
-        _ParentGroupModel = [MCKLineGroupModel new];
+- (MCKLineGroupModel *)parentGroupModel {
+    if(!_parentGroupModel) {
+        _parentGroupModel = [MCKLineGroupModel new];
     }
-    return _ParentGroupModel;
+    return _parentGroupModel;
 }
 
 //对Model数组进行排序，初始化每个Model的最新9Clock的最低价和最高价
@@ -508,8 +514,8 @@
         _lowestPrice = [arr[3] floatValue];
         _closingPrice = [arr[4] floatValue];
         _volume = [arr[5] floatValue];
-        self.SumOfLastClose = _closingPrice + self.PreviousKlineModel.SumOfLastClose;
-        self.SumOfLastVolume = _volume + self.PreviousKlineModel.SumOfLastVolume;
+        self.sumOfLastClose = _closingPrice + self.previousKlineModel.sumOfLastClose;
+        self.sumOfLastVolume = _volume + self.previousKlineModel.sumOfLastVolume;
     }
 }
 
@@ -545,8 +551,8 @@
     [self DIF];
     [self DEA];
     [self MACD];
-    [self rangeLastNinePriceByArray:self.ParentGroupModel.models condition:NSOrderedAscending];
-    [self rangeLastNinePriceByArray:self.ParentGroupModel.models condition:NSOrderedDescending];
+    [self rangeLastNinePriceByArray:self.parentGroupModel.models condition:NSOrderedAscending];
+    [self rangeLastNinePriceByArray:self.parentGroupModel.models condition:NSOrderedDescending];
     [self RSV_9];
     [self KDJ_K];
     [self KDJ_D];

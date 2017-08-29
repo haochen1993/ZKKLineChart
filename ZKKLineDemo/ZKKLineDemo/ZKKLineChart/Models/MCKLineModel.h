@@ -19,86 +19,33 @@ typedef NS_ENUM(NSInteger, YCoinType) {
 
 #pragma 外部初始化
 
-/**
- *  货币类型
- */
-@property (nonatomic, assign) YCoinType CoinType;
+@property (nonatomic, assign) YCoinType coinType; //!< 货币类型
+@property (nonatomic, strong) MCKLineModel *previousKlineModel; //!< 前一个Model
+@property (nonatomic, strong) MCKLineGroupModel *parentGroupModel; //!< 父ModelArray:用来给当前Model索引到Parent数组
+@property (nonatomic, assign) CGFloat sumOfLastClose; //!< 该Model及其之前所有收盘价之和
+@property (nonatomic, assign) CGFloat sumOfLastVolume; //!< 该Model及其之前所有成交量之和
+@property (nonatomic, copy) NSString *date; //!< 日期
+@property (nonatomic, copy) NSString *fullDate; //!< 含有年月日的时间
+@property (nonatomic, assign) CGFloat openingPrice; //!< 开盘价
+@property (nonatomic, assign) CGFloat closingPrice; //!< 收盘价
+@property (nonatomic, assign) CGFloat highestPrice; //!< 最高价
+@property (nonatomic, assign) CGFloat lowestPrice; //!< 最低价
+@property (nonatomic, assign) CGFloat volume; //!< 成交量
+@property (nonatomic, assign) BOOL isFirstTradeDate; //!< 是否是某个月的第一个交易日
 
-/**
- *  前一个Model
- */
-@property (nonatomic, strong) MCKLineModel *PreviousKlineModel;
-
-/**
- *  父ModelArray:用来给当前Model索引到Parent数组
- */
-@property (nonatomic, strong) MCKLineGroupModel *ParentGroupModel;
-
-/**
- *  该Model及其之前所有收盘价之和
- */
-@property (nonatomic, assign) CGFloat SumOfLastClose;
-
-/**
- *  该Model及其之前所有成交量之和
- */
-@property (nonatomic, assign) CGFloat SumOfLastVolume;
-
-/**
- *  日期
- */
-@property (nonatomic, copy) NSString *date;
-@property (nonatomic, copy) NSString *fullDate;
-
-/**
- *  开盘价
- */
-@property (nonatomic, assign) CGFloat openingPrice;
-
-/**
- *  收盘价
- */
-@property (nonatomic, assign) CGFloat closingPrice;
-
-/**
- *  最高价
- */
-@property (nonatomic, assign) CGFloat highestPrice;
-
-/**
- *  最低价
- */
-@property (nonatomic, assign) CGFloat lowestPrice;
-
-/**
- *  成交量
- */
-@property (nonatomic, assign) CGFloat volume;
-
-/**
- *  是否是某个月的第一个交易日
- */
-@property (nonatomic, assign) BOOL isFirstTradeDate;
 #pragma 内部自动初始化
 
 //移动平均数分为MA（简单移动平均数）和EMA（指数移动平均数），其计算公式如下：［C为收盘价，N为周期数］：
 //MA（N）=（C1+C2+……CN）/N
-
-
-//MA（7）=（C1+C2+……CN）/7
 @property (nonatomic, assign) CGFloat MA7;
 @property (nonatomic, assign) CGFloat MA12;
 @property (nonatomic, assign) CGFloat MA26;
-
-//MA（30）=（C1+C2+……CN）/30
 @property (nonatomic, assign) CGFloat MA30;
 
 @property (nonatomic, assign) CGFloat Volume_MA7;
-
 @property (nonatomic, assign) CGFloat Volume_MA30;
 
 @property (nonatomic, assign) CGFloat Volume_EMA7;
-
 @property (nonatomic, assign) CGFloat Volume_EMA30;
 
 #pragma BOLL线
@@ -160,7 +107,6 @@ typedef NS_ENUM(NSInteger, YCoinType) {
 //EMA（26）=昨日EMA（26）*25/27+C*2/27；   即为MACD指标中的慢线；
 @property (nonatomic, assign) CGFloat MACD;
 
-
 /**
  *  9Clock内最低价
  */
@@ -170,8 +116,6 @@ typedef NS_ENUM(NSInteger, YCoinType) {
  *  9Clock内最高价
  */
 @property (nonatomic, assign) CGFloat NineClocksMaxPrice;
-
-
 
 //KDJ(9,3.3),下面以该参数为例说明计算方法。
 //9，3，3代表指标分析周期为9天，K值D值为3天

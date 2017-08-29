@@ -21,9 +21,9 @@
     //设置数据
     for (NSArray *valueArr in dataSource) {
         MCKLineModel *model = [MCKLineModel new];
-        model.PreviousKlineModel = preModel;
+        model.previousKlineModel = preModel;
         [model initWithValues:valueArr];
-        model.ParentGroupModel = groupModel;
+        model.parentGroupModel = groupModel;
         
         [mutableArr addObject:model];
         
