@@ -559,7 +559,8 @@ static const CGFloat kAccessoryMargin = 6.f;
 }
 
 - (CGFloat)getPricePerHeightUnit {
-    return (self.highestPriceOfAll - self.lowestPriceOfAll) / (self.yAxisHeight - kChartVerticalMargin * 2);
+    CGFloat unitValue = (self.highestPriceOfAll - self.lowestPriceOfAll) / (self.yAxisHeight - kChartVerticalMargin * 2);
+    return unitValue ?: 1.f;
 }
 
 /**
@@ -567,9 +568,6 @@ static const CGFloat kAccessoryMargin = 6.f;
  */
 - (void)drawKLine {
     CGFloat pricePerHeightUnit = [self getPricePerHeightUnit];
-    if (pricePerHeightUnit == 0) {
-        pricePerHeightUnit = 1.0;
-    }
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, 0.5);
@@ -664,9 +662,6 @@ static const CGFloat kAccessoryMargin = 6.f;
     
     CGFloat xAxisValue = self.leftMargin + 0.5*_kLineWidth + _kLinePadding;
     CGFloat pricePerHeightUnit = [self getPricePerHeightUnit];
-    if (pricePerHeightUnit == 0) {
-        pricePerHeightUnit = 1.0f;
-    }
     
     // 均线个数
     NSInteger maLength = [self.MAValues[index] integerValue];
