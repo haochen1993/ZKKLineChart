@@ -21,6 +21,8 @@ static NSString *cellID = @"MCStockSegmentViewCell";
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) UIImageView *flagImageView;
 
+- (void)updateWithText:(NSString *)text selectedStyle:(BOOL)isSelectedStyle;
+
 @end
 
 @implementation MCStockSegmentViewCell
@@ -41,6 +43,11 @@ static NSString *cellID = @"MCStockSegmentViewCell";
     _timeLabel.textColor = TitleColor_Nor;
 }
 
+- (void)updateWithText:(NSString *)text selectedStyle:(BOOL)isSelectedStyle {
+    _timeLabel.text = text;
+    _timeLabel.textColor = isSelectedStyle ? TitleColor_HL : TitleColor_Nor;
+}
+
 @end
 
 // ---------
@@ -51,6 +58,7 @@ static NSString *cellID = @"MCStockSegmentViewCell";
 @property (nonatomic, strong) UIButton *targetBtn;
 @property (nonatomic, strong) UIView *popupPanel;
 @property (nonatomic, copy) NSArray *dataSource;
+@property (nonatomic, assign) NSInteger selectedIndex;
 
 @end
 
@@ -174,12 +182,14 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MCStockSegmentViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellID forIndexPath:indexPath];
-    cell.timeLabel.text = _dataSource[indexPath.item];
+    [cell updateWithText:_dataSource[indexPath.item] selectedStyle:indexPath.item == _selectedIndex];
+    
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"=---------------");
+    _selectedIndex = indexPath.item;
+    [_collectionView reloadData];
 }
 
 @end
