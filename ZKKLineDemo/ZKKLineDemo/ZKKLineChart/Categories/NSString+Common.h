@@ -28,6 +28,10 @@
 - (float)stringWidthWithFont:(UIFont *)font height:(float)height;
 - (float)stringHeightWithFont:(UIFont *)font width:(float)width;
 - (float)stringHeightWithFont:(UIFont *)font width:(float)width lineSpacing:(float)lineSpacing;
+
+- (CGSize)stringSizeWithFont:(UIFont *)font;
+- (CGSize)stringSizeWithFont:(UIFont *)font lineSpacing:(CGFloat)lineSpacing;
+
 //星座
 -(NSString*)getAstor;
 

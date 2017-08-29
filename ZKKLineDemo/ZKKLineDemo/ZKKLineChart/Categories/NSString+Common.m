@@ -212,6 +212,32 @@
     return ceilf(size.height);
 }
 
+- (CGSize)stringSizeWithFont:(UIFont *)font {
+    return [self stringSizeWithFont:font lineSpacing:0];
+}
+
+- (CGSize)stringSizeWithFont:(UIFont *)font lineSpacing:(CGFloat)lineSpacing {
+    CGSize size = CGSizeZero;
+    if (self == nil || self.length == 0) {
+        return size;
+    }
+    NSString *copyString = [NSString stringWithFormat:@"%@", self];
+    CGSize constrainedSize = CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX);
+    
+    NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
+    paragraph.lineBreakMode = NSLineBreakByWordWrapping;
+    if (lineSpacing) {
+        paragraph.lineSpacing = lineSpacing;
+    }
+    
+    size = [copyString boundingRectWithSize: constrainedSize
+                                    options:NSStringDrawingUsesLineFragmentOrigin
+                                 attributes:@{ NSFontAttributeName:font, NSParagraphStyleAttributeName:paragraph }
+                                    context: nil].size;
+    
+    return size;
+}
+
 //转换星座 只适合 2014-05-12格式
 -(NSString *)getAstor
 {

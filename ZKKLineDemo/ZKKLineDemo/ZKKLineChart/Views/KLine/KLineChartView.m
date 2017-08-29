@@ -575,7 +575,8 @@ static const CGFloat kAccessoryMargin = 6.f;
     CGFloat xAxis = _kLinePadding;
     [self.xAxisMapper removeAllObjects];
     
-    CGPoint maxPoint, minPoint;
+    CGPoint maxPoint = CGPointZero;
+    CGPoint minPoint = CGPointZero;
     
     NSArray *items = [self.dataSource subarrayWithRange:NSMakeRange(self.startDrawIndex, self.kLineDrawNum)];
     for (MCKLineModel *item in items) {
@@ -617,21 +618,32 @@ static const CGFloat kAccessoryMargin = 6.f;
         xAxis += _kLineWidth + _kLinePadding;
     }
     
-    NSAttributedString *attString = [MCStockChartUtil attributeText:[MCStockChartUtil decimalValue:self.highestPriceOfAll] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
-    CGSize textSize = [MCStockChartUtil attributeString:attString boundingRectWithSize:CGSizeMake(100, 100)];
-    CGFloat originX = maxPoint.x - textSize.width - self.kLineWidth - 2 < self.leftMargin + self.kLineWidth + 2.0 ? maxPoint.x + self.kLineWidth : maxPoint.x - textSize.width - self.kLineWidth;
-    [attString drawInRect:CGRectMake(originX,
-                                     maxPoint.y - kChartVerticalMargin,
-                                     textSize.width,
-                                     textSize.height)];
+    [self drawHintTitleWithPoint:maxPoint isMax:true];
+    [self drawHintTitleWithPoint:minPoint isMax:false];
+}
+
+- (void)drawHintTitleWithPoint:(CGPoint)point isMax:(BOOL)isMax {
+    // ⇠ ← →
+    UIFont *titleFont = [UIFont systemFontOfSize:8.f];
+    CGFloat price = isMax ? self.highestPriceOfAll : self.lowestPriceOfAll;
+    NSString *priceStr = [MCStockChartUtil decimalValue:price];
     
-    attString = [MCStockChartUtil attributeText:[MCStockChartUtil decimalValue:self.lowestPriceOfAll] textColor:HexRGB(0xFFB54C) font:[UIFont systemFontOfSize:12.0f]];
-    textSize = [MCStockChartUtil attributeString:attString boundingRectWithSize:CGSizeMake(100, 100)];
-    originX = minPoint.x - textSize.width - self.kLineWidth - 2 < self.leftMargin + self.kLineWidth + 2.0 ?  minPoint.x + self.kLineWidth : minPoint.x - textSize.width - self.kLineWidth;
-    [attString drawInRect:CGRectMake(originX,
-                                     self.yAxisHeight - textSize.height + self.topMargin - kChartVerticalMargin,
-                                     textSize.width,
-                                     textSize.height)];
+    NSString *hintTitle = [NSString stringWithFormat:@"←%@", priceStr];
+    CGSize titleSize = [hintTitle stringSizeWithFont:titleFont];
+    BOOL shouldTitleLeft = point.x + titleSize.width > SelfWidth - self.rightMargin;
+    
+    CGFloat titleX = 0;
+    if (shouldTitleLeft) {
+        hintTitle = [NSString stringWithFormat:@"%@→", priceStr];
+        titleX = point.x - titleSize.width;
+    }
+    else {
+        hintTitle = [NSString stringWithFormat:@"←%@", priceStr];
+        titleX = point.x;
+    }
+    CGFloat titleY = isMax ? point.y - titleSize.height : point.y;
+    NSAttributedString *attString = [MCStockChartUtil attributeText:hintTitle textColor:_xAxisTitleColor font:titleFont];
+    [attString drawInRect:(CGRect){titleX, titleY, titleSize}];
 }
 
 /**
@@ -751,47 +763,6 @@ static const CGFloat kAccessoryMargin = 6.f;
         MCKLineModel *model = drawContext[i];
         self.highestPriceOfAll = MAX(model.highestPrice, self.highestPriceOfAll);
         self.lowestPriceOfAll = MIN(model.lowestPrice, self.lowestPriceOfAll);
-        
-        if(model.MA7) {
-            if(model.MA7 < _lowestPriceOfAll) {
-                _lowestPriceOfAll = model.MA7;
-            }
-            if(model.MA7 > _highestPriceOfAll) {
-                _highestPriceOfAll = model.MA7;
-            }
-        }
-        if(model.MA12) {
-            if (_lowestPriceOfAll > model.MA12) {
-                _lowestPriceOfAll = model.MA12;
-            }
-            if (_highestPriceOfAll < model.MA12) {
-                _highestPriceOfAll = model.MA12;
-            }
-        }
-        if(model.MA20) {
-            if (_lowestPriceOfAll > model.MA20) {
-                _lowestPriceOfAll = model.MA20;
-            }
-            if (_highestPriceOfAll < model.MA20) {
-                _highestPriceOfAll = model.MA20;
-            }
-        }
-        if(model.MA26) {
-            if (_lowestPriceOfAll > model.MA26) {
-                _lowestPriceOfAll = model.MA26;
-            }
-            if (_highestPriceOfAll < model.MA26) {
-                _highestPriceOfAll = model.MA26;
-            }
-        }
-        if(model.MA30) {
-            if (_lowestPriceOfAll > model.MA30) {
-                _lowestPriceOfAll = model.MA30;
-            }
-            if (_highestPriceOfAll < model.MA30) {
-                _highestPriceOfAll = model.MA30;
-            }
-        }
     }
 }
 
