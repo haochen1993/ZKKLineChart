@@ -234,7 +234,6 @@ static const CGFloat kVerticalMargin = 12.f;
         
         [attString drawInRect:CGRectMake(self.boxOriginX - size.width - 2.0f, strokeRect.origin.y + i*strokeRect.size.height/2.0 - size.height/2.0*i - (i==0?2 : 0), size.width, size.height)];
     }
-    
 }
 
 - (void)drawDashLineInContext:(CGContextRef)context
