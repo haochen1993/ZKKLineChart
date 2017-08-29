@@ -8,6 +8,7 @@
 //
 
 #import "KLineChartView.h"
+#import <Masonry.h>
 #import "UIBezierPath+curved.h"
 #import "ACMacros.h"
 #import "MCVolumeView.h"
@@ -15,6 +16,7 @@
 #import "MCKLineTitleView.h"
 #import "NSString+Common.h"
 #import "MCStockChartUtil.h"
+#import "MCStockSegmentView.h"
 
 #define MaxYAxis       (self.topMargin + self.yAxisHeight)
 #define MaxBoundSize   (MAX(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)))
@@ -27,8 +29,7 @@ static const NSUInteger kYAxisCutCount = 5; //!< Y轴切割份数
 static const CGFloat kBarChartHeightRatio = .182f; //!< 副图的高度占比
 static const CGFloat kChartVerticalMargin = 30.f;  //!< 图表上下各留的间隙
 static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
-static const CGFloat kBottomSegmentViewHeight = 35.f;
-static const CGFloat kAccessoryMargin = 6.f;
+static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 
 @interface KLineChartView ()
 
@@ -79,6 +80,8 @@ static const CGFloat kAccessoryMargin = 6.f;
 @property (nonatomic, assign) CGFloat movingAvgLineWidth; //!< 均线宽度
 @property (nonatomic, assign) NSInteger lastDrawNum; //!< 缩放手势 记录上次的绘制个数
 @property (nonatomic, strong) MCKLineTitleView *KLineTitleView;
+@property (nonatomic, strong) MCStockSegmentView *segmentView;
+@property (nonatomic, assign) CGFloat bottomSegmentViewHeight;
 
 @end
 
@@ -102,6 +105,24 @@ static const CGFloat kAccessoryMargin = 6.f;
 
 - (void)setup {
     self.backgroundColor = GlobalColor_Dark;
+    
+    [self initDate];
+    //添加手势
+    [self addGestures];
+    [self registerObserver];
+    [self setupBottomSegmentView];
+}
+
+- (void)setupBottomSegmentView {
+    _segmentView = [MCStockSegmentView segmentView];
+    [self addSubview:_segmentView];
+    [_segmentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.bottom.right.mas_equalTo(0);
+        make.height.mas_equalTo(_bottomSegmentViewHeight);
+    }];
+}
+
+- (void)initDate {
     _landscapeMode = false;
     
     self.positiveLineColor = KLineColor_Green;
@@ -154,9 +175,8 @@ static const CGFloat kAccessoryMargin = 6.f;
     self.rightMargin = 2.0;
     self.leftMargin = 25.0f;
     self.KLineTitleView.hidden = true;
-    //添加手势
-    [self addGestures];
-    [self registerObserver];
+    
+    _bottomSegmentViewHeight = 30.f;
 }
 
 /**
@@ -198,7 +218,7 @@ static const CGFloat kAccessoryMargin = 6.f;
     self.xAxisWidth = rect.size.width - self.rightMargin - self.leftMargin;
     
     CGFloat accessoryViewTotalHeight = rect.size.height * kBarChartHeightRatio * 2;
-    self.yAxisHeight = rect.size.height - self.topMargin - kTimeAxisHeight - accessoryViewTotalHeight - kBottomSegmentViewHeight;
+    self.yAxisHeight = rect.size.height - self.topMargin - kTimeAxisHeight - accessoryViewTotalHeight - kAccessoryMargin - _bottomSegmentViewHeight;
     
     // 纵轴的分割线
     [self drawYAxisInRect:rect];
@@ -535,7 +555,7 @@ static const CGFloat kAccessoryMargin = 6.f;
         if (xAxisValue > self.leftMargin + self.xAxisWidth) {
             break;
         }
-        [self drawDashLineInContext:context movePoint:CGPointMake(xAxisValue, self.topMargin + 1.25) toPoint:CGPointMake(xAxisValue, SelfHeight - kBottomSegmentViewHeight + 5)];
+        [self drawDashLineInContext:context movePoint:CGPointMake(xAxisValue, self.topMargin + 1.25) toPoint:CGPointMake(xAxisValue, SelfHeight - _bottomSegmentViewHeight + 5)];
         //x轴坐标
         NSInteger timeIndex = i * lineCountPerGrid + self.startDrawIndex;
         if (timeIndex > self.dataSource.count - 1) {
@@ -968,13 +988,16 @@ static const CGFloat kAccessoryMargin = 6.f;
         angle = M_PI_2;
         bounds = CGRectMake(0, 0, CGRectGetHeight(self.superview.bounds) - 64.f, CGRectGetWidth(self.superview.bounds));
         center = CGPointMake(CGRectGetMidX(self.superview.bounds), CGRectGetMidY(self.superview.bounds) + 32.f);
+        _bottomSegmentViewHeight = 2;
+        
     }
     else {
         angle = 0;
         bounds = CGRectMake(0, 0, CGRectGetWidth(self.superview.bounds), CGRectGetHeight(self.superview.bounds) - 64.f);
         center = CGPointMake(CGRectGetMidX(self.superview.bounds), CGRectGetMidY(self.superview.bounds) + 32.f);
+        _bottomSegmentViewHeight = 35;
     }
-    [UIView animateWithDuration:.33 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+    [UIView animateWithDuration:.35 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.transform = CGAffineTransformMakeRotation(angle);
         self.bounds = bounds;
         self.center = center;
