@@ -104,22 +104,20 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 }
 
 - (void)setup {
-    self.backgroundColor = GlobalColor_Dark;
+    self.backgroundColor = GlobalBGColor_Dark;
     
     [self initDate];
     //添加手势
     [self addGestures];
     [self registerObserver];
-    [self setupBottomSegmentView];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self setupBottomSegmentView];
+    });
 }
 
 - (void)setupBottomSegmentView {
     _segmentView = [MCStockSegmentView segmentView];
     [self addSubview:_segmentView];
-    [_segmentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.bottom.right.mas_equalTo(0);
-        make.height.mas_equalTo(_bottomSegmentViewHeight);
-    }];
 }
 
 - (void)initDate {
@@ -176,7 +174,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     self.leftMargin = 25.0f;
     self.KLineTitleView.hidden = true;
     
-    _bottomSegmentViewHeight = 30.f;
+    _bottomSegmentViewHeight = MCStockSegmentViewHeight;
 }
 
 /**
@@ -995,7 +993,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         angle = 0;
         bounds = CGRectMake(0, 0, CGRectGetWidth(self.superview.bounds), CGRectGetHeight(self.superview.bounds) - 64.f);
         center = CGPointMake(CGRectGetMidX(self.superview.bounds), CGRectGetMidY(self.superview.bounds) + 32.f);
-        _bottomSegmentViewHeight = 35;
+        _bottomSegmentViewHeight = MCStockSegmentViewHeight;
     }
     [UIView animateWithDuration:.35 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.transform = CGAffineTransformMakeRotation(angle);

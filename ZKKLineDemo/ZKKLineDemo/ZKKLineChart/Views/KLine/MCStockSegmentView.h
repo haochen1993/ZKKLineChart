@@ -13,3 +13,5 @@
 + (instancetype)segmentView;
 
 @end
+
+extern const CGFloat MCStockSegmentViewHeight;

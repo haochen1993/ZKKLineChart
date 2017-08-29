@@ -9,6 +9,8 @@
 #import "UIView+Addition.h"
 #import "MCStockChartUtil.h"
 
+#define KeyboardAnimationCurve  7 << 16
+
 //** 沙盒路径 ***********************************************************************************
 #define PATH_OF_APP_HOME    NSHomeDirectory()
 #define PATH_OF_TEMP        NSTemporaryDirectory()
@@ -30,7 +32,7 @@
 #define KLineColor_Green  HexRGB(0x26e27e)
 #define KLineColor_Red    HexRGB(0xcb292e)
 #define GlobalColor_Blue  HexRGB(0x2187c9)
-#define GlobalColor_Dark  HexRGB(0x292c34)
+#define GlobalBGColor_Dark  HexRGB(0x292c34)
 
 /** DEBUG RELEASE **/
 #if DEBUG
