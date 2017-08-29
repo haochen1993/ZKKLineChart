@@ -8,7 +8,7 @@
 
 #import "MATipView.h"
 #import <Masonry.h>
-#import "ACMacros.h"
+#import "MacroToolHeader.h"
 
 @interface MATipView ()
 

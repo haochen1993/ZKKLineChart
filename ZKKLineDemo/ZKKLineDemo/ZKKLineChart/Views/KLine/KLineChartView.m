@@ -10,7 +10,7 @@
 #import "KLineChartView.h"
 #import <Masonry.h>
 #import "UIBezierPath+curved.h"
-#import "ACMacros.h"
+#import "MacroToolHeader.h"
 #import "MCVolumeView.h"
 #import "MCAccessoryView.h"
 #import "MCKLineTitleView.h"
@@ -410,6 +410,11 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 }
 
 - (void)showTipBoardWithTouchPoint:(CGPoint)touchPoint isInMainView:(BOOL)inMainView {
+    // 防止tap事件与segmentView的collectionView的点击冲突导致
+    if (touchPoint.y > SelfHeight - MCStockSegmentViewHeight) {
+        return;
+    }
+    
     CGFloat relativeTouchX = touchPoint.x - _leftMargin;
     // 如果是来自外部的点击事件，Y坐标防止跨到其他图层
     if (!inMainView) {
@@ -908,6 +913,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 - (UITapGestureRecognizer *)tapGesture {
     if (!_tapGesture) {
         _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapEvent:)];
+        [_tapGesture setCancelsTouchesInView:false];
     }
     return _tapGesture;
 }

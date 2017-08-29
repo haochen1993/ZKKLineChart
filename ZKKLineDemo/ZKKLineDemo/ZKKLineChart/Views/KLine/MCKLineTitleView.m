@@ -8,7 +8,7 @@
 
 #import "MCKLineTitleView.h"
 #import "NSString+Common.h"
-#import "ACMacros.h"
+#import "MacroToolHeader.h"
 #import "UIView+Addition.h"
 #import <Masonry.h>
 #import "MCStockChartUtil.h"
