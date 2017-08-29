@@ -63,7 +63,7 @@ static NSString *cellID = @"MCStockSegmentViewCell";
 @end
 
 static const CGFloat kTargetBtnWidth = 60.f;
-static const CGFloat kPopupViewHeight = 100.f;
+static const CGFloat kPopupViewHeight = 150.f;
 const CGFloat MCStockSegmentViewHeight = 35.f;
 
 @implementation MCStockSegmentView
@@ -95,6 +95,7 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
 - (void)setup {
     [self setNeedsLayout];
     [self layoutIfNeeded];
+    
     _dataSource = @[ @"分时", @"5分", @"30分", @"60分", @"日线" ];
     
     [self setupTargetBtn];
@@ -104,16 +105,66 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
 
 - (void)setupPopupPanel {
     _popupPanel = [UIView new];
-    _popupPanel.backgroundColor = [UIColor greenColor];
+    _popupPanel.backgroundColor = BGColor;
     [self insertSubview:_popupPanel atIndex:0];
     _popupPanel.us_size = CGSizeMake(SCREEN_WIDTH, kPopupViewHeight);
     _popupPanel.us_top = self.us_height;
     
+    CGFloat btnWidth = 60.f;
+    
+    UIView *topView = [UIView new];
+    [_popupPanel addSubview:topView];
+    UILabel *topTitleLabel = [self generateTitleLabel:@"主图"];
+    [_popupPanel addSubview:topTitleLabel];
+    
+    NSArray *topBtnTitles = @[ @"MA", @"BOLL", @"关闭" ];
+    for (int i = 0; i < topBtnTitles.count; i ++) {
+        UIButton *btn = [self generateBtn:topBtnTitles[i]];
+        btn.us_top = CGRectGetMaxY(topTitleLabel.frame);
+        btn.us_left = i * btnWidth;
+        [_popupPanel addSubview:btn];
+    }
+    
+    UIView *line = [UIView new];
+    [_popupPanel addSubview:line];
+    line.us_top = _popupPanel.us_size.height * .5;
+    line.us_size = CGSizeMake(SCREEN_WIDTH, .5f);
+    line.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:.4];
+    
+    UIView *bottomView = [UIView new];
+    [_popupPanel addSubview:bottomView];
+    UILabel *bottomTitleLabel = [self generateTitleLabel:@"副图"];
+    [_popupPanel addSubview:bottomTitleLabel];
+    bottomTitleLabel.us_top = _popupPanel.us_size.height * .5;
+    
+    NSArray *bottomBtnTitles = @[ @"MACD", @"KDJ", @"RSI", @"WR", @"关闭" ];
+    for (int i = 0; i < bottomBtnTitles.count; i ++) {
+        UIButton *btn = [self generateBtn:bottomBtnTitles[i]];
+        btn.us_top = CGRectGetMaxY(bottomTitleLabel.frame);
+        btn.us_left = i * btnWidth;
+        [_popupPanel addSubview:btn];
+    }
+}
+
+- (UIButton *)generateBtn:(NSString *)title {
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_popupPanel addSubview:btn];
-    [btn setTitle:@"哈哈" forState:UIControlStateNormal];
-    btn.us_size = CGSizeMake(100, 30);
-    [btn addTarget:self action:@selector(test) forControlEvents:UIControlEventTouchUpInside];
+    [btn setTitle:title forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    btn.titleLabel.font = [UIFont systemFontOfSize:12];
+    btn.us_size = CGSizeMake(60, 35);
+    [btn setTitleColor:TitleColor_HL forState:UIControlStateSelected];
+    [btn addTarget:self action:@selector(popupBtnDidClick:) forControlEvents:UIControlEventTouchUpInside];
+    return btn;
+}
+
+- (UILabel *)generateTitleLabel:(NSString *)title {
+    UILabel *label = [UILabel new];
+    label.text = title;
+    label.font = [UIFont systemFontOfSize:12];
+    label.textColor = [UIColor whiteColor];
+    label.us_size = CGSizeMake(100, 36);
+    label.us_left = 15.f;
+    return label;
 }
 
 - (void)setupTargetBtn {
@@ -170,8 +221,8 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     } completion:nil];
 }
 
-- (void)test {
-    
+- (void)popupBtnDidClick:(UIButton *)btn {
+    btn.selected = !btn.selected;
 }
 
 #pragma mark - <UICollectionViewDelegate, UICollectionViewDataSource>
