@@ -347,16 +347,14 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 
 - (void)pinchEvent:(UIPinchGestureRecognizer *)pinchEvent {
     [self hideTipsWithAnimated:NO];
-    CGFloat scale = pinchEvent.scale - self.lastPanScale + 1;
-    
     if (!self.zoomEnable || self.dataSource.count == 0) {
         return;
     }
-    
+    CGFloat scale = pinchEvent.scale - self.lastPanScale + 1;
+    if ((scale < 1 && _kLineWidth <= _minKLineWidth) || (scale > 1 && _kLineWidth >= _maxKLineWidth)) {
+        return;
+    }
     self.kLineWidth = _kLineWidth * scale;
-    
-    CGFloat forwardDrawCount = self.kLineDrawNum;
-    
     _kLineDrawNum = floor((SelfWidth - self.leftMargin - self.rightMargin) / (self.kLineWidth + self.kLinePadding));
     
     //容差处理
@@ -364,15 +362,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     if (diffWidth > 4*(self.kLineWidth + self.kLinePadding)/5.0) {
         _kLineDrawNum = _kLineDrawNum + 1;
     }
-    
     _kLineDrawNum = (self.dataSource.count > 0 && _kLineDrawNum < self.dataSource.count) ? _kLineDrawNum : self.dataSource.count;
-    if (forwardDrawCount == self.kLineDrawNum && self.maxKLineWidth != self.kLineWidth) {
-        return;
-    }
-    
-    if ((scale < 1 && _kLineWidth == _minKLineWidth) || (scale > 1 && _kLineWidth == _maxKLineWidth)) {
-        return;
-    }
     
     NSInteger offset = (NSInteger)((_lastDrawNum - _kLineDrawNum) / 2);
     if (ABS(offset)) {
