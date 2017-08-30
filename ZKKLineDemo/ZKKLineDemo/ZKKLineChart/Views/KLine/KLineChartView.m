@@ -369,7 +369,12 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         _lastDrawNum = _kLineDrawNum;
         if (ABS(offset) < 1.5) {
             _startDrawIndex += offset;
-            self.startDrawIndex = self.startDrawIndex + self.kLineDrawNum > self.dataSource.count ? self.dataSource.count - self.kLineDrawNum : self.startDrawIndex;
+            if (_startDrawIndex + self.kLineDrawNum > self.dataSource.count) {
+                _startDrawIndex = self.dataSource.count - self.kLineDrawNum;
+            }
+            if (_startDrawIndex < 0) {
+                _startDrawIndex = 0;
+            }
             [self resetMaxAndMin];
             [self setNeedsDisplay];
         }
