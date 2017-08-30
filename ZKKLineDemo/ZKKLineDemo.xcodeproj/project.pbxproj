@@ -282,8 +282,6 @@
 				5888BBFC1F4FF8020033737C /* MCKLineTitleView.m */,
 				58F9794E1F38304000C756E4 /* MATipView.h */,
 				58F9794F1F38304000C756E4 /* MATipView.m */,
-				58C4DFEB1F4D8DFA005E5002 /* MCAccessoryView.h */,
-				58C4DFEC1F4D8DFA005E5002 /* MCAccessoryView.m */,
 				58D64D601F5534BD00B4A0F8 /* MCStockSegmentView.h */,
 				58D64D611F5534BD00B4A0F8 /* MCStockSegmentView.m */,
 			);
@@ -293,6 +291,8 @@
 		58F9795B1F38304000C756E4 /* VolumnView */ = {
 			isa = PBXGroup;
 			children = (
+				58C4DFEB1F4D8DFA005E5002 /* MCAccessoryView.h */,
+				58C4DFEC1F4D8DFA005E5002 /* MCAccessoryView.m */,
 				58F9795C1F38304000C756E4 /* MCVolumeView.h */,
 				58F9795D1F38304000C756E4 /* MCVolumeView.m */,
 				58ED07D81F5035B800E8BA30 /* MCAssistantBaseView.h */,

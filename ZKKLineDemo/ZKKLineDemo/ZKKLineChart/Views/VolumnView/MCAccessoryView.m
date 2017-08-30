@@ -68,19 +68,13 @@ static const CGFloat kVerticalMargin = 12.f;
 
 - (CGFloat)calcValuePerHeightUnit {
     CGFloat unitValue = (_highestValue - _lowestValue) / (self.frame.size.height - kVerticalMargin * 2);
-    return unitValue;
+    return unitValue ?: 1.f;
 }
 
-/**
- *  均线path
- */
 - (CGPathRef)movingAvgGraphPathForContextAtIndex:(NSInteger)index {
     UIBezierPath *path = nil;
     CGFloat xAxisValue = self.boxOriginX + 0.5*self.kLineWidth + self.linePadding;
     CGFloat unitValue = [self calcValuePerHeightUnit];
-    if (unitValue == 0) {
-        unitValue = 1.0f;
-    }
     // 均线个数
     NSInteger maLength = [self.MAValues[index] integerValue];
     
@@ -178,9 +172,6 @@ static const CGFloat kVerticalMargin = 12.f;
     [self drawVolView];
 }
 
-/**
- *  交易量
- */
 - (void)drawVolView {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, self.kLineWidth);
