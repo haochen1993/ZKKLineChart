@@ -10,103 +10,42 @@
 #import "MCKLineTitleView.h"
 @class MCKLineModel, KLineChartView;
 
-typedef NS_ENUM(NSInteger, CandlerstickChartsVolStyle) {
-    CandlerstickChartsVolStyleDefault = 0,
-    CandlerstickChartsVolStyleRSV9,
-    CandlerstickChartsVolStyleKDJ,
-    CandlerstickChartsVolStyleMACD,
-    CandlerstickChartsVolStyleRSI,
-    CandlerstickChartsVolStyleBOLL,
-    CandlerstickChartsVolStyleDMA,
-    CandlerstickChartsVolStyleCCI,
-    CandlerstickChartsVolStyleWR,
-    CandlerstickChartsVolStyleBIAS
-};
-
-
 @interface MCAssistantBaseView : UIView
 
 @property (nonatomic, strong) MCKLineTitleView *titleView;
 
-/*
- * 边框开始坐标点
- */
-@property (nonatomic, assign) float boxOriginX;
+@property (nonatomic, assign) float boxOriginX; //!< 边框开始坐标点
 
-/*
- *  边框距离右边距离
- */
-@property (nonatomic, assign) float boxRightMargin;
+@property (nonatomic, assign) float boxRightMargin; //!< 边框距离右边距离
 
-/**
- *  k线图宽度
- */
-@property (nonatomic, assign) CGFloat kLineWidth;
+@property (nonatomic, assign) CGFloat kLineWidth; //!< k线图宽度
 
-/**
- *  k线图间距
- */
-@property (nonatomic, assign) CGFloat linePadding;
+@property (nonatomic, assign) CGFloat linePadding; //!< k线图间距
 
-/**
- *  y坐标轴字体
- */
-@property (nonatomic, strong) UIFont *yAxisTitleFont;
+@property (nonatomic, strong) UIFont *yAxisTitleFont; //!< y坐标轴字体
 
-/**
- *  y坐标轴标题颜色
- */
-@property (nonatomic, strong) UIColor *yAxisTitleColor;
+@property (nonatomic, strong) UIColor *yAxisTitleColor; //!< y坐标轴标题颜色
 
-/**
- *  坐标轴边框颜色
- */
-@property (nonatomic, strong) UIColor *axisShadowColor;
+@property (nonatomic, strong) UIColor *axisShadowColor; //!< 坐标轴边框颜色
 
-/**
- *  坐标轴边框宽度
- */
-@property (nonatomic, assign) CGFloat axisShadowWidth;
+@property (nonatomic, assign) CGFloat axisShadowWidth; //!< 坐标轴边框宽度
 
-/**
- *  交易量阳线颜色
- */
-@property (nonatomic, strong) UIColor *positiveVolColor;
+@property (nonatomic, strong) UIColor *positiveVolColor; //!< 交易量阳线颜色
 
-/**
- *  交易量阴线颜色
- */
-@property (nonatomic, strong) UIColor *negativeVolColor;
+@property (nonatomic, strong) UIColor *negativeVolColor; //!< 交易量阴线颜色
 
-/**
- *  分割线大小
- */
-@property (nonatomic, assign) CGFloat separatorWidth;
+@property (nonatomic, assign) CGFloat separatorWidth; //!< 分割线宽度
 
-/**
- *  分割线颜色
- */
-@property (nonatomic, strong) UIColor *separatorColor;
+@property (nonatomic, strong) UIColor *separatorColor; //!< 分割线颜色
 
-/*
- *  取值位置
- */
-@property (nonatomic, assign) NSInteger startDrawIndex;
+@property (nonatomic, assign) NSInteger startDrawIndex; //!< 取值位置
 
-/*
- *  绘制个数
- */
-@property (nonatomic, assign) NSInteger numberOfDrawCount;
+@property (nonatomic, assign) NSInteger numberOfDrawCount; //!< 绘制个数
 
 //默认 YES
 @property (nonatomic, assign) BOOL gestureEnable;
 
 @property (nonatomic, strong) NSArray <MCKLineModel *> *data;
-
-/*
- * 柱状图类型
- */
-@property (nonatomic) CandlerstickChartsVolStyle volStyle;
 
 @property (nonatomic, weak) KLineChartView *baseChartView;
 

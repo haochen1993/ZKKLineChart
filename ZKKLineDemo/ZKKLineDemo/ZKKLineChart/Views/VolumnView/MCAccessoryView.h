@@ -7,8 +7,11 @@
 //
 
 #import "MCAssistantBaseView.h"
+#import "MCStockHeader.h"
 
 @interface MCAccessoryView : MCAssistantBaseView
+
+@property (nonatomic, assign) MCStockAccessoryChartType accessoryChartType;
 
 @end
 

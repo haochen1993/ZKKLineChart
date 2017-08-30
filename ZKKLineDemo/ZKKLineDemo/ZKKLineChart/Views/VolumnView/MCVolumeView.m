@@ -37,8 +37,6 @@ static const CGFloat kVerticalMargin = 12.f;
 }
 
 - (void)setup {
-    self.volStyle = CandlerstickChartsVolStyleDefault;
-    
     _MAValues = @[ @7, @30 ];
     
     _maxValue = -MAXFLOAT;
@@ -132,22 +130,15 @@ static const CGFloat kVerticalMargin = 12.f;
 - (void)reset {
     _maxValue = -MAXFLOAT;
     _minValue = MAXFLOAT;
-    switch (self.volStyle) {
-        case CandlerstickChartsVolStyleDefault: {
-            NSArray *volums = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
-            for (MCKLineModel *item in volums) {
-                if (self.maxValue < item.volume) {
-                    self.maxValue = item.volume;
-                }
-                
-                if (self.minValue > item.volume) {
-                    self.minValue = item.volume;
-                }
-            }
-            break;
+    NSArray *volums = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
+    for (MCKLineModel *item in volums) {
+        if (self.maxValue < item.volume) {
+            self.maxValue = item.volume;
         }
-        default:
-            break;
+        
+        if (self.minValue > item.volume) {
+            self.minValue = item.volume;
+        }
     }
 }
 
@@ -161,54 +152,10 @@ static const CGFloat kVerticalMargin = 12.f;
 }
 
 - (void)drawChart {
-    switch (self.volStyle) {
-        case CandlerstickChartsVolStyleDefault: {
-            [self showYAxisTitleWithTitles:@[[NSString stringWithFormat:@"%.f", self.maxValue], [NSString stringWithFormat:@"%.f", self.maxValue/2.0], @"万"]];
-            [self drawVolView];
-            break;
-        }
-        case CandlerstickChartsVolStyleRSV9: {
-            break;
-        }
-            
-        case CandlerstickChartsVolStyleKDJ: {
-            break;
-        }
-            
-        case CandlerstickChartsVolStyleMACD: {
-            break;
-        }
-            
-        case CandlerstickChartsVolStyleRSI: {
-            break;
-        }
-            
-        case CandlerstickChartsVolStyleBOLL: {
-            break;
-        }
-            
-        case CandlerstickChartsVolStyleDMA: {
-            break;
-        }
-            
-        case CandlerstickChartsVolStyleCCI: {
-            break;
-        }
-            
-        case CandlerstickChartsVolStyleWR: {
-            break;
-        }
-        case CandlerstickChartsVolStyleBIAS: {
-            break;
-        }
-        default:
-            break;
-    }
+    [self showYAxisTitleWithTitles:@[[NSString stringWithFormat:@"%.f", self.maxValue], [NSString stringWithFormat:@"%.f", self.maxValue/2.0], @"万"]];
+    [self drawVolView];
 }
 
-/**
- *  交易量
- */
 - (void)drawVolView {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, self.kLineWidth);
@@ -278,66 +225,6 @@ static const CGFloat kVerticalMargin = 12.f;
     CGContextAddLineToPoint(context, toPoint.x, toPoint.y);
     
     CGContextStrokePath(context);
-}
-
-#pragma mark - events
-
-- (void)switchEvent:(UITapGestureRecognizer *)tapGesture {
-    return;
-    switch (self.volStyle) {
-        case CandlerstickChartsVolStyleDefault: {
-            self.volStyle = CandlerstickChartsVolStyleRSV9;
-            break;
-        }
-        case CandlerstickChartsVolStyleRSV9: {
-            self.volStyle = CandlerstickChartsVolStyleKDJ;
-            break;
-        }
-            
-        case CandlerstickChartsVolStyleKDJ: {
-            self.volStyle = CandlerstickChartsVolStyleMACD;
-            break;
-        }
-            
-        case CandlerstickChartsVolStyleMACD: {
-            self.volStyle = CandlerstickChartsVolStyleRSI;
-            break;
-        }
-            
-        case CandlerstickChartsVolStyleRSI: {
-            self.volStyle = CandlerstickChartsVolStyleBOLL;
-            break;
-        }
-            
-        case CandlerstickChartsVolStyleBOLL: {
-            self.volStyle = CandlerstickChartsVolStyleDMA;
-            break;
-        }
-            
-        case CandlerstickChartsVolStyleDMA: {
-            self.volStyle = CandlerstickChartsVolStyleCCI;
-            break;
-        }
-            
-        case CandlerstickChartsVolStyleCCI: {
-            self.volStyle = CandlerstickChartsVolStyleWR;
-            break;
-        }
-            
-        case CandlerstickChartsVolStyleWR: {
-            self.volStyle = CandlerstickChartsVolStyleBIAS;
-            break;
-        }
-        case CandlerstickChartsVolStyleBIAS: {
-            self.volStyle = CandlerstickChartsVolStyleDefault;
-            break;
-        }
-        default:
-            break;
-    }
-    
-    [self update];
-    [self setNeedsDisplay];
 }
 
 @end

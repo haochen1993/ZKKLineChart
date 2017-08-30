@@ -48,6 +48,7 @@
 		5888BBFE1F4FFC660033737C /* NSString+Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Common.h"; sourceTree = "<group>"; };
 		5888BBFF1F4FFC700033737C /* NSString+Common.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Common.m"; sourceTree = "<group>"; };
 		5894C9401F56891600BEC3F2 /* 指标算法及释义.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "指标算法及释义.h"; sourceTree = "<group>"; };
+		5894C9421F56983600BEC3F2 /* MCStockHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCStockHeader.h; sourceTree = "<group>"; };
 		58B5F5AE1F3AE289008DED7E /* UIBezierPath+curved.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+curved.m"; sourceTree = "<group>"; };
 		58B5F5AF1F3AE28A008DED7E /* UIView+Addition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Addition.h"; sourceTree = "<group>"; };
 		58B5F5B01F3AE28A008DED7E /* UIView+Addition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Addition.m"; sourceTree = "<group>"; };
@@ -145,6 +146,7 @@
 				58D64D551F54088B00B4A0F8 /* MCStockChartUtil.h */,
 				58D64D561F54088B00B4A0F8 /* MCStockChartUtil.m */,
 				5894C9401F56891600BEC3F2 /* 指标算法及释义.h */,
+				5894C9421F56983600BEC3F2 /* MCStockHeader.h */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
