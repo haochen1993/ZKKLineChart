@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5888BBFD1F4FF8020033737C /* MCKLineTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5888BBFC1F4FF8020033737C /* MCKLineTitleView.m */; };
 		5888BC001F4FFC730033737C /* NSString+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 5888BBFF1F4FFC700033737C /* NSString+Common.m */; };
+		5894C9411F56891600BEC3F2 /* 指标算法及释义.h in Resources */ = {isa = PBXBuildFile; fileRef = 5894C9401F56891600BEC3F2 /* 指标算法及释义.h */; };
 		58B5F5BB1F3AE544008DED7E /* UIBezierPath+curved.m in Sources */ = {isa = PBXBuildFile; fileRef = 58B5F5AE1F3AE289008DED7E /* UIBezierPath+curved.m */; };
 		58B5F5BC1F3AE546008DED7E /* UIView+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 58B5F5B01F3AE28A008DED7E /* UIView+Addition.m */; };
 		58B5F5BE1F3AEF6C008DED7E /* source.json in Resources */ = {isa = PBXBuildFile; fileRef = 58B5F5BD1F3AEF6C008DED7E /* source.json */; };
@@ -46,6 +47,7 @@
 		5888BBFC1F4FF8020033737C /* MCKLineTitleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCKLineTitleView.m; sourceTree = "<group>"; };
 		5888BBFE1F4FFC660033737C /* NSString+Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Common.h"; sourceTree = "<group>"; };
 		5888BBFF1F4FFC700033737C /* NSString+Common.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Common.m"; sourceTree = "<group>"; };
+		5894C9401F56891600BEC3F2 /* 指标算法及释义.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "指标算法及释义.h"; sourceTree = "<group>"; };
 		58B5F5AE1F3AE289008DED7E /* UIBezierPath+curved.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+curved.m"; sourceTree = "<group>"; };
 		58B5F5AF1F3AE28A008DED7E /* UIView+Addition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Addition.h"; sourceTree = "<group>"; };
 		58B5F5B01F3AE28A008DED7E /* UIView+Addition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Addition.m"; sourceTree = "<group>"; };
@@ -66,12 +68,9 @@
 		58DEA0BB1F4C0108008199F0 /* MCKLinePositionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCKLinePositionModel.h; sourceTree = "<group>"; };
 		58DEA0BC1F4C0108008199F0 /* MCKLinePositionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCKLinePositionModel.m; sourceTree = "<group>"; };
 		58DEA0BD1F4C0108008199F0 /* MCKLineVolumePositionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCKLineVolumePositionModel.m; sourceTree = "<group>"; };
-		58DEA0BE1F4C0108008199F0 /* KDJ介绍.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "KDJ介绍.md"; sourceTree = "<group>"; };
-		58DEA0BF1F4C0108008199F0 /* MA-EMA-MACD介绍.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "MA-EMA-MACD介绍.md"; sourceTree = "<group>"; };
 		58DEA0C01F4C0108008199F0 /* MCKLineGroupModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCKLineGroupModel.h; sourceTree = "<group>"; };
 		58DEA0C11F4C0108008199F0 /* MCKLineModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCKLineModel.h; sourceTree = "<group>"; };
 		58DEA0C21F4C0108008199F0 /* MCKLineModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCKLineModel.m; sourceTree = "<group>"; };
-		58DEA0C31F4C0108008199F0 /* 指标公式.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "指标公式.md"; sourceTree = "<group>"; };
 		58DEA0C41F4C0109008199F0 /* MCKLineGroupModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCKLineGroupModel.m; sourceTree = "<group>"; };
 		58DEA0CA1F4C0154008199F0 /* UIColor+Y_StockChart.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Y_StockChart.h"; sourceTree = "<group>"; };
 		58DEA0CB1F4C0154008199F0 /* UIColor+Y_StockChart.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Y_StockChart.m"; sourceTree = "<group>"; };
@@ -145,6 +144,7 @@
 				58D64D631F555BDE00B4A0F8 /* CFunctionImplement.m */,
 				58D64D551F54088B00B4A0F8 /* MCStockChartUtil.h */,
 				58D64D561F54088B00B4A0F8 /* MCStockChartUtil.m */,
+				5894C9401F56891600BEC3F2 /* 指标算法及释义.h */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -240,9 +240,6 @@
 		58F979421F38304000C756E4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				58DEA0C31F4C0108008199F0 /* 指标公式.md */,
-				58DEA0BE1F4C0108008199F0 /* KDJ介绍.md */,
-				58DEA0BF1F4C0108008199F0 /* MA-EMA-MACD介绍.md */,
 				58DEA0C01F4C0108008199F0 /* MCKLineGroupModel.h */,
 				58DEA0C41F4C0109008199F0 /* MCKLineGroupModel.m */,
 				58DEA0C11F4C0108008199F0 /* MCKLineModel.h */,
@@ -376,6 +373,7 @@
 			files = (
 				58B5F5BE1F3AEF6C008DED7E /* source.json in Resources */,
 				58F9796B1F38304000C756E4 /* data.plist in Resources */,
+				5894C9411F56891600BEC3F2 /* 指标算法及释义.h in Resources */,
 				58F978B31F38182000C756E4 /* LaunchScreen.storyboard in Resources */,
 				58F978B01F38182000C756E4 /* Assets.xcassets in Resources */,
 			);

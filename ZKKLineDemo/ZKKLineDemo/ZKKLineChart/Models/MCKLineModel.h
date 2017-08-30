@@ -107,29 +107,13 @@ typedef NS_ENUM(NSInteger, YCoinType) {
 //EMA（26）=昨日EMA（26）*25/27+C*2/27；   即为MACD指标中的慢线；
 @property (nonatomic, assign) CGFloat MACD;
 
-/**
- *  9Clock内最低价
- */
-@property (nonatomic, assign) CGFloat NineClocksMinPrice;
-
-/**
- *  9Clock内最高价
- */
-@property (nonatomic, assign) CGFloat NineClocksMaxPrice;
-
-//KDJ(9,3.3),下面以该参数为例说明计算方法。
-//9，3，3代表指标分析周期为9天，K值D值为3天
-//RSV(9)=（今日收盘价－9日内最低价）÷（9日内最高价－9日内最低价）×100
-//K(3日)=（当日RSV值+2*前一日K值）÷3
-//D(3日)=（当日K值+2*前一日D值）÷3
-//J=3K－2D
+// 详见指标算法及释义.h
 @property (nonatomic, assign) CGFloat RSV_9;
-
 @property (nonatomic, assign) CGFloat KDJ_K;
-
 @property (nonatomic, assign) CGFloat KDJ_D;
-
 @property (nonatomic, assign) CGFloat KDJ_J;
+@property (nonatomic, assign) CGFloat minPriceOfNineClock; //!< 9Clock内最低价
+@property (nonatomic, assign) CGFloat maxPriceOfNineClock; //!< 9Clock内最高价
 
 //初始化Model
 - (void)initWithValues:(NSArray *)arr;

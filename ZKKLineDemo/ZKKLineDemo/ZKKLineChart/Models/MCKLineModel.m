@@ -13,10 +13,10 @@
 
 - (CGFloat)RSV_9 {
     if (!_RSV_9) {
-        if(self.NineClocksMinPrice == self.NineClocksMaxPrice) {
+        if(self.minPriceOfNineClock == self.maxPriceOfNineClock) {
             _RSV_9 = 100;
         } else {
-            _RSV_9 = (self.closingPrice - self.NineClocksMinPrice) * 100 / (self.NineClocksMaxPrice - self.NineClocksMinPrice);
+            _RSV_9 = (self.closingPrice - self.minPriceOfNineClock) * 100 / (self.maxPriceOfNineClock - self.minPriceOfNineClock);
         }
     }
     return _RSV_9;
@@ -209,8 +209,8 @@
     return _sumOfLastVolume;
 }
 
-- (CGFloat)NineClocksMinPrice {
-    if (!_NineClocksMinPrice) {
+- (CGFloat)minPriceOfNineClock {
+    if (!_minPriceOfNineClock) {
 //        if([self.ParentGroupModel.models indexOfObject:self] >= 8)
 //        {
             [self rangeLastNinePriceByArray:self.parentGroupModel.models condition:NSOrderedDescending];
@@ -218,19 +218,19 @@
 //            _NineClocksMinPrice = @0;
 //        }
     }
-    return _NineClocksMinPrice;
+    return _minPriceOfNineClock;
 }
 
-- (CGFloat)NineClocksMaxPrice {
-    if (!_NineClocksMaxPrice) {
+- (CGFloat)maxPriceOfNineClock {
+    if (!_maxPriceOfNineClock) {
         if([self.parentGroupModel.models indexOfObject:self] >= 8)
         {
             [self rangeLastNinePriceByArray:self.parentGroupModel.models condition:NSOrderedAscending];
         } else {
-            _NineClocksMaxPrice = 0;
+            _maxPriceOfNineClock = 0;
         }
     }
-    return _NineClocksMaxPrice;
+    return _maxPriceOfNineClock;
 }
 
 ////DIF=EMA（12）-EMA（26）         DIF的值即为红绿柱；
@@ -445,7 +445,7 @@
                     em--;
                 }
                 NSLog(@"%f",emMaxValue);
-                models[j].NineClocksMaxPrice = emMaxValue;
+                models[j].maxPriceOfNineClock = emMaxValue;
             }
             //第一个循环结束后，ClockFirstValue为最小值
             for (NSInteger i = 0, j = 8; j < models.count; i++,j++) {
@@ -461,7 +461,7 @@
                 }
                 NSLog(@"%f",emMaxValue);
 
-                models[j].NineClocksMaxPrice = emMaxValue;
+                models[j].maxPriceOfNineClock = emMaxValue;
             }
         }
             break;
@@ -474,13 +474,12 @@
                 NSInteger em = j;
                 
                 while ( em >= 0 ) {
-                    if([@(emMinValue) compare:@(models[em].lowestPrice)] == cond)
-                    {
+                    if([@(emMinValue) compare:@(models[em].lowestPrice)] == cond) {
                         emMinValue = models[em].lowestPrice;
                     }
                     em--;
                 }
-                models[j].NineClocksMinPrice = emMinValue;
+                models[j].minPriceOfNineClock = emMinValue;
             }
             
             for (NSInteger i = 0, j = 8; j < models.count; i++,j++) {
@@ -494,7 +493,7 @@
                     }
                     em--;
                 }
-                models[j].NineClocksMinPrice = emMinValue;
+                models[j].minPriceOfNineClock = emMinValue;
             }
         }
             break;
@@ -546,8 +545,8 @@
     _EMA12 = _closingPrice;
     _EMA26 = _closingPrice;
     _EMA30 = _closingPrice;
-    _NineClocksMinPrice = _lowestPrice;
-    _NineClocksMaxPrice = _highestPrice;
+    _minPriceOfNineClock = _lowestPrice;
+    _maxPriceOfNineClock = _highestPrice;
     [self DIF];
     [self DEA];
     [self MACD];
@@ -581,8 +580,8 @@
     [self DIF];
     [self DEA];
     [self MACD];
-    [self NineClocksMaxPrice];
-    [self NineClocksMinPrice];
+    [self maxPriceOfNineClock];
+    [self minPriceOfNineClock];
     [self RSV_9];
     [self KDJ_K];
     [self KDJ_D];
