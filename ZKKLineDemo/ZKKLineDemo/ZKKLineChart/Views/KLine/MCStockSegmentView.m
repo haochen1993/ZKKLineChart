@@ -62,7 +62,6 @@ static NSString *cellID = @"MCStockSegmentViewCell";
 @property (nonatomic, strong) UIButton *targetBtn;
 @property (nonatomic, strong) UIView *popupPanel;
 @property (nonatomic, copy) NSArray *dataSource;
-@property (nonatomic, assign) BOOL isOpening;
 @property (nonatomic, strong) MCStockSegmentSelectedModel *selectedModel;
 @property (nonatomic, strong) UIButton *selectedMainChartBtn;
 @property (nonatomic, strong) UIButton *selectedAccessoryChartBtn;
@@ -235,9 +234,13 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
         topValue = self.us_height;
     }
     
-    [UIView animateWithDuration:.25 delay:0 options:KeyboardAnimationCurve animations:^{
+    [UIView animateWithDuration:.2 delay:0 options:KeyboardAnimationCurve animations:^{
         _popupPanel.us_top = topValue;
     } completion:nil];
+    
+    if ([self.delegate respondsToSelector:@selector(stockSegmentView:showPopupView:)]) {
+        [self.delegate stockSegmentView:self showPopupView:_isOpening];
+    }
 }
 
 - (void)accessoryChartBtnClick:(UIButton *)btn {
@@ -293,9 +296,7 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
 }
 
 - (void)hidePopupView {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self targetBtnClcik];
-    });
+    [self targetBtnClcik];
 }
 
 #pragma mark - <UICollectionViewDelegate, UICollectionViewDataSource>

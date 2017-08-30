@@ -17,10 +17,16 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-        [self addGestureRecognizer:tapGesture];
+        [self setup];
     }
     return self;
+}
+
+- (void)setup {
+    self.autoFit = false;
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    [self addGestureRecognizer:tapGesture];
 }
 
 - (void)handleTap:(UITapGestureRecognizer *)tapGesture {

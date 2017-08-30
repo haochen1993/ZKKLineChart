@@ -24,12 +24,15 @@
 @optional
 
 - (void)stockSegmentView:(MCStockSegmentView *)segmentView didSelectModel:(MCStockSegmentSelectedModel *)model;
+- (void)stockSegmentView:(MCStockSegmentView *)segmentView showPopupView:(BOOL)showPopupView;
 
 @end
 
 @interface MCStockSegmentView : UIView
 
 @property (nonatomic, weak) id <MCStockSegmentViewDelegate> delegate;
+
+@property (nonatomic, assign, readonly) BOOL isOpening;
 
 + (instancetype)segmentView;
 

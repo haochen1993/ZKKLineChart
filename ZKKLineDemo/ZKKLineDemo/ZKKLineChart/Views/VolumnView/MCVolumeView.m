@@ -130,7 +130,9 @@ static const CGFloat kVerticalMargin = 12.f;
 - (void)reset {
     _maxValue = -MAXFLOAT;
     _minValue = MAXFLOAT;
-    NSArray *volums = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
+    
+    NSArray *subChartValues = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
+    NSArray *volums = self.autoFit ? subChartValues : self.data;
     for (MCKLineModel *item in volums) {
         if (self.maxValue < item.volume) {
             self.maxValue = item.volume;

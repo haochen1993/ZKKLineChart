@@ -54,7 +54,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 @property (nonatomic, strong) UIView *horizontalCrossLine;   //水平十字线
 // 成交量图
 @property (nonatomic, strong) MCVolumeView *volView;
-@property (nonatomic, strong) MCAccessoryView *MACDView;
+@property (nonatomic, strong) MCAccessoryView *accessoryView;
 //时间
 @property (nonatomic, strong) UILabel *timeLabel;
 //价格
@@ -161,7 +161,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     self.timeAndPriceTextColor = HexRGB(0x333333);
     
     self.maxKLineWidth = 24;
-    self.minKLineWidth = 1.5;
+    self.minKLineWidth = 1.f;
     
     self.kLineWidth = 4.0;
     self.kLinePadding = 2.0;
@@ -242,7 +242,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     
     if (self.showBarChart) {
         self.volView.data = dataSource;
-        self.MACDView.data = dataSource;
+        self.accessoryView.data = dataSource;
     }
     
     // 设置
@@ -320,7 +320,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 }
 
 - (void)tapEvent:(UITapGestureRecognizer *)tapGesture {
-    if (self.dataSource.count == 0 || !self.dataSource) {
+    if (self.dataSource.count == 0 || !self.dataSource || _segmentView.isOpening) {
         return;
     }
     CGPoint touchPoint = [tapGesture locationInView:self];
@@ -465,7 +465,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
                                           kTimeAxisHeight - self.separatorWidth*2);
     }
     [self.volView showTitleView:item];
-    [self.MACDView showTitleView:item];
+    [self.accessoryView showTitleView:item];
 }
 
 - (void)hideTipsWithAnimated:(BOOL)animated {
@@ -475,7 +475,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     self.timeLabel.hidden = YES;
     self.KLineTitleView.hidden = true;
     [self.volView hideTitleView];
-    [self.MACDView hideTitleView];
+    [self.accessoryView hideTitleView];
 }
 
 #pragma mark - private methods
@@ -756,15 +756,17 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     self.volView.boxOriginX = self.leftMargin;
     self.volView.startDrawIndex = self.startDrawIndex;
     self.volView.numberOfDrawCount = self.kLineDrawNum;
+    self.volView.autoFit = _autoFit;
     [self.volView update];
     
-    self.MACDView.frame = CGRectMake(0, CGRectGetMaxY(self.volView.frame) + kAccessoryMargin, rect.size.width, rect.size.height * kBarChartHeightRatio);
-    self.MACDView.kLineWidth = self.kLineWidth;
-    self.MACDView.linePadding = self.kLinePadding;
-    self.MACDView.boxOriginX = self.leftMargin;
-    self.MACDView.startDrawIndex = self.startDrawIndex;
-    self.MACDView.numberOfDrawCount = self.kLineDrawNum;
-    [self.MACDView update];
+    self.accessoryView.frame = CGRectMake(0, CGRectGetMaxY(self.volView.frame) + kAccessoryMargin, rect.size.width, rect.size.height * kBarChartHeightRatio);
+    self.accessoryView.kLineWidth = self.kLineWidth;
+    self.accessoryView.linePadding = self.kLinePadding;
+    self.accessoryView.boxOriginX = self.leftMargin;
+    self.accessoryView.startDrawIndex = self.startDrawIndex;
+    self.accessoryView.numberOfDrawCount = self.kLineDrawNum;
+    self.accessoryView.autoFit = _autoFit;
+    [self.accessoryView update];
 }
 
 - (void)resetMaxAndMin {
@@ -814,30 +816,30 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     return _volView;
 }
 
-- (MCAccessoryView *)MACDView {
-    if (!_MACDView) {
-        _MACDView = [MCAccessoryView new];
-        _MACDView.backgroundColor  = [UIColor clearColor];
-        _MACDView.boxRightMargin = self.rightMargin;
-        _MACDView.axisShadowColor = self.axisShadowColor;
-        _MACDView.axisShadowWidth = self.axisShadowWidth;
-        _MACDView.negativeVolColor = self.negativeLineColor;
-        _MACDView.positiveVolColor = self.positiveLineColor;
-        _MACDView.yAxisTitleFont = self.yAxisTitleFont;
-        _MACDView.yAxisTitleColor = self.yAxisTitleColor;
-        _MACDView.separatorWidth = self.separatorWidth;
-        _MACDView.separatorColor = self.separatorColor;
-        _MACDView.baseChartView = self;
-        [self addSubview:_MACDView];
+- (MCAccessoryView *)accessoryView {
+    if (!_accessoryView) {
+        _accessoryView = [MCAccessoryView new];
+        _accessoryView.backgroundColor  = [UIColor clearColor];
+        _accessoryView.boxRightMargin = self.rightMargin;
+        _accessoryView.axisShadowColor = self.axisShadowColor;
+        _accessoryView.axisShadowWidth = self.axisShadowWidth;
+        _accessoryView.negativeVolColor = self.negativeLineColor;
+        _accessoryView.positiveVolColor = self.positiveLineColor;
+        _accessoryView.yAxisTitleFont = self.yAxisTitleFont;
+        _accessoryView.yAxisTitleColor = self.yAxisTitleColor;
+        _accessoryView.separatorWidth = self.separatorWidth;
+        _accessoryView.separatorColor = self.separatorColor;
+        _accessoryView.baseChartView = self;
+        [self addSubview:_accessoryView];
     }
-    return _MACDView;
+    return _accessoryView;
 }
 
 - (UIView *)verticalCrossLine {
     if (!_verticalCrossLine) {
         _verticalCrossLine = [[UIView alloc] initWithFrame:CGRectMake(self.leftMargin, self.topMargin, 0.5, self.yAxisHeight)];
         _verticalCrossLine.backgroundColor = self.crossLineColor;
-        [self addSubview:_verticalCrossLine];
+        [self insertSubview:_verticalCrossLine belowSubview:self.segmentView];
     }
     return _verticalCrossLine;
 }
@@ -1017,9 +1019,11 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     else if (model.subType == MCStockSegmentViewSubTypeAccessory) {
         if (model.accessoryChartType == MCStockAccessoryChartTypeMACD) {
             DLog(@"点击副图 == MCStockAccessoryChartTypeMACD");
+            _accessoryView.accessoryChartType = MCStockAccessoryChartTypeMACD;
         }
         else if (model.accessoryChartType == MCStockAccessoryChartTypeKDJ) {
             DLog(@"点击副图 == MCStockAccessoryChartTypeKDJ");
+            _accessoryView.accessoryChartType = MCStockAccessoryChartTypeKDJ;
         }
         else if (model.accessoryChartType == MCStockAccessoryChartTypeRSI) {
             DLog(@"点击副图 == MCStockAccessoryChartTypeRSI");
@@ -1030,6 +1034,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         else if (model.accessoryChartType == MCStockAccessoryChartTypeClose) {
             DLog(@"点击副图 == MCStockAccessoryChartTypeClose");
         }
+        [_accessoryView update];
     }
     else if (model.subType == MCStockSegmentViewSubTypeTime) {
         if (model.targetTimeType == MCStockTargetTimeTypeTiming) {
@@ -1048,6 +1053,10 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
             DLog(@"点击时间轴 == MCStockTargetTimeTypeDay");
         }
     }
+}
+
+- (void)stockSegmentView:(MCStockSegmentView *)segmentView showPopupView:(BOOL)showPopupView {
+    [self hideTipsWithAnimated:false];
 }
 
 - (void)dealloc {

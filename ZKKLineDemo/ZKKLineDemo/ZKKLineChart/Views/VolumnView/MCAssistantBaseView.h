@@ -42,6 +42,8 @@
 
 @property (nonatomic, assign) NSInteger numberOfDrawCount; //!< 绘制个数
 
+@property (nonatomic, assign) BOOL autoFit;
+
 //默认 YES
 @property (nonatomic, assign) BOOL gestureEnable;
 
