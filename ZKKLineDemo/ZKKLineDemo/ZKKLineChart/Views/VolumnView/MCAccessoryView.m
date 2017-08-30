@@ -11,14 +11,14 @@
 #import "MCKLineModel.h"
 #import "UIBezierPath+curved.h"
 #import "MCStockChartUtil.h"
+#import "NSString+Common.h"
 
 @interface MCAccessoryView ()
 
 @property (nonatomic) CGFloat highestValue;
-
 @property (nonatomic) CGFloat lowestValue;
-
-@property (nonatomic, copy) NSArray *MAValues;
+@property (nonatomic, copy) NSArray <NSNumber *> *MAValues;
+@property (nonatomic, copy) NSArray <UIColor *> *MAColors;
 
 @end
 
@@ -36,10 +36,35 @@ static const CGFloat kVerticalMargin = 12.f;
 }
 
 - (void)setup {
-    _MAValues = @[ @7, @30 ];
+    _MAValues = [NSArray array];
+    _MAColors = [NSArray array];
     
     _highestValue = -MAXFLOAT;
     _lowestValue = MAXFLOAT;
+    self.accessoryChartType = MCStockAccessoryChartTypeMACD;
+}
+
+- (void)setAccessoryChartType:(MCStockAccessoryChartType)accessoryChartType {
+    _accessoryChartType = accessoryChartType;
+    switch (accessoryChartType) {
+        case MCStockAccessoryChartTypeMACD: {
+            _MAValues = @[ @0, @0 ];
+            _MAColors = @[ [UIColor whiteColor], [UIColor yellowColor] ];
+        }  break;
+        case MCStockAccessoryChartTypeKDJ: {
+            _MAValues = @[ @0, @0, @0 ];
+            _MAColors = @[ [UIColor whiteColor], [UIColor yellowColor], [UIColor purpleColor] ];
+        }  break;
+        case MCStockAccessoryChartTypeRSI: {
+            
+        }  break;
+        case MCStockAccessoryChartTypeWR: {
+            
+        }  break;
+        case MCStockAccessoryChartTypeClose: {
+            
+        }  break;
+    }
 }
 
 // overrite
@@ -51,15 +76,11 @@ static const CGFloat kVerticalMargin = 12.f;
     [self drawMALine];
 }
 
-/**
- *  均线图
- */
 - (void)drawMALine {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, 1.f);
-    UIColor *colors[] = { [UIColor whiteColor], [UIColor yellowColor] };
     for (int i = 0; i < _MAValues.count; i ++) {
-        CGContextSetStrokeColorWithColor(context, colors[i].CGColor);
+        CGContextSetStrokeColorWithColor(context, _MAColors[i].CGColor);
         CGPathRef path = [self movingAvgGraphPathForContextAtIndex:i];
         CGContextAddPath(context, path);
         CGContextStrokePath(context);
@@ -83,14 +104,39 @@ static const CGFloat kVerticalMargin = 12.f;
         MCKLineModel *item = drawArrays[i];
         
         CGFloat MAValue = 0;
-        if (maLength == 7) {
-            MAValue = item.DEA;
-        }
-        else if (maLength == 30) {
-            MAValue = item.DIF;
+        
+        switch (_accessoryChartType) {
+            case MCStockAccessoryChartTypeMACD: {
+                if (index == 0) {
+                    MAValue = item.DEA;
+                }
+                else if (index == 1) {
+                    MAValue = item.DIF;
+                }
+            } break;
+            case MCStockAccessoryChartTypeKDJ: {
+                if (index == 0) {
+                    MAValue = item.KDJ_K;
+                }
+                else if (index == 1) {
+                    MAValue = item.KDJ_D;
+                }
+                else if (index == 2) {
+                    MAValue = item.KDJ_J;
+                }
+            } break;
+            case MCStockAccessoryChartTypeRSI: {
+                
+            } break;
+            case MCStockAccessoryChartTypeWR: {
+                
+            } break;
+            case MCStockAccessoryChartTypeClose: {
+                
+            } break;
         }
         // 不足均线个数，则不需要获取该段均线数据(例如: 均5，个数小于5个，则不需要绘制前四均线，...)
-        if ([self.data indexOfObject:item] < maLength - 1) {
+        if ([self.data indexOfObject:item] < maLength - 1 && maLength) {
             xAxisValue += self.kLineWidth + self.linePadding;
             continue;
         }
@@ -131,30 +177,54 @@ static const CGFloat kVerticalMargin = 12.f;
     
     NSArray *volums = [self.data subarrayWithRange:NSMakeRange(self.startDrawIndex, self.numberOfDrawCount)];
     for (MCKLineModel *model in volums) {
-        if(model.DIF) {
-            if(model.DIF < _lowestValue) {
-                _lowestValue = model.DIF;
-            }
-            if(model.DIF > _highestValue) {
-                _highestValue = model.DIF;
-            }
+        
+        switch (_accessoryChartType) {
+            case MCStockAccessoryChartTypeMACD:{
+                [self resetWhenTypeMACDWithModel:model];
+            } break;
+            case MCStockAccessoryChartTypeKDJ:{
+                [self resetWhenTypeKDJWithModel:model];
+            } break;
+            case MCStockAccessoryChartTypeRSI:{
+                
+            } break;
+            case MCStockAccessoryChartTypeWR:{
+                
+            } break;
+            case MCStockAccessoryChartTypeClose:{
+                
+            } break;
         }
-        if(model.DEA) {
-            if (_lowestValue > model.DEA) {
-                _lowestValue = model.DEA;
-            }
-            if (_highestValue < model.DEA) {
-                _highestValue = model.DEA;
-            }
-        }
-        if(model.MACD) {
-            if (_lowestValue > model.MACD) {
-                _lowestValue = model.MACD;
-            }
-            if (_highestValue < model.MACD) {
-                _highestValue = model.MACD;
-            }
-        }
+    }
+}
+
+- (void)resetWhenTypeKDJWithModel:(MCKLineModel *)model {
+    if (model.KDJ_K) {
+        _lowestValue = MIN(_lowestValue, model.KDJ_K);
+        _highestValue = MAX(_highestValue, model.KDJ_K);
+    }
+    if (model.KDJ_D) {
+        _lowestValue = MIN(_lowestValue, model.KDJ_D);
+        _highestValue = MAX(_highestValue, model.KDJ_D);
+    }
+    if (model.KDJ_J) {
+        _lowestValue = MIN(_lowestValue, model.KDJ_J);
+        _highestValue = MAX(_highestValue, model.KDJ_J);
+    }
+}
+
+- (void)resetWhenTypeMACDWithModel:(MCKLineModel *)model {
+    if(model.DIF) {
+        _lowestValue = MIN(_lowestValue, model.DIF);
+        _highestValue = MAX(_highestValue, model.DIF);
+    }
+    if(model.DEA) {
+        _lowestValue = MIN(_lowestValue, model.DEA);
+        _highestValue = MAX(_highestValue, model.DEA);
+    }
+    if(model.MACD) {
+        _lowestValue = MIN(_lowestValue, model.MACD);
+        _highestValue = MAX(_highestValue, model.MACD);
     }
 }
 
@@ -169,10 +239,14 @@ static const CGFloat kVerticalMargin = 12.f;
 
 - (void)drawChart {
     [self showYAxisTitleWithTitles:@[[NSString stringWithFormat:@"%.f", self.highestValue], [NSString stringWithFormat:@"%.f", self.highestValue/2.0], @"万"]];
-    [self drawVolView];
+    [self drawAccessoryView];
 }
 
-- (void)drawVolView {
+- (void)drawAccessoryView {
+    if (_accessoryChartType != MCStockAccessoryChartTypeMACD) {
+        return;
+    }
+    
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, self.kLineWidth);
     
@@ -203,7 +277,7 @@ static const CGFloat kVerticalMargin = 12.f;
     }];
 }
 
-- (void)showYAxisTitleWithTitles:(NSArray *)yAxis {
+- (void)showYAxisTitleWithTitles:(NSArray *)yAxisTitles {
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGRect rect = self.bounds;
@@ -219,11 +293,14 @@ static const CGFloat kVerticalMargin = 12.f;
     //这必须把dash给初始化一次，不然会影响其他线条的绘制
     CGContextSetLineDash(context, 0, 0, 0);
     
-    for (int i = 0; i < yAxis.count; i ++) {
-        NSAttributedString *attString = [MCStockChartUtil attributeText:yAxis[i] textColor:self.yAxisTitleColor font:self.yAxisTitleFont];
+    for (int i = 0; i < yAxisTitles.count; i ++) {
+        NSAttributedString *attString = [MCStockChartUtil attributeText:yAxisTitles[i] textColor:self.yAxisTitleColor font:self.yAxisTitleFont];
         CGSize size = [MCStockChartUtil attributeString:attString boundingRectWithSize:CGSizeMake(self.boxOriginX, self.yAxisTitleFont.lineHeight)];
         
-        [attString drawInRect:CGRectMake(self.boxOriginX - size.width - 2.0f, strokeRect.origin.y + i*strokeRect.size.height/2.0 - size.height/2.0*i - (i==0?2 : 0), size.width, size.height)];
+        [attString drawInRect:CGRectMake(self.boxOriginX - size.width - 2.0f,
+                                         strokeRect.origin.y + i*strokeRect.size.height/2.0 - size.height/2.0*i - (i==0?2 : 0),
+                                         size.width,
+                                         size.height)];
     }
 }
 

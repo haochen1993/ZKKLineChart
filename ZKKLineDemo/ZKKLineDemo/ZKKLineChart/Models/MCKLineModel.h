@@ -97,7 +97,7 @@ typedef NS_ENUM(NSInteger, YCoinType) {
 //26日EMA的算式为
 //EMA（26）=昨日EMA（26）*25/27+C*2/27；   即为MACD指标中的慢线-慢速平滑移动平均线；
 
-//DIF=EMA（12）-EMA（26）         DIF的值即为红绿柱；
+//DIF = EMA（12）- EMA（26）         DIF的值即为红绿柱；
 @property (nonatomic, assign) CGFloat DIF;
 
 //今日的DEA值（即MACD值）=前一日DEA*8/10+今日DIF*2/10.

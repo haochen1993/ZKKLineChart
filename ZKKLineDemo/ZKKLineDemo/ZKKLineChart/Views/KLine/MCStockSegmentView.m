@@ -62,7 +62,10 @@ static NSString *cellID = @"MCStockSegmentViewCell";
 @property (nonatomic, strong) UIButton *targetBtn;
 @property (nonatomic, strong) UIView *popupPanel;
 @property (nonatomic, copy) NSArray *dataSource;
-@property (nonatomic, assign) NSInteger selectedIndex;
+@property (nonatomic, assign) BOOL isOpening;
+@property (nonatomic, strong) MCStockSegmentSelectedModel *selectedModel;
+@property (nonatomic, strong) UIButton *selectedMainChartBtn;
+@property (nonatomic, strong) UIButton *selectedAccessoryChartBtn;
 
 @end
 
@@ -100,6 +103,11 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     [self setNeedsLayout];
     [self layoutIfNeeded];
     
+    _selectedModel = [MCStockSegmentSelectedModel new];
+    _selectedModel.mainChartType = MCStockMainChartTypeMA;
+    _selectedModel.accessoryChartType = MCStockAccessoryChartTypeMACD;
+    _selectedModel.targetTimeType = MCStockTargetTimeTypeMin_30;
+    
     _dataSource = @[ @"分时", @"5分", @"30分", @"60分", @"日线" ];
     
     [self setupTargetBtn];
@@ -128,6 +136,9 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
         btn.us_left = i * btnWidth;
         [btn addTarget:self action:@selector(mainChartBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [_popupPanel addSubview:btn];
+        if (i == 0) {
+            [self mainChartBtnClick:btn];
+        }
     }
     
     UIView *line = [UIView new];
@@ -149,6 +160,9 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
         btn.us_left = i * btnWidth;
         [btn addTarget:self action:@selector(accessoryChartBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [_popupPanel addSubview:btn];
+        if (i == 0) {
+            [self accessoryChartBtnClick:btn];
+        }
     }
 }
 
@@ -211,10 +225,10 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
 #pragma mark - Actions
 
 - (void)targetBtnClcik {
-    _targetBtn.selected = !_targetBtn.selected;
+    _isOpening = !_isOpening;
     
     CGFloat topValue = 0;
-    if (_targetBtn.selected) {
+    if (_isOpening) {
         topValue = self.us_height - kPopupViewHeight - MCStockSegmentViewHeight;
     }
     else {
@@ -227,7 +241,9 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
 }
 
 - (void)accessoryChartBtnClick:(UIButton *)btn {
-    btn.selected = !btn.selected;
+    _selectedAccessoryChartBtn.selected = false;
+    btn.selected = true;
+    _selectedAccessoryChartBtn = btn;
     
     MCStockSegmentSelectedModel *model = [MCStockSegmentSelectedModel new];
     model.subType = MCStockSegmentViewSubTypeAccessory;
@@ -250,10 +266,13 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     if ([self.delegate respondsToSelector:@selector(stockSegmentView:didSelectModel:)]) {
         [self.delegate stockSegmentView:self didSelectModel:model];
     }
+    [self hidePopupView];
 }
 
 - (void)mainChartBtnClick:(UIButton *)btn {
-    btn.selected = !btn.selected;
+    _selectedMainChartBtn.selected = false;
+    btn.selected = true;
+    _selectedMainChartBtn = btn;
     
     MCStockSegmentSelectedModel *model = [MCStockSegmentSelectedModel new];
     model.subType = MCStockSegmentViewSubTypeMain;
@@ -270,6 +289,13 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     if ([self.delegate respondsToSelector:@selector(stockSegmentView:didSelectModel:)]) {
         [self.delegate stockSegmentView:self didSelectModel:model];
     }
+    [self hidePopupView];
+}
+
+- (void)hidePopupView {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self targetBtnClcik];
+    });
 }
 
 #pragma mark - <UICollectionViewDelegate, UICollectionViewDataSource>
@@ -280,14 +306,14 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MCStockSegmentViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellID forIndexPath:indexPath];
-    [cell updateWithText:_dataSource[indexPath.item] selectedStyle:indexPath.item == _selectedIndex];
+    [cell updateWithText:_dataSource[indexPath.item] selectedStyle:indexPath.item == _selectedModel.targetTimeType];
     
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    _selectedIndex = indexPath.item;
     [_collectionView reloadData];
+    _selectedModel.targetTimeType = indexPath.item;
     
     MCStockSegmentSelectedModel *model = [MCStockSegmentSelectedModel new];
     model.subType = MCStockSegmentViewSubTypeTime;
