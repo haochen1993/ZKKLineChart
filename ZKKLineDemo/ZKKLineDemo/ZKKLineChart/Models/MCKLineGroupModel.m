@@ -24,9 +24,7 @@
         model.previousKlineModel = preModel;
         [model initWithValues:valueArr];
         model.parentGroupModel = groupModel;
-        
         [mutableArr addObject:model];
-        
         preModel = model;
     }
     

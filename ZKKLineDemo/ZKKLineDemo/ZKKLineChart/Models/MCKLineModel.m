@@ -15,7 +15,8 @@
     if (!_RSV_9) {
         if(self.minPriceOfNineClock == self.maxPriceOfNineClock) {
             _RSV_9 = 100;
-        } else {
+        }
+        else {
             _RSV_9 = (self.closingPrice - self.minPriceOfNineClock) * 100 / (self.maxPriceOfNineClock - self.minPriceOfNineClock);
         }
     }
@@ -24,14 +25,14 @@
 
 - (CGFloat)KDJ_K {
     if (!_KDJ_K) {
-        _KDJ_K = (self.RSV_9 + 2 * (self.previousKlineModel.KDJ_K ? self.previousKlineModel.KDJ_K : 50) )/3;
+        _KDJ_K = (self.RSV_9 + 2 * (self.previousKlineModel.KDJ_K ?: 50) ) / 3;
     }
     return _KDJ_K;
 }
 
 - (CGFloat)KDJ_D {
     if(!_KDJ_D) {
-        _KDJ_D = (self.KDJ_K + 2 * (self.previousKlineModel.KDJ_D ? self.previousKlineModel.KDJ_D : 50))/3;
+        _KDJ_D = (self.KDJ_K + 2 * (self.previousKlineModel.KDJ_D ?: 50)) / 3;
     }
     return _KDJ_D;
 }
@@ -211,26 +212,42 @@
 
 - (CGFloat)minPriceOfNineClock {
     if (!_minPriceOfNineClock) {
-//        if([self.ParentGroupModel.models indexOfObject:self] >= 8)
-//        {
-            [self rangeLastNinePriceByArray:self.parentGroupModel.models condition:NSOrderedDescending];
-//        } else {
-//            _NineClocksMinPrice = @0;
-//        }
+        _minPriceOfNineClock = [self calcMinPriceOfNineClock];
     }
     return _minPriceOfNineClock;
 }
 
 - (CGFloat)maxPriceOfNineClock {
     if (!_maxPriceOfNineClock) {
-        if([self.parentGroupModel.models indexOfObject:self] >= 8)
-        {
-            [self rangeLastNinePriceByArray:self.parentGroupModel.models condition:NSOrderedAscending];
-        } else {
-            _maxPriceOfNineClock = 0;
-        }
+        _maxPriceOfNineClock = [self calcMaxPriceOfNineClock];
     }
     return _maxPriceOfNineClock;
+}
+
+- (CGFloat)calcMinPriceOfNineClock {
+    NSArray <MCKLineModel *> *models = self.parentGroupModel.models;
+    NSInteger index = [self.parentGroupModel.models indexOfObject:self];
+    CGFloat minValue = models[index].lowestPrice;
+    NSInteger startIndex = index < 9 ? 0 : (index - ( 9 - 1));
+    for (NSInteger i = startIndex; i < index; i ++) {
+        if (models[i].lowestPrice < minValue) {
+            minValue = models[i].lowestPrice;
+        }
+    }
+    return minValue;
+}
+
+- (CGFloat)calcMaxPriceOfNineClock {
+    NSArray <MCKLineModel *> *models = self.parentGroupModel.models;
+    NSInteger index = [self.parentGroupModel.models indexOfObject:self];
+    CGFloat maxValue = models[index].highestPrice;
+    NSInteger startIndex = index < 9 ? 0 : (index - ( 9 - 1));
+    for (NSInteger i = startIndex; i < index; i ++) {
+        if (models[i].highestPrice > maxValue) {
+            maxValue = models[i].highestPrice;
+        }
+    }
+    return maxValue;
 }
 
 ////DIF=EMA（12）-EMA（26）         DIF的值即为红绿柱；
@@ -263,9 +280,7 @@
 #pragma mark BOLL线
 
 - (CGFloat)MA20 {
-    
     if (!_MA20) {
-        
         NSInteger index = [self.parentGroupModel.models indexOfObject:self];
         if (index >= 19) {
             if (index > 19) {
@@ -276,49 +291,32 @@
         }
     }
     return _MA20;
-    
 }
 
 - (CGFloat)BOLL_MB {
-    
     if(!_BOLL_MB) {
-        
         NSInteger index = [self.parentGroupModel.models indexOfObject:self];
         if (index >= 19) {
-            
             if (index > 19) {
                 _BOLL_MB = (self.sumOfLastClose - self.parentGroupModel.models[index - 19].sumOfLastClose) / 19;
-                
-            } else {
-                
+            }
+            else {
                 _BOLL_MB = self.sumOfLastClose / index;
-                
             }
         }
-        
         // NSLog(@"lazyMB:\n _BOLL_MB: %@", _BOLL_MB);
-        
     }
-    
     return _BOLL_MB;
 }
 
 - (CGFloat)BOLL_MD {
-    
     if (!_BOLL_MD) {
-        
         NSInteger index = [self.parentGroupModel.models indexOfObject:self];
-        
         if (index >= 20) {
-            
             _BOLL_MD = sqrt((self.previousKlineModel.BOLL_SUBMD_SUM - self.parentGroupModel.models[index - 20].BOLL_SUBMD_SUM)/ 20);
-            
         }
-        
     }
-    
     // NSLog(@"lazy:\n_BOLL_MD:%@ -- BOLL_SUBMD:%@",_BOLL_MD,_BOLL_SUBMD);
-    
     return _BOLL_MD;
 }
 
@@ -329,9 +327,7 @@
             _BOLL_UP = self.BOLL_MB + 2 * self.BOLL_MD;
         }
     }
-    
     // NSLog(@"lazy:\n_BOLL_UP:%@ -- BOLL_MD:%@",_BOLL_UP,_BOLL_MD);
-    
     return _BOLL_UP;
 }
 
@@ -342,164 +338,37 @@
             _BOLL_DN = self.BOLL_MB - 2 * self.BOLL_MD;
         }
     }
-    
     // NSLog(@"lazy:\n_BOLL_DN:%@ -- BOLL_MD:%@",_BOLL_DN,_BOLL_MD);
-    
     return _BOLL_DN;
 }
 
 - (CGFloat)BOLL_SUBMD_SUM {
     
     if (!_BOLL_SUBMD_SUM) {
-        
         NSInteger index = [self.parentGroupModel.models indexOfObject:self];
         if (index >= 20) {
-            
             _BOLL_SUBMD_SUM = self.previousKlineModel.BOLL_SUBMD_SUM + self.BOLL_SUBMD;
-            
         }
     }
-    
     // NSLog(@"lazy:\n_BOLL_SUBMD_SUM:%@ -- BOLL_SUBMD:%@",_BOLL_SUBMD_SUM,_BOLL_SUBMD);
-    
     return _BOLL_SUBMD_SUM;
 }
 
 - (CGFloat)BOLL_SUBMD {
-    
     if (!_BOLL_SUBMD) {
-        
         NSInteger index = [self.parentGroupModel.models indexOfObject:self];
-        
         if (index >= 20) {
-            
             _BOLL_SUBMD = (self.closingPrice - self.MA20) * ( self.closingPrice - self.MA20);
-                        
         }
     }
-    
-    // NSLog(@"lazy_BOLL_SUBMD: \n MA20: %@ \n Close: %@ \n subNum: %f", _MA20, _Close, self.Close - self.MA20);
-    
     return _BOLL_SUBMD;
 }
-
-
-
-//- (MCKLineModel *)PreviousKlineModel {
-//    if (!_PreviousKlineModel) {
-//        _PreviousKlineModel = [MCKLineModel new];
-//        _PreviousKlineModel.DIF = 0;
-//        _PreviousKlineModel.DEA = 0;
-//        _PreviousKlineModel.MACD = 0;
-//        _PreviousKlineModel.MA7 = 0;
-//        _PreviousKlineModel.MA12 = 0;
-//        _PreviousKlineModel.MA26 = 0;
-//        _PreviousKlineModel.MA30 = 0;
-//        _PreviousKlineModel.EMA7 = 0;
-//        _PreviousKlineModel.EMA12 = 0;
-//        _PreviousKlineModel.EMA26 = 0;
-//        _PreviousKlineModel.EMA30 = 0;
-//        _PreviousKlineModel.Volume_MA7 = 0;
-//        _PreviousKlineModel.Volume_MA30 = 0;
-//        _PreviousKlineModel.Volume_EMA7 = 0;
-//        _PreviousKlineModel.Volume_EMA30 = 0;
-//        _PreviousKlineModel.SumOfLastClose = 0;
-//        _PreviousKlineModel.SumOfLastVolume = 0;
-//        _PreviousKlineModel.KDJ_K = 50;
-//        _PreviousKlineModel.KDJ_D = 50;
-//
-//        _PreviousKlineModel.MA20 = 0;
-//        _PreviousKlineModel.BOLL_MD = 0;
-//        _PreviousKlineModel.BOLL_MB = 0;
-//        _PreviousKlineModel.BOLL_DN = 0;
-//        _PreviousKlineModel.BOLL_UP = 0;
-//        _PreviousKlineModel.BOLL_SUBMD_SUM = 0;
-//        _PreviousKlineModel.BOLL_SUBMD = 0;
-//        
-//    }
-//    return _PreviousKlineModel;
-//}
 
 - (MCKLineGroupModel *)parentGroupModel {
     if(!_parentGroupModel) {
         _parentGroupModel = [MCKLineGroupModel new];
     }
     return _parentGroupModel;
-}
-
-//对Model数组进行排序，初始化每个Model的最新9Clock的最低价和最高价
-- (void)rangeLastNinePriceByArray:(NSArray<MCKLineModel *> *)models condition:(NSComparisonResult)cond {
-    switch (cond) {
-            //最高价
-        case NSOrderedAscending: {
-//            第一个循环结束后，ClockFirstValue为最小值
-            for (NSInteger j = 7; j >= 1; j--) {
-                CGFloat emMaxValue = 0;
-                
-                NSInteger em = j;
-                
-                while ( em >= 0 ) {
-                    if([@(emMaxValue) compare:@(models[em].highestPrice)] == cond) {
-                        emMaxValue = models[em].highestPrice;
-                    }
-                    em--;
-                }
-                NSLog(@"%f",emMaxValue);
-                models[j].maxPriceOfNineClock = emMaxValue;
-            }
-            //第一个循环结束后，ClockFirstValue为最小值
-            for (NSInteger i = 0, j = 8; j < models.count; i++,j++) {
-                CGFloat emMaxValue = 0;
-                
-                NSInteger em = j;
-                
-                while ( em >= i ) {
-                    if([@(emMaxValue) compare:@(models[em].highestPrice)] == cond) {
-                        emMaxValue = models[em].highestPrice;
-                    }
-                    em--;
-                }
-                NSLog(@"%f",emMaxValue);
-
-                models[j].maxPriceOfNineClock = emMaxValue;
-            }
-        }
-            break;
-        case NSOrderedDescending: {
-            //第一个循环结束后，ClockFirstValue为最小值
-            
-            for (NSInteger j = 7; j >= 1; j--) {
-                CGFloat emMinValue = 10000000000;
-                
-                NSInteger em = j;
-                
-                while ( em >= 0 ) {
-                    if([@(emMinValue) compare:@(models[em].lowestPrice)] == cond) {
-                        emMinValue = models[em].lowestPrice;
-                    }
-                    em--;
-                }
-                models[j].minPriceOfNineClock = emMinValue;
-            }
-            
-            for (NSInteger i = 0, j = 8; j < models.count; i++,j++) {
-                CGFloat emMinValue = 10000000000;
-                
-                NSInteger em = j;
-                
-                while ( em >= i ) {
-                    if([@(10000000000) compare:@(models[em].lowestPrice)] == cond) {
-                        emMinValue = models[em].lowestPrice;
-                    }
-                    em--;
-                }
-                models[j].minPriceOfNineClock = emMinValue;
-            }
-        }
-            break;
-        default:
-            break;
-    }
 }
 
 - (void)initWithValues:(NSArray *)arr {
@@ -550,8 +419,6 @@
     [self DIF];
     [self DEA];
     [self MACD];
-    [self rangeLastNinePriceByArray:self.parentGroupModel.models condition:NSOrderedAscending];
-    [self rangeLastNinePriceByArray:self.parentGroupModel.models condition:NSOrderedDescending];
     [self RSV_9];
     [self KDJ_K];
     [self KDJ_D];
