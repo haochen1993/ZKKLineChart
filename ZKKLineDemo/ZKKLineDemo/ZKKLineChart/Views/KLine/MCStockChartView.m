@@ -1048,20 +1048,8 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         [_accessoryView update];
     }
     else if (model.subType == MCStockSegmentViewSubTypeTime) {
-        if (model.targetTimeType == MCStockTargetTimeTypeTiming) {
-            DLog(@"点击时间轴 == MCStockTargetTimeTypeTiming");
-        }
-        else if (model.targetTimeType == MCStockTargetTimeTypeMin_5) {
-            DLog(@"点击时间轴 == MCStockTargetTimeTypeMin_5");
-        }
-        else if (model.targetTimeType == MCStockTargetTimeTypeMin_30) {
-            DLog(@"点击时间轴 == MCStockTargetTimeTypeMin_30");
-        }
-        else if (model.targetTimeType == MCStockTargetTimeTypeMin_60) {
-            DLog(@"点击时间轴 == MCStockTargetTimeTypeMin_60");
-        }
-        else if (model.targetTimeType == MCStockTargetTimeTypeDay) {
-            DLog(@"点击时间轴 == MCStockTargetTimeTypeDay");
+        if ([self.delegate respondsToSelector:@selector(stockChartView:didSelectTargetTime:)]) {
+            [self.delegate stockChartView:self didSelectTargetTime:model.targetTimeType];
         }
     }
 }

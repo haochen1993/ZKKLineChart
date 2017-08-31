@@ -8,8 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "MCKLineModel.h"
+#import "MCStockHeader.h"
+@class MCStockChartView;
 
-@protocol KLineChartViewDelegate <NSObject>
+@protocol MCStockChartViewDelegate <NSObject>
+
+@optional
+- (void)stockChartView:(MCStockChartView *)stockChartView didSelectTargetTime:(MCStockTargetTimeType)targetTimeType;
 
 @end
 
@@ -39,15 +44,7 @@
 
 @property (nonatomic, assign) BOOL landscapeMode;
 
-/**
- *  动态更新显示最新, 默认不开启。
- *
- *  注意⚠️
- 1. 有新数据过来，新数据会呈现高亮状态提示为最新数据
- 2. 开启，有新数据过来，会以最新数据显示为准绘制在UI；优先级优于用户操作；忽略用户操作的结果。
- 3. 不开启，优先级低于手势，处理完手势，才会处理最新数据，用户的操作为准。
- */
-@property (nonatomic, assign) BOOL dynamicUpdateIsNew;
+@property (nonatomic, weak) id <MCStockChartViewDelegate> delegate;
 
 - (void)drawChartWithDataSource:(NSArray <MCKLineModel *> *)dataSource;
 
