@@ -115,6 +115,12 @@ typedef NS_ENUM(NSInteger, YCoinType) {
 @property (nonatomic, assign) CGFloat minPriceOfNineClock; //!< 9Clock内最低价
 @property (nonatomic, assign) CGFloat maxPriceOfNineClock; //!< 9Clock内最高价
 
+@property (nonatomic, assign) CGFloat closeDiff; //!< 跟前日的收盘价之差
+@property (nonatomic, assign) CGFloat RSI_6;
+@property (nonatomic, assign) CGFloat RSI_12;
+@property (nonatomic, assign) CGFloat RSI_24;
+
+
 //初始化Model
 - (void)initWithValues:(NSArray *)arr;
 

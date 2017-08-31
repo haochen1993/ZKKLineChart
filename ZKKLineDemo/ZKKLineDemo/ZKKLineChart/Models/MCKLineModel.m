@@ -277,6 +277,62 @@
     return _MACD;
 }
 
+- (CGFloat)closeDiff {
+    if (!_closeDiff) {
+        _closeDiff = self.closingPrice - self.previousKlineModel.closingPrice;
+    }
+    return _closeDiff;
+}
+
+- (CGFloat)RSI_6 {
+    if (!_RSI_6) {
+        _RSI_6 = [self calcRSIWithDays:6];
+    }
+    return _RSI_6;
+}
+
+- (CGFloat)RSI_12 {
+    if (!_RSI_12) {
+        _RSI_12 = [self calcRSIWithDays:12];
+    }
+    return _RSI_12;
+}
+
+-(CGFloat)RSI_24 {
+    if (!_RSI_24) {
+        _RSI_24 = [self calcRSIWithDays:24];
+    }
+    return _RSI_24;
+}
+
+/**
+ 计算RSI
+ RSI（14）= A ÷（A＋B）× 100
+ */
+- (CGFloat)calcRSIWithDays:(NSInteger)daysCount {
+    CGFloat RSI = 0;
+    
+    NSInteger selfIndex = [self.parentGroupModel.models indexOfObject:self];
+    if (selfIndex < daysCount) {
+        return RSI;
+    }
+    else {
+        CGFloat positiveSum = 0;
+        CGFloat negativeSum = 0;
+        for (NSInteger i = selfIndex; i >= selfIndex - daysCount; i --) {
+            MCKLineModel *model = self.parentGroupModel.models[i];
+            if (model.closeDiff >= 0) {
+                positiveSum += model.closeDiff;
+            }
+            else {
+                negativeSum += fabs(model.closeDiff);
+            }
+        }
+        RSI = positiveSum / (positiveSum + negativeSum) * 100;
+    }
+    return RSI;
+}
+
 #pragma mark BOLL线
 
 - (CGFloat)MA20 {
@@ -461,6 +517,11 @@
     [self BOLL_DN];
     [self BOLL_SUBMD];
     [self BOLL_SUBMD_SUM];
+    
+    [self closeDiff];
+    [self RSI_6];
+    [self RSI_12];
+    [self RSI_24];
 }
 
 @end
