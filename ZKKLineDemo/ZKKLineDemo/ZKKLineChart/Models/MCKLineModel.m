@@ -44,26 +44,6 @@
     return _KDJ_J;
 }
 
-- (CGFloat)MA7 {
-    if([Y_StockChartGlobalVariable isEMALine] == Y_StockChartTargetLineStatusMA) {
-        if (!_MA7) {
-            NSInteger index = [self.parentGroupModel.models indexOfObject:self];
-            if (index >= 6) {
-                if (index > 6) {
-                    _MA7 = (self.sumOfLastClose - self.parentGroupModel.models[index - 7].sumOfLastClose) / 7;
-                }
-                else {
-                    _MA7 = self.sumOfLastClose / 7;
-                }
-            }
-        }
-    }
-    else {
-        return self.EMA7;
-    }
-    return _MA7;
-}
-
 - (CGFloat)Volume_MA7 {
     if([Y_StockChartGlobalVariable isEMALine] == Y_StockChartTargetLineStatusMA) {
         if (!_Volume_MA7) {
@@ -120,26 +100,6 @@
     return _EMA26;
 }
 
-- (CGFloat)MA30 {
-    if([Y_StockChartGlobalVariable isEMALine] == Y_StockChartTargetLineStatusMA) {
-        if (!_MA30) {
-            NSInteger index = [self.parentGroupModel.models indexOfObject:self];
-            if (index >= 29) {
-                if (index > 29) {
-                    _MA30 = (self.sumOfLastClose - self.parentGroupModel.models[index - 30].sumOfLastClose) / 30;
-                }
-                else {
-                    _MA30 = self.sumOfLastClose / 30;
-                }
-            }
-        }
-    }
-    else {
-        return self.EMA30;
-    }
-    return _MA30;
-}
-
 - (CGFloat)Volume_MA30 {
     if([Y_StockChartGlobalVariable isEMALine] == Y_StockChartTargetLineStatusMA) {
         if (!_Volume_MA30) {
@@ -166,34 +126,32 @@
     return _Volume_EMA30;
 }
 
+- (CGFloat)MA7 {
+    if (!_MA7) {
+        _MA7 = [self calcMAValueWithDays:7];
+    }
+    return _MA7;
+}
+
 - (CGFloat)MA12 {
     if (!_MA12) {
-        NSInteger index = [self.parentGroupModel.models indexOfObject:self];
-        if (index >= 11) {
-            if (index > 11) {
-                _MA12 = (self.sumOfLastClose - self.parentGroupModel.models[index - 12].sumOfLastClose) / 12;
-            }
-            else {
-                _MA12 = self.sumOfLastClose / 12;
-            }
-        }
+        _MA12 = [self calcMAValueWithDays:12];
     }
     return _MA12;
 }
 
 - (CGFloat)MA26 {
     if (!_MA26) {
-        NSInteger index = [self.parentGroupModel.models indexOfObject:self];
-        if (index >= 25) {
-            if (index > 25) {
-                _MA26 = (self.sumOfLastClose - self.parentGroupModel.models[index - 26].sumOfLastClose) / 26;
-            }
-            else {
-                _MA26 = self.sumOfLastClose / 26;
-            }
-        }
+        _MA26 = [self calcMAValueWithDays:26];
     }
     return _MA26;
+}
+
+- (CGFloat)MA30 {
+    if (!_MA30) {
+        _MA30 = [self calcMAValueWithDays:30];
+    }
+    return _MA30;
 }
 
 - (CGFloat)sumOfLastClose {
@@ -222,32 +180,6 @@
         _maxPriceOfNineClock = [self calcMaxPriceOfNineClock];
     }
     return _maxPriceOfNineClock;
-}
-
-- (CGFloat)calcMinPriceOfNineClock {
-    NSArray <MCKLineModel *> *models = self.parentGroupModel.models;
-    NSInteger index = [self.parentGroupModel.models indexOfObject:self];
-    CGFloat minValue = models[index].lowestPrice;
-    NSInteger startIndex = index < 9 ? 0 : (index - ( 9 - 1));
-    for (NSInteger i = startIndex; i < index; i ++) {
-        if (models[i].lowestPrice < minValue) {
-            minValue = models[i].lowestPrice;
-        }
-    }
-    return minValue;
-}
-
-- (CGFloat)calcMaxPriceOfNineClock {
-    NSArray <MCKLineModel *> *models = self.parentGroupModel.models;
-    NSInteger index = [self.parentGroupModel.models indexOfObject:self];
-    CGFloat maxValue = models[index].highestPrice;
-    NSInteger startIndex = index < 9 ? 0 : (index - ( 9 - 1));
-    for (NSInteger i = startIndex; i < index; i ++) {
-        if (models[i].highestPrice > maxValue) {
-            maxValue = models[i].highestPrice;
-        }
-    }
-    return maxValue;
 }
 
 ////DIF=EMA（12）-EMA（26）         DIF的值即为红绿柱；
@@ -303,34 +235,6 @@
         _RSI_24 = [self calcRSIWithDays:24];
     }
     return _RSI_24;
-}
-
-/**
- 计算RSI
- RSI（14）= A ÷（A＋B）× 100
- */
-- (CGFloat)calcRSIWithDays:(NSInteger)daysCount {
-    CGFloat RSI = 0;
-    
-    NSInteger selfIndex = [self.parentGroupModel.models indexOfObject:self];
-    if (selfIndex < daysCount) {
-        return RSI;
-    }
-    else {
-        CGFloat positiveSum = 0;
-        CGFloat negativeSum = 0;
-        for (NSInteger i = selfIndex; i >= selfIndex - daysCount; i --) {
-            MCKLineModel *model = self.parentGroupModel.models[i];
-            if (model.closeDiff >= 0) {
-                positiveSum += model.closeDiff;
-            }
-            else {
-                negativeSum += fabs(model.closeDiff);
-            }
-        }
-        RSI = positiveSum / (positiveSum + negativeSum) * 100;
-    }
-    return RSI;
 }
 
 #pragma mark BOLL线
@@ -522,6 +426,77 @@
     [self RSI_6];
     [self RSI_12];
     [self RSI_24];
+}
+
+#pragma mark - Calc
+
+- (CGFloat)calcMinPriceOfNineClock {
+    NSArray <MCKLineModel *> *models = self.parentGroupModel.models;
+    NSInteger index = [self.parentGroupModel.models indexOfObject:self];
+    CGFloat minValue = models[index].lowestPrice;
+    NSInteger startIndex = index < 9 ? 0 : (index - ( 9 - 1));
+    for (NSInteger i = startIndex; i < index; i ++) {
+        if (models[i].lowestPrice < minValue) {
+            minValue = models[i].lowestPrice;
+        }
+    }
+    return minValue;
+}
+
+- (CGFloat)calcMaxPriceOfNineClock {
+    NSArray <MCKLineModel *> *models = self.parentGroupModel.models;
+    NSInteger index = [self.parentGroupModel.models indexOfObject:self];
+    CGFloat maxValue = models[index].highestPrice;
+    NSInteger startIndex = index < 9 ? 0 : (index - ( 9 - 1));
+    for (NSInteger i = startIndex; i < index; i ++) {
+        if (models[i].highestPrice > maxValue) {
+            maxValue = models[i].highestPrice;
+        }
+    }
+    return maxValue;
+}
+
+/**
+ 计算RSI
+ RSI（14）= A ÷（A＋B）× 100
+ */
+- (CGFloat)calcRSIWithDays:(NSInteger)daysCount {
+    CGFloat RSI = 0;
+    
+    NSInteger selfIndex = [self.parentGroupModel.models indexOfObject:self];
+    if (selfIndex < daysCount) {
+        return RSI;
+    }
+    else {
+        CGFloat positiveSum = 0;
+        CGFloat negativeSum = 0;
+        for (NSInteger i = selfIndex; i >= selfIndex - daysCount; i --) {
+            MCKLineModel *model = self.parentGroupModel.models[i];
+            if (model.closeDiff >= 0) {
+                positiveSum += model.closeDiff;
+            }
+            else {
+                negativeSum += fabs(model.closeDiff);
+            }
+        }
+        RSI = positiveSum / (positiveSum + negativeSum) * 100;
+    }
+    return RSI;
+}
+
+- (CGFloat)calcMAValueWithDays:(NSInteger)daysCount {
+    CGFloat MAValue = 0;
+    NSInteger index = [self.parentGroupModel.models indexOfObject:self];
+    if (index == daysCount-1) {
+        MAValue = self.sumOfLastClose / daysCount;
+    }
+    else if (index > daysCount-1) {
+        MAValue = (self.sumOfLastClose - self.parentGroupModel.models[index - daysCount].sumOfLastClose) / daysCount;
+    }
+    else {
+        MAValue = 0;
+    }
+    return MAValue;
 }
 
 @end

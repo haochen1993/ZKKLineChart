@@ -697,49 +697,47 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     // 均线个数
     NSInteger maLength = [self.MAValues[index] integerValue];
     
-    // 均线个数达不到三个以上也不绘制
-    if (pricePerHeightUnit != 0 || maLength + 2 < self.dataSource.count) {
-        NSArray *drawArrays = [self.dataSource subarrayWithRange:NSMakeRange(self.startDrawIndex, self.kLineDrawNum)];
-        for (int i = 0; i < drawArrays.count; i ++) {
-            MCKLineModel *item = drawArrays[i];
-            
-            CGFloat MAValue = 0;
-            if (maLength == 7) {
-                MAValue = item.MA7;
-            }
-            else if (maLength == 12) {
-                MAValue = item.MA12;
-            }
-            else if (maLength == 26) {
-                MAValue = item.MA26;
-            }
-            else if (maLength == 30) {
-                MAValue = item.MA30;
-            }
-            // 不足均线个数，则不需要获取该段均线数据(例如: 均5，个数小于5个，则不需要绘制前四均线，...)
-            if ([self.dataSource indexOfObject:item] < maLength - 1) {
-                xAxisValue += self.kLineWidth + self.kLinePadding;
-                continue;
-            }
-            CGFloat deltaToBottomAxis = (MAValue - self.lowestPriceOfAll) / pricePerHeightUnit + kChartVerticalMargin;
-            CGFloat yAxisValue = MaxYAxis - (deltaToBottomAxis ?: 1);
-            
-            CGPoint maPoint = CGPointMake(xAxisValue, yAxisValue);
-            
-            if (yAxisValue < self.topMargin || yAxisValue > MaxYAxis) {
-                xAxisValue += self.kLineWidth + self.kLinePadding;
-                continue;
-            }
-            if (!path) {
-                path = [UIBezierPath bezierPath];
-                [path moveToPoint:maPoint];
-            }
-            else {
-                [path addLineToPoint:maPoint];
-            }
-            xAxisValue += self.kLineWidth + self.kLinePadding;
+    NSArray *drawArrays = [self.dataSource subarrayWithRange:NSMakeRange(self.startDrawIndex, self.kLineDrawNum)];
+    for (int i = 0; i < drawArrays.count; i ++) {
+        MCKLineModel *item = drawArrays[i];
+        
+        CGFloat MAValue = 0;
+        if (maLength == 7) {
+            MAValue = item.MA7;
         }
+        else if (maLength == 12) {
+            MAValue = item.MA12;
+        }
+        else if (maLength == 26) {
+            MAValue = item.MA26;
+        }
+        else if (maLength == 30) {
+            MAValue = item.MA30;
+        }
+        // 不足均线个数，则不需要获取该段均线数据(例如: 均5，个数小于5个，则不需要绘制前四均线，...)
+        if ([self.dataSource indexOfObject:item] < maLength - 1) {
+            xAxisValue += self.kLineWidth + self.kLinePadding;
+            continue;
+        }
+        CGFloat deltaToBottomAxis = (MAValue - self.lowestPriceOfAll) / pricePerHeightUnit + kChartVerticalMargin;
+        CGFloat yAxisValue = MaxYAxis - (deltaToBottomAxis ?: 1);
+        
+        CGPoint maPoint = CGPointMake(xAxisValue, yAxisValue);
+        
+        if (yAxisValue < self.topMargin || yAxisValue > MaxYAxis) {
+            xAxisValue += self.kLineWidth + self.kLinePadding;
+            continue;
+        }
+        if (!path) {
+            path = [UIBezierPath bezierPath];
+            [path moveToPoint:maPoint];
+        }
+        else {
+            [path addLineToPoint:maPoint];
+        }
+        xAxisValue += self.kLineWidth + self.kLinePadding;
     }
+    
     //圆滑
     path = [path mc_smoothedPathWithGranularity:15];
     return path.CGPath;
