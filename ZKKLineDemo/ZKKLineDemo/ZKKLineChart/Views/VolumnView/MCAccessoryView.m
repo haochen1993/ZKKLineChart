@@ -56,7 +56,8 @@ static const CGFloat kVerticalMargin = 12.f;
             _MAColors = @[ [UIColor whiteColor], [UIColor yellowColor], [UIColor purpleColor] ];
         }  break;
         case MCStockAccessoryChartTypeRSI: {
-            
+            _MAValues = @[ @6, @12, @24 ];
+            _MAColors = @[ [UIColor whiteColor], [UIColor yellowColor], [UIColor purpleColor] ];
         }  break;
         case MCStockAccessoryChartTypeWR: {
             
@@ -126,7 +127,15 @@ static const CGFloat kVerticalMargin = 12.f;
                 }
             } break;
             case MCStockAccessoryChartTypeRSI: {
-                
+                if (index == 0) {
+                    MAValue = item.RSI_6;
+                }
+                else if (index == 1) {
+                    MAValue = item.RSI_12;
+                }
+                else if (index == 2) {
+                    MAValue = item.RSI_24;
+                }
             } break;
             case MCStockAccessoryChartTypeWR: {
                 
@@ -136,7 +145,8 @@ static const CGFloat kVerticalMargin = 12.f;
             } break;
         }
         // 不足均线个数，则不需要获取该段均线数据(例如: 均5，个数小于5个，则不需要绘制前四均线，...)
-        if ([self.data indexOfObject:item] < maLength - 1 && maLength) {
+        BOOL notEnoughToDraw = [self.data indexOfObject:item] < maLength - 1;
+        if ((notEnoughToDraw && maLength) || !MAValue) {
             xAxisValue += self.kLineWidth + self.linePadding;
             continue;
         }
@@ -186,7 +196,7 @@ static const CGFloat kVerticalMargin = 12.f;
                 [self resetWhenTypeKDJWithModel:model];
             } break;
             case MCStockAccessoryChartTypeRSI:{
-                
+                [self resetWhenTypeRSIWithModel:model];
             } break;
             case MCStockAccessoryChartTypeWR:{
                 
@@ -195,6 +205,21 @@ static const CGFloat kVerticalMargin = 12.f;
                 
             } break;
         }
+    }
+}
+
+- (void)resetWhenTypeRSIWithModel:(MCKLineModel *)model {
+    if (model.RSI_6) {
+        _lowestValue = MIN(_lowestValue, model.RSI_6);
+        _highestValue = MAX(_highestValue, model.RSI_6);
+    }
+    if (model.RSI_12) {
+        _lowestValue = MIN(_lowestValue, model.RSI_12);
+        _highestValue = MAX(_highestValue, model.RSI_12);
+    }
+    if (model.RSI_24) {
+        _lowestValue = MIN(_lowestValue, model.RSI_24);
+        _highestValue = MAX(_highestValue, model.RSI_24);
     }
 }
 

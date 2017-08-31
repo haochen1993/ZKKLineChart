@@ -338,7 +338,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         self.startDrawIndex = self.startDrawIndex - offsetIndex < 0 ? 0 : self.startDrawIndex - offsetIndex;
     }
     else {
-        self.startDrawIndex = self.startDrawIndex + offsetIndex + self.kLineDrawNum > self.dataSource.count ? self.dataSource.count - self.kLineDrawNum : self.startDrawIndex + offsetIndex;
+        self.startDrawIndex = self.startDrawIndex + offsetIndex + self.kLineDrawNum >= self.dataSource.count ? self.dataSource.count - self.kLineDrawNum : self.startDrawIndex + offsetIndex;
     }
     [self resetMaxAndMin];
     [panGesture setTranslation:CGPointZero inView:self];
@@ -1032,6 +1032,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         }
         else if (model.accessoryChartType == MCStockAccessoryChartTypeRSI) {
             DLog(@"点击副图 == MCStockAccessoryChartTypeRSI");
+            _accessoryView.accessoryChartType = MCStockAccessoryChartTypeRSI;
         }
         else if (model.accessoryChartType == MCStockAccessoryChartTypeWR) {
             DLog(@"点击副图 == MCStockAccessoryChartTypeWR");
