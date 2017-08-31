@@ -85,7 +85,6 @@ static const CGFloat kDefaultMargin = 8.f;
 }
 
 - (void)updateWithHigh:(CGFloat)high open:(CGFloat)open close:(CGFloat)close low:(CGFloat)low {
-    NSAssert(high && open && close && low, @"value error");
     [self updateLabel:_label_0 text:[@"开盘价: " stringByAppendingString:[MCStockChartUtil decimalValue:high]] color: nil];
     [self updateLabel:_label_1 text:[@"最高价: " stringByAppendingString:[MCStockChartUtil decimalValue:open]] color: nil];
     [self updateLabel:_label_2 text:[@"收盘价: " stringByAppendingString:[MCStockChartUtil decimalValue:close]] color: nil];
@@ -93,7 +92,6 @@ static const CGFloat kDefaultMargin = 8.f;
 }
 
 - (void)updateWithVolume:(CGFloat)volume MA5:(CGFloat)MA5 MA10:(CGFloat)MA10 {
-    NSAssert(volume && MA5 && MA10, @"value error");
     [self updateLabel:_label_0 text:[@"交易量: " stringByAppendingString:[MCStockChartUtil decimalValue:volume count:4]] color: nil];
     [self updateLabel:_label_1 text:[@"MA5: " stringByAppendingString:[MCStockChartUtil decimalValue:MA5]] color: [UIColor whiteColor]];
     [self updateLabel:_label_2 text:[@"MA10: " stringByAppendingString:[MCStockChartUtil decimalValue:MA10]] color: [UIColor yellowColor]];
