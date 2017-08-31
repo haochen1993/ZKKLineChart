@@ -777,9 +777,14 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 - (void)resetMaxAndMin {
     self.highestPriceOfAll = -MAXFLOAT;
     self.lowestPriceOfAll = MAXFLOAT;
-    NSArray *subChartValues = [self.dataSource subarrayWithRange:NSMakeRange(self.startDrawIndex, MIN(self.kLineDrawNum, self.dataSource.count))];
-    NSArray *drawContext = self.autoFit ? subChartValues : self.dataSource;
+    NSInteger totalCount = [self.dataSource count];
     
+    NSRange subRange = NSMakeRange(self.startDrawIndex, MIN(self.kLineDrawNum, self.dataSource.count));
+    if (NSMaxRange(subRange) > totalCount) {
+        subRange = NSMakeRange(totalCount - self.kLineDrawNum, totalCount);
+    }
+    NSArray *subChartValues = [self.dataSource subarrayWithRange:subRange];
+    NSArray *drawContext = self.autoFit ? subChartValues : self.dataSource;
     for (int i = 0; i < drawContext.count; i++) {
         MCKLineModel *model = drawContext[i];
         self.highestPriceOfAll = MAX(model.highestPrice, self.highestPriceOfAll);
