@@ -7,10 +7,9 @@
 //
 
 #import "MCVolumeView.h"
-#import "KLineListTransformer.h"
 #import "MCKLineModel.h"
 #import "UIBezierPath+curved.h"
-#import "MCKLineTitleView.h"
+#import "MCStockTitleView.h"
 #import "MCStockChartUtil.h"
 
 @interface MCVolumeView ()

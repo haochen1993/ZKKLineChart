@@ -1,39 +1,19 @@
 //
-//  TYBarChartView.h
-//  CandlerstickCharts
+//  KLineChartView.h
+//  ZKKLineDemo
 //
-//  Created by ZhouKang on 16/8/11.
-//  Copyright © 2016年 liuxd. All rights reserved.
+//  Created by ZhouKang on 17/8/11.
+//  Copyright © 2017年 ZhouKang. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "MCKLineModel.h"
 
-@interface KLineChartView : UIView
+@protocol KLineChartViewDelegate <NSObject>
 
-/************************************************************************************/
-/*                                          |                                       */
-/*                                      topMargin                                   */
-/*                                          |                                       */
-/*                    *------------------------------------------*                  */
-/*                    |                                          |                  */
-/*                    |                                          |                  */
-/* <-  leftMargin   ->|                    k线图                  | <- leftMargin -> */
-/*                    |                                          |                  */
-/*                    |                                          |                  */
-/*                    *------------------------------------------*      -           */
-/*                                                                      |           */
-/*                                                                      |           */
-/*                                                                      |           */
-/***********************************************************************|************/
-/*                                   showBarChart = YES                 |           */
-/****************************************************************** bottomMargin ****/
-/*                    *------------------------------------------*      |           */
-/*                    |                                          |      |           */
-/*                    |                    柱形图                 |      |           */
-/*                    |                                          |      |           */
-/*                    *------------------------------------------*      _           */
-/************************************************************************************/
+@end
+
+@interface MCStockChartView : UIView
 
 @property (nonatomic, assign) CGFloat topMargin; //!< 内容距离父试图顶部高度
 

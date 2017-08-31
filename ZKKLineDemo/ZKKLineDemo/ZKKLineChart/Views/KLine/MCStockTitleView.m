@@ -1,19 +1,19 @@
 //
-//  MCKLineTitleView.m
+//  MCStockTitleView.m
 //  ZKKLineDemo
 //
 //  Created by ZK on 2017/8/25.
 //  Copyright © 2017年 ZhouKang. All rights reserved.
 //
 
-#import "MCKLineTitleView.h"
+#import "MCStockTitleView.h"
 #import "NSString+Common.h"
 #import "MacroToolHeader.h"
 #import "UIView+Addition.h"
 #import <Masonry.h>
 #import "MCStockChartUtil.h"
 
-@interface MCKLineTitleView ()
+@interface MCStockTitleView ()
 
 // 从左往右的label
 @property (nonatomic, strong) UILabel *label_0;
@@ -25,7 +25,7 @@
 
 static const CGFloat kDefaultMargin = 8.f;
 
-@implementation MCKLineTitleView
+@implementation MCStockTitleView
 
 + (instancetype)titleView {
     return [self new];

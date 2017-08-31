@@ -1,19 +1,19 @@
 //
-//  TYBarChartView.m
-//  CandlerstickCharts
+//  KLineChartView.m
+//  ZKKLineDemo
 //
 //  k线图
-//  Created by ZhouKang on 16/8/11.
-//  Copyright © 2016年 liuxd. All rights reserved.
+//  Created by ZhouKang on 17/8/11.
+//  Copyright © 2017年 ZhouKang. All rights reserved.
 //
 
-#import "KLineChartView.h"
+#import "MCStockChartView.h"
 #import <Masonry.h>
 #import "UIBezierPath+curved.h"
 #import "MacroToolHeader.h"
 #import "MCVolumeView.h"
 #import "MCAccessoryView.h"
-#import "MCKLineTitleView.h"
+#import "MCStockTitleView.h"
 #import "NSString+Common.h"
 #import "MCStockChartUtil.h"
 #import "MCStockSegmentView.h"
@@ -31,7 +31,7 @@ static const CGFloat kChartVerticalMargin = 30.f;  //!< 图表上下各留的间
 static const CGFloat kTimeAxisHeight = 14.f;       //!< 时间轴的高度
 static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 
-@interface KLineChartView () <MCStockSegmentViewDelegate>
+@interface MCStockChartView () <MCStockSegmentViewDelegate>
 
 @property (nonatomic, assign) CGFloat yAxisHeight;
 @property (nonatomic, assign) CGFloat xAxisWidth;
@@ -79,13 +79,13 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 @property (nonatomic, strong) UIColor *timeAndPriceTipsBackgroundColor; //!< 时间和价格提示背景颜色
 @property (nonatomic, assign) CGFloat movingAvgLineWidth; //!< 均线宽度
 @property (nonatomic, assign) NSInteger lastDrawNum; //!< 缩放手势 记录上次的绘制个数
-@property (nonatomic, strong) MCKLineTitleView *KLineTitleView;
+@property (nonatomic, strong) MCStockTitleView *KLineTitleView;
 @property (nonatomic, strong) MCStockSegmentView *segmentView;
 @property (nonatomic, assign) CGFloat bottomSegmentViewHeight;
 
 @end
 
-@implementation KLineChartView
+@implementation MCStockChartView
 
 #pragma mark - life cycle
 
@@ -904,9 +904,9 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     return _priceLabel;
 }
 
-- (MCKLineTitleView *)KLineTitleView {
+- (MCStockTitleView *)KLineTitleView {
     if (!_KLineTitleView) {
-        _KLineTitleView = [MCKLineTitleView titleView];
+        _KLineTitleView = [MCStockTitleView titleView];
         [self addSubview:_KLineTitleView];
     }
     _KLineTitleView.frame = CGRectMake(_leftMargin + 10, _topMargin, SelfWidth, 20);

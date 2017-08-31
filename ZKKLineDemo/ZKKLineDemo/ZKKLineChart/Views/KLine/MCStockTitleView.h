@@ -1,5 +1,5 @@
 //
-//  MCKLineTitleView.h
+//  MCStockTitleView.h
 //  ZKKLineDemo
 //
 //  Created by ZK on 2017/8/25.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MCKLineTitleView : UIView
+@interface MCStockTitleView : UIView
 
 + (instancetype)titleView;
 

@@ -7,7 +7,6 @@
 //
 
 #import "MCAccessoryView.h"
-#import "KLineListTransformer.h"
 #import "MCKLineModel.h"
 #import "UIBezierPath+curved.h"
 #import "MCStockChartUtil.h"

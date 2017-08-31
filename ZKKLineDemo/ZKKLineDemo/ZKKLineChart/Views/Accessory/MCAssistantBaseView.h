@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MCKLineTitleView.h"
-@class MCKLineModel, KLineChartView;
+#import "MCStockTitleView.h"
+@class MCKLineModel, MCStockChartView;
 
 @interface MCAssistantBaseView : UIView
 
-@property (nonatomic, strong) MCKLineTitleView *titleView;
+@property (nonatomic, strong) MCStockTitleView *titleView;
 
 @property (nonatomic, assign) float boxOriginX; //!< 边框开始坐标点
 
@@ -49,7 +49,7 @@
 
 @property (nonatomic, strong) NSArray <MCKLineModel *> *data;
 
-@property (nonatomic, weak) KLineChartView *baseChartView;
+@property (nonatomic, weak) MCStockChartView *baseChartView;
 
 - (void)update;
 

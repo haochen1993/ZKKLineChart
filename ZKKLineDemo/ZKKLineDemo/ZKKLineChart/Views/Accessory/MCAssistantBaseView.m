@@ -7,7 +7,7 @@
 //
 
 #import "MCAssistantBaseView.h"
-#import "KLineChartView.h"
+#import "MCStockChartView.h"
 
 @interface MCAssistantBaseView ()
 
@@ -43,9 +43,9 @@
     self.titleView.hidden = true;
 }
 
-- (MCKLineTitleView *)titleView {
+- (MCStockTitleView *)titleView {
     if (!_titleView) {
-        _titleView = [MCKLineTitleView titleView];
+        _titleView = [MCStockTitleView titleView];
         _titleView.hidden = true;
         [self addSubview:_titleView];
     }

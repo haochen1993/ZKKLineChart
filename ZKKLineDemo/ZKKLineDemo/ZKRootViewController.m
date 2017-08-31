@@ -7,23 +7,16 @@
 //
 
 #import "ZKRootViewController.h"
-#import "KLineChartView.h"
-#import "KLineListTransformer.h"
+#import "MCStockChartView.h"
 #import <YYModel.h>
-#import "ZKKLineItem.h"
 #import "MacroToolHeader.h"
 #import "NetWorking.h"
 #import "MCKLineGroupModel.h"
 
 @interface ZKRootViewController ()
 
-@property (nonatomic, strong) KLineListTransformer *lineListTransformer;
-@property (nonatomic, strong) KLineChartView *kLineChartView;
+@property (nonatomic, strong) MCStockChartView *kLineChartView;
 
-/**
- *  (模拟)实时测试
- */
-@property (nonatomic, strong) NSArray <ZKKLineItem *> *dataSource;
 @property (nonatomic, strong) NSTimer *timer;
 
 @end
@@ -59,7 +52,7 @@
 }
 
 - (void)setupKLineView {
-    _kLineChartView = [[KLineChartView alloc] initWithFrame:CGRectMake(0, 64, self.view.us_width, self.view.us_height - 64)];
+    _kLineChartView = [[MCStockChartView alloc] initWithFrame:CGRectMake(0, 64, self.view.us_width, self.view.us_height - 64)];
     [self.view addSubview:self.kLineChartView];
     _kLineChartView.autoFit = true;
 }
@@ -97,13 +90,6 @@
 }
 
 - (void)realTimeData:(id)timer {
-}
-
-- (KLineListTransformer *)lineListTransformer {
-    if (!_lineListTransformer) {
-        _lineListTransformer = [KLineListTransformer new];
-    }
-    return _lineListTransformer;
 }
 
 - (void)dealloc {
