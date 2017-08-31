@@ -52,10 +52,6 @@ static NSString *cellID = @"MCStockSegmentViewCell";
 
 // ---------
 
-@implementation MCStockSegmentSelectedModel
-
-@end
-
 @interface MCStockSegmentView () <UICollectionViewDelegate, UICollectionViewDataSource>
 
 @property (nonatomic, strong) UICollectionView *collectionView;

@@ -10,15 +10,6 @@
 #import "MCStockHeader.h"
 @class MCStockSegmentView;
 
-@interface MCStockSegmentSelectedModel: NSObject
-
-@property (nonatomic, assign) MCStockSegmentViewSubType subType;
-@property (nonatomic, assign) MCStockTargetTimeType targetTimeType;
-@property (nonatomic, assign) MCStockAccessoryChartType accessoryChartType;
-@property (nonatomic, assign) MCStockMainChartType mainChartType;
-
-@end
-
 @protocol MCStockSegmentViewDelegate <NSObject>
 
 @optional

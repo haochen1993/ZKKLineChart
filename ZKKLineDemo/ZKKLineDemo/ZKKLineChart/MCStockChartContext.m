@@ -8,6 +8,12 @@
 
 #import "MCStockChartContext.h"
 
+@implementation MCStockSegmentSelectedModel
+
+@end
+
+// ------
+
 @implementation MCStockChartContext
 
 + (instancetype)shareInstance {
@@ -15,8 +21,20 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         context_ = [MCStockChartContext new];
+        [context_ setup];
     });
     return context_;
+}
+
+- (void)setup {
+    [self setupSelectedModel];
+}
+
+- (void)setupSelectedModel {
+    _selectedModel = [MCStockSegmentSelectedModel new];
+    _selectedModel.mainChartType = MCStockMainChartTypeMA;
+    _selectedModel.accessoryChartType = MCStockAccessoryChartTypeMACD;
+    _selectedModel.targetTimeType = MCStockTargetTimeTypeMin_30;
 }
 
 @end

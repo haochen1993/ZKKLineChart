@@ -255,16 +255,7 @@
 
 - (CGFloat)BOLL_MB {
     if(!_BOLL_MB) {
-        NSInteger index = [self.parentGroupModel.models indexOfObject:self];
-        if (index >= 19) {
-            if (index > 19) {
-                _BOLL_MB = (self.sumOfLastClose - self.parentGroupModel.models[index - 19].sumOfLastClose) / 19;
-            }
-            else {
-                _BOLL_MB = self.sumOfLastClose / index;
-            }
-        }
-        // NSLog(@"lazyMB:\n _BOLL_MB: %@", _BOLL_MB);
+        _BOLL_MB = [self calcMAValueWithDays:20];
     }
     return _BOLL_MB;
 }

@@ -1013,6 +1013,9 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 #pragma mark - <MCStockSegmentViewDelegate>
 
 - (void)stockSegmentView:(MCStockSegmentView *)segmentView didSelectModel:(MCStockSegmentSelectedModel *)model {
+    
+    _stockContext.selectedModel = model;
+    
     if (model.subType == MCStockSegmentViewSubTypeMain) {
         if (model.mainChartType == MCStockMainChartTypeMA) {
             DLog(@"点击主图 == MCStockMainChartTypeMA");

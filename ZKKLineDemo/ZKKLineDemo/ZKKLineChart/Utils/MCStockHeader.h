@@ -37,6 +37,6 @@ typedef NS_ENUM(NSInteger, MCStockSegmentViewSubType) {
     MCStockSegmentViewSubTypeTime,     //!< 时间轴
 };
 
-
+#import "MCStockChartContext.h"
 
 #endif /* MCStockHeader_h */

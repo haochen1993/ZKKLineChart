@@ -8,11 +8,24 @@
 
 #import <Foundation/Foundation.h>
 #import "MCStockChartUtil.h"
+#import "MCStockHeader.h"
 
 #define _stockContext [MCStockChartContext shareInstance]
+
+@interface MCStockSegmentSelectedModel: NSObject
+
+@property (nonatomic, assign) MCStockSegmentViewSubType subType;
+@property (nonatomic, assign) MCStockTargetTimeType targetTimeType;
+@property (nonatomic, assign) MCStockAccessoryChartType accessoryChartType;
+@property (nonatomic, assign) MCStockMainChartType mainChartType;
+
+@end
+
+// ------
 
 @interface MCStockChartContext : NSObject
 
 + (instancetype)shareInstance;
+@property (nonatomic, strong) MCStockSegmentSelectedModel *selectedModel;
 
 @end
