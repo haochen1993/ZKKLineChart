@@ -55,14 +55,14 @@ typedef NS_ENUM(NSInteger, YCoinType) {
 // 标准差 二次方根【 下的 (n-1)天的 C-MA二次方 和】
 @property (nonatomic, assign) CGFloat BOLL_MD;
 
-// n-1 天的 MA   中轨线
-@property (nonatomic, assign) CGFloat BOLL_MB;
+// n-1 天的 MA
+@property (nonatomic, assign) CGFloat BOLL_MB; //!< 中轨线
 
-// MB + k * MD   上轨线
-@property (nonatomic, assign) CGFloat BOLL_UP;
+// MB + k * MD
+@property (nonatomic, assign) CGFloat BOLL_UP; //!< 上轨线
 
-// MB - k * MD    下轨线
-@property (nonatomic, assign) CGFloat BOLL_DN;
+// MB - k * MD
+@property (nonatomic, assign) CGFloat BOLL_DN; //!< 下轨线
 
 //  n 个 ( Cn - MA20)的平方和
 @property (nonatomic, assign) CGFloat BOLL_SUBMD_SUM;

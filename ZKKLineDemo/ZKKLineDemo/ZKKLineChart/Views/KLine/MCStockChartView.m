@@ -82,6 +82,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 @property (nonatomic, strong) MCStockTitleView *KLineTitleView;
 @property (nonatomic, strong) MCStockSegmentView *segmentView;
 @property (nonatomic, assign) CGFloat bottomSegmentViewHeight;
+@property (nonatomic, assign) MCStockMainChartType mainChartType;
 
 @end
 
@@ -176,6 +177,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     self.KLineTitleView.hidden = true;
     
     _bottomSegmentViewHeight = MCStockSegmentViewHeight;
+    _mainChartType = MCStockMainChartTypeMA;
 }
 
 /**
@@ -248,9 +250,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     // 设置
     [self drawSetting];
     
-    [self resetMaxAndMin];
-    
-    [self setNeedsDisplay];
+    [self update];
 }
 
 - (void)drawSetting {
@@ -340,9 +340,8 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     else {
         self.startDrawIndex = self.startDrawIndex + offsetIndex + self.kLineDrawNum >= self.dataSource.count ? self.dataSource.count - self.kLineDrawNum : self.startDrawIndex + offsetIndex;
     }
-    [self resetMaxAndMin];
     [panGesture setTranslation:CGPointZero inView:self];
-    [self setNeedsDisplay];
+    [self update];
 }
 
 - (void)pinchEvent:(UIPinchGestureRecognizer *)pinchEvent {
@@ -375,8 +374,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
             if (_startDrawIndex < 0) {
                 _startDrawIndex = 0;
             }
-            [self resetMaxAndMin];
-            [self setNeedsDisplay];
+            [self update];
         }
     }
     
@@ -669,10 +667,9 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
  *  均线图
  */
 - (void)drawMALine {
-    if (!self.showAvgLine) {
+    if (!self.showAvgLine || _MAValues.count > _MAColors.count) {
         return;
     }
-    NSAssert(self.MAColors.count == self.MAValues.count, @"绘制均线个数与均线绘制颜色个数不一致！");
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, self.movingAvgLineWidth);
@@ -702,20 +699,34 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         MCKLineModel *item = drawArrays[i];
         
         CGFloat MAValue = 0;
-        if (maLength == 7) {
-            MAValue = item.MA7;
+        if (_mainChartType == MCStockMainChartTypeMA) {
+            if (index == 0) {
+                MAValue = item.MA7;
+            }
+            else if (index == 1) {
+                MAValue = item.MA12;
+            }
+            else if (index == 2) {
+                MAValue = item.MA26;
+            }
+            else if (index == 3) {
+                MAValue = item.MA30;
+            }
         }
-        else if (maLength == 12) {
-            MAValue = item.MA12;
+        else if (_mainChartType == MCStockMainChartTypeBOLL) {
+            if (index == 0) {
+                MAValue = item.BOLL_MB;
+            }
+            else if (index == 1) {
+                MAValue = item.BOLL_UP;
+            }
+            else if (index == 2) {
+                MAValue = item.BOLL_DN;
+            }
         }
-        else if (maLength == 26) {
-            MAValue = item.MA26;
-        }
-        else if (maLength == 30) {
-            MAValue = item.MA30;
-        }
+        
         // 不足均线个数，则不需要获取该段均线数据(例如: 均5，个数小于5个，则不需要绘制前四均线，...)
-        if ([self.dataSource indexOfObject:item] < maLength - 1) {
+        if ([self.dataSource indexOfObject:item] < maLength - 1 || !MAValue) {
             xAxisValue += self.kLineWidth + self.kLinePadding;
             continue;
         }
@@ -787,6 +798,18 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         MCKLineModel *model = drawContext[i];
         self.highestPriceOfAll = MAX(model.highestPrice, self.highestPriceOfAll);
         self.lowestPriceOfAll = MIN(model.lowestPrice, self.lowestPriceOfAll);
+    }
+    // 如果是BOLL，要重置最大最小值
+    if (_mainChartType == MCStockMainChartTypeBOLL) {
+        for (int i = 0; i < drawContext.count; i++) {
+            MCKLineModel *model = drawContext[i];
+            if (model.BOLL_UP) {
+                self.highestPriceOfAll = MAX(model.BOLL_UP, self.highestPriceOfAll);
+            }
+            if (model.BOLL_DN) {
+                self.lowestPriceOfAll = MIN(model.BOLL_DN, self.lowestPriceOfAll);
+            }
+        }
     }
 }
 
@@ -1010,6 +1033,16 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     [self drawChartWithDataSource:_dataSource];
 }
 
+- (void)setMainChartType:(MCStockMainChartType)mainChartType {
+    _mainChartType = mainChartType;
+    _MAValues = @[ @20, @20, @20 ];
+}
+
+- (void)update {
+    [self resetMaxAndMin];
+    [self setNeedsDisplay];
+}
+
 #pragma mark - <MCStockSegmentViewDelegate>
 
 - (void)stockSegmentView:(MCStockSegmentView *)segmentView didSelectModel:(MCStockSegmentSelectedModel *)model {
@@ -1019,13 +1052,16 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     if (model.subType == MCStockSegmentViewSubTypeMain) {
         if (model.mainChartType == MCStockMainChartTypeMA) {
             DLog(@"点击主图 == MCStockMainChartTypeMA");
+            self.mainChartType = MCStockMainChartTypeMA;
         }
         else if (model.mainChartType == MCStockMainChartTypeBOLL) {
             DLog(@"点击主图 == MCStockMainChartTypeBOLL");
+            self.mainChartType = MCStockMainChartTypeBOLL;
         }
         else if (model.mainChartType == MCStockMainChartTypeClose) {
             DLog(@"点击主图 == 关闭");
         }
+        [self update];
     }
     else if (model.subType == MCStockSegmentViewSubTypeAccessory) {
         if (model.accessoryChartType == MCStockAccessoryChartTypeMACD) {

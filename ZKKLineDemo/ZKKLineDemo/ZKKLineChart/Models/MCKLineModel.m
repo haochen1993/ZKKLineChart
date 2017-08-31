@@ -264,6 +264,7 @@
     if (!_BOLL_MD) {
         NSInteger index = [self.parentGroupModel.models indexOfObject:self];
         if (index >= 20) {
+//            _BOLL_MD = sqrt(pow((self.closingPrice - self.BOLL_MB), 2) / 20);
             _BOLL_MD = sqrt((self.previousKlineModel.BOLL_SUBMD_SUM - self.parentGroupModel.models[index - 20].BOLL_SUBMD_SUM)/ 20);
         }
     }
@@ -289,7 +290,7 @@
             _BOLL_DN = self.BOLL_MB - 2 * self.BOLL_MD;
         }
     }
-    // NSLog(@"lazy:\n_BOLL_DN:%@ -- BOLL_MD:%@",_BOLL_DN,_BOLL_MD);
+//     NSLog(@"lazy:\n_BOLL_DN:%f -- BOLL_MD:%f",_BOLL_DN,_BOLL_MD);
     return _BOLL_DN;
 }
 
