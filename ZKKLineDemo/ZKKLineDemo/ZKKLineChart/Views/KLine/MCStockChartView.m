@@ -85,6 +85,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 @property (nonatomic, assign) CGFloat bottomSegmentViewHeight;
 @property (nonatomic, assign) MCStockMainChartType mainChartType;
 @property (nonatomic, strong) MCStockHeaderView *headerView;
+@property (nonatomic, strong) UIButton *rotateBtn;
 
 @end
 
@@ -124,7 +125,8 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     
     [_headerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(SCREEN_WIDTH, MCStockHeaderViewHeight));
-        make.left.top.mas_equalTo(0);
+        make.top.mas_equalTo(_navBarHeight);
+        make.left.mas_equalTo(0);
     }];
 }
 
@@ -183,7 +185,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     
     self.xAxisMapper = [NSMutableDictionary dictionary];
     
-    self.topMargin = MCStockHeaderViewHeight;
+    self.topMargin = MCStockHeaderViewHeight + _navBarHeight;
     self.rightMargin = 2.f;
     self.leftMargin = 5.f;
     self.KLineTitleView.hidden = true;
@@ -526,6 +528,9 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         }
         else if (i > 0 && i < cutNum) {
             diffHeight = size.height/2.0;
+        }
+        if ([self landscapeMode] && !i) {
+            continue;
         }
         [attString drawInRect:CGRectMake(SelfWidth - self.rightMargin + 2.f,
                                          self.yAxisHeight / cutNum * i + self.topMargin - diffHeight,
@@ -976,6 +981,18 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     return _longGesture;
 }
 
+- (UIButton *)rotateBtn {
+    if (!_rotateBtn) {
+        _rotateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self addSubview:_rotateBtn];
+        [_rotateBtn setImage:[UIImage imageNamed:@"full_rotate"] forState:UIControlStateNormal];
+        [_rotateBtn addTarget:self action:@selector(rotateBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    }
+    CGFloat btnWidth = self.rightMargin;
+    _rotateBtn.frame = CGRectMake(SelfWidth-btnWidth, 0, btnWidth, btnWidth);
+    return _rotateBtn;
+}
+
 #pragma mark - setters 
 
 - (void)setDataSource:(NSArray<MCKLineModel *> *)chartValues {
@@ -1024,27 +1041,35 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     CGFloat angle = 0;
     CGRect bounds = CGRectZero;
     CGPoint center = CGPointZero;
+    CGFloat navTop = 0;
     
     if (landscapeMode) {
         angle = M_PI_2;
-        bounds = CGRectMake(0, 0, CGRectGetHeight(self.superview.bounds) - 64.f, CGRectGetWidth(self.superview.bounds));
-        center = CGPointMake(CGRectGetMidX(self.superview.bounds), CGRectGetMidY(self.superview.bounds) + 32.f);
+        bounds = CGRectMake(0, 0, CGRectGetHeight(self.superview.bounds), CGRectGetWidth(self.superview.bounds));
+        center = CGPointMake(CGRectGetMidX(self.superview.bounds), CGRectGetMidY(self.superview.bounds));
         _bottomSegmentViewHeight = 2;
         self.topMargin = 8.f;
         [_headerView hide];
+        navTop = -_navBarHeight;
+        [[UIApplication sharedApplication] setStatusBarHidden:true withAnimation:UIStatusBarAnimationSlide];
     }
     else {
         angle = 0;
-        bounds = CGRectMake(0, 0, CGRectGetWidth(self.superview.bounds), CGRectGetHeight(self.superview.bounds) - 64.f);
-        center = CGPointMake(CGRectGetMidX(self.superview.bounds), CGRectGetMidY(self.superview.bounds) + 32.f);
+        bounds = CGRectMake(0, 0, CGRectGetWidth(self.superview.bounds), CGRectGetHeight(self.superview.bounds));
+        center = CGPointMake(CGRectGetMidX(self.superview.bounds), CGRectGetMidY(self.superview.bounds));
         _bottomSegmentViewHeight = MCStockSegmentViewHeight;
-        self.topMargin = MCStockHeaderViewHeight;
+        self.topMargin = MCStockHeaderViewHeight + _navBarHeight;
         [_headerView show];
+        navTop = 20;
+        [[UIApplication sharedApplication] setStatusBarHidden:false withAnimation:UIStatusBarAnimationSlide];
     }
+    
     [UIView animateWithDuration:.35 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.transform = CGAffineTransformMakeRotation(angle);
         self.bounds = bounds;
         self.center = center;
+        self.viewController.navigationController.navigationBar.us_top = navTop;
+        [self rotateBtn];
     } completion:nil];
     [self drawChartWithDataSource:_dataSource];
 }
@@ -1057,6 +1082,10 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 - (void)update {
     [self resetMaxAndMin];
     [self setNeedsDisplay];
+}
+
+- (void)rotateBtnClick {
+    self.landscapeMode = false;
 }
 
 #pragma mark - <MCStockSegmentViewDelegate>

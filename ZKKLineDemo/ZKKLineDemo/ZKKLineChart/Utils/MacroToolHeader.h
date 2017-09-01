@@ -45,6 +45,7 @@
 
 #endif
 
+#define _navBarHeight     64.f
 
 
 #define IS_IPAD              (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)

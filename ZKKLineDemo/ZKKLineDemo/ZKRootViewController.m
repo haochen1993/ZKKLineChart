@@ -48,22 +48,11 @@
 }
 
 - (void)rotateScreen:(UIBarButtonItem *)item {
-    if (item.tag == 0) {
-        _kLineChartView.landscapeMode = true;
-        item.tag = 1;
-        
-        [UIView animateWithDuration:.3 animations:^{
-            self.navigationController.navigationBar.us_top = -64.f;
-        }];
-    }
-    else {
-        _kLineChartView.landscapeMode = false;
-        item.tag = 0;
-    }
+    _kLineChartView.landscapeMode = true;
 }
 
 - (void)setupKLineView {
-    _kLineChartView = [[MCStockChartView alloc] initWithFrame:CGRectMake(0, 64, self.view.us_width, self.view.us_height - 64)];
+    _kLineChartView = [[MCStockChartView alloc] initWithFrame:CGRectMake(0, 0, self.view.us_width, self.view.us_height)];
     [self.view addSubview:self.kLineChartView];
     _kLineChartView.autoFit = true;
     _kLineChartView.delegate = self;

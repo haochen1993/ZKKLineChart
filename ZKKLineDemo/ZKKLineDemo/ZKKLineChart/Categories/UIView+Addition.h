@@ -48,9 +48,12 @@
 
 - (UIView*)ancestorOrSelfWithClass:(Class)cls;
 
+- (UIViewController *)viewController;
+
 - (void)removeAllSubviews;
 
 - (CGPoint)offsetFromView:(UIView*)otherView;
 
 - (void)setBorderColor:(UIColor *)borderColor width:(CGFloat)borderWidth cornerRadius:(CGFloat)cornerRadius;
+
 @end
