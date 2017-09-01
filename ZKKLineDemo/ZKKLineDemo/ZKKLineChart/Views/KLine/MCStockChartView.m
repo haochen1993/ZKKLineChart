@@ -180,8 +180,8 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     self.xAxisMapper = [NSMutableDictionary dictionary];
     
     self.topMargin = MCStockHeaderViewHeight;
-    self.rightMargin = 2.0;
-    self.leftMargin = 25.0f;
+    self.rightMargin = 2.f;
+    self.leftMargin = 5.f;
     self.KLineTitleView.hidden = true;
     
     _bottomSegmentViewHeight = MCStockSegmentViewHeight;
@@ -263,22 +263,14 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 }
 
 - (void)drawSetting {
-    NSDictionary *attributes = @{ NSFontAttributeName:self.yAxisTitleFont,
-                                  NSForegroundColorAttributeName:self.yAxisTitleColor };
     NSString *priceTitle = [NSString stringWithFormat:@"%.2f", self.highestItem.highestPrice];
-    
-    NSAttributedString *attString =
-    [[NSAttributedString alloc] initWithString:priceTitle
-                                    attributes:attributes];
-    CGSize size = [attString boundingRectWithSize:CGSizeMake(MAXFLOAT, self.yAxisTitleFont.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
-    self.leftMargin = size.width + 4.0f;
+    CGSize size = [priceTitle stringSizeWithFont:self.yAxisTitleFont];
+    self.rightMargin = size.width + 4.f;
     [self resetDrawNumAndIndex];
 }
 
 - (void)resetDrawNumAndIndex {
-    //更具宽度和间距确定要画多少个k线柱形图
     self.kLineDrawNum = floor(((SelfWidth - self.leftMargin - self.rightMargin - _kLinePadding) / (self.kLineWidth + self.kLinePadding)));
-    //确定从第几个开始画
     self.startDrawIndex = self.dataSource.count > 0 ? self.dataSource.count - self.kLineDrawNum : 0;
 }
 
@@ -522,7 +514,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     for (int i = 0; i < cutNum+1; i ++) {
         CGFloat yAxisValue = (i == cutNum) ? lowest : (highetst - avgValue * i);
         NSAttributedString *attString = [MCStockChartUtil attributeText:[MCStockChartUtil decimalValue:yAxisValue] textColor:self.yAxisTitleColor font:self.yAxisTitleFont];
-        CGSize size = [attString boundingRectWithSize:CGSizeMake(self.leftMargin, self.yAxisTitleFont.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+        CGSize size = [attString.string stringSizeWithFont:self.yAxisTitleFont];
         
         CGFloat diffHeight = 0;
         if (i == cutNum) {
@@ -531,7 +523,10 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         else if (i > 0 && i < cutNum) {
             diffHeight = size.height/2.0;
         }
-        [attString drawInRect:CGRectMake(self.leftMargin - size.width - 2.0f, self.yAxisHeight / cutNum * i + self.topMargin - diffHeight, size.width, size.height)];
+        [attString drawInRect:CGRectMake(SelfWidth - self.rightMargin + 2.f,
+                                         self.yAxisHeight / cutNum * i + self.topMargin - diffHeight,
+                                         size.width,
+                                         size.height)];
     }
 }
 
@@ -779,6 +774,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     self.volView.linePadding = self.kLinePadding;
     self.volView.boxOriginX = self.leftMargin;
     self.volView.startDrawIndex = self.startDrawIndex;
+    self.volView.boxRightMargin = self.rightMargin;
     self.volView.numberOfDrawCount = self.kLineDrawNum;
     self.volView.autoFit = _autoFit;
     [self.volView update];
@@ -787,6 +783,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     self.accessoryView.kLineWidth = self.kLineWidth;
     self.accessoryView.linePadding = self.kLinePadding;
     self.accessoryView.boxOriginX = self.leftMargin;
+    self.accessoryView.boxRightMargin = self.rightMargin;
     self.accessoryView.startDrawIndex = self.startDrawIndex;
     self.accessoryView.numberOfDrawCount = self.kLineDrawNum;
     self.accessoryView.autoFit = _autoFit;

@@ -311,17 +311,19 @@ static const CGFloat kVerticalMargin = 12.f;
     CGRect strokeRect = CGRectMake(self.boxOriginX, self.axisShadowWidth/2.0, rect.size.width - self.boxOriginX - self.boxRightMargin, rect.size.height);
     CGContextStrokeRect(context, strokeRect);
     
-    [self drawDashLineInContext:context movePoint:CGPointMake(self.boxOriginX + 1.25, rect.size.height/2.0)
-                        toPoint:CGPointMake(rect.size.width  - self.boxRightMargin - 0.8, rect.size.height/2.0)];
+    [self drawDashLineInContext:context movePoint:CGPointMake(self.boxOriginX + 1.25,
+                                                              rect.size.height/2.0)
+                        toPoint:CGPointMake(rect.size.width  - self.boxRightMargin - 0.8,
+                                            rect.size.height/2.0)];
     
     //这必须把dash给初始化一次，不然会影响其他线条的绘制
     CGContextSetLineDash(context, 0, 0, 0);
     
     for (int i = 0; i < yAxisTitles.count; i ++) {
         NSAttributedString *attString = [MCStockChartUtil attributeText:yAxisTitles[i] textColor:self.yAxisTitleColor font:self.yAxisTitleFont];
-        CGSize size = [MCStockChartUtil attributeString:attString boundingRectWithSize:CGSizeMake(self.boxOriginX, self.yAxisTitleFont.lineHeight)];
+        CGSize size = [attString.string stringSizeWithFont:self.yAxisTitleFont];
         
-        [attString drawInRect:CGRectMake(self.boxOriginX - size.width - 2.0f,
+        [attString drawInRect:CGRectMake(rect.size.width - self.boxRightMargin + 2.f,
                                          strokeRect.origin.y + i*strokeRect.size.height/2.0 - size.height/2.0*i - (i==0?2 : 0),
                                          size.width,
                                          size.height)];
