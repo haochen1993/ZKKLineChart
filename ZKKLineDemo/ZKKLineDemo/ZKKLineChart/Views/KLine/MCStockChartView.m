@@ -456,11 +456,11 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     self.priceLabel.hidden = NO;
     self.priceLabel.text = item.openingPrice > item.closingPrice ? [MCStockChartUtil decimalValue:item.openingPrice] : [MCStockChartUtil decimalValue:item.closingPrice];
     
-    CGFloat priceLabelHeight = kTimeAxisHeight * .6;
+    CGFloat priceLabelHeight = [_priceLabel.text stringHeightWithFont:_priceLabel.font width:MAXFLOAT];
     CGFloat priceLabelY = point.y - priceLabelHeight / 2;
-    self.priceLabel.frame = CGRectMake(0.5,
+    self.priceLabel.frame = CGRectMake(SelfWidth-self.rightMargin,
                                        priceLabelY,
-                                       self.leftMargin - self.separatorWidth,
+                                       _rightMargin - self.separatorWidth,
                                        priceLabelHeight);
     [self bringSubviewToFront:self.priceLabel];
     
