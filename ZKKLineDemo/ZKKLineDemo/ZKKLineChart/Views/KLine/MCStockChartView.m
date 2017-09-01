@@ -17,6 +17,7 @@
 #import "NSString+Common.h"
 #import "MCStockChartUtil.h"
 #import "MCStockSegmentView.h"
+#import "MCStockHeaderView.h"
 
 #define MaxYAxis       (self.topMargin + self.yAxisHeight)
 #define MaxBoundSize   (MAX(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)))
@@ -83,6 +84,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 @property (nonatomic, strong) MCStockSegmentView *segmentView;
 @property (nonatomic, assign) CGFloat bottomSegmentViewHeight;
 @property (nonatomic, assign) MCStockMainChartType mainChartType;
+@property (nonatomic, strong) MCStockHeaderView *headerView;
 
 @end
 
@@ -111,9 +113,16 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     //添加手势
     [self addGestures];
     [self registerObserver];
+    [self setupHeader];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self setupBottomSegmentView];
     });
+}
+
+- (void)setupHeader {
+    _headerView = [MCStockHeaderView stockHeaderView];
+    [self addSubview:_headerView];
+    _headerView.frame = (CGRect){CGPointZero, SCREEN_WIDTH, MCStockHeaderViewHeight};
 }
 
 - (void)setupBottomSegmentView {
@@ -171,7 +180,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     
     self.xAxisMapper = [NSMutableDictionary dictionary];
     
-    self.topMargin = 20.0f;
+    self.topMargin = MCStockHeaderViewHeight;
     self.rightMargin = 2.0;
     self.leftMargin = 25.0f;
     self.KLineTitleView.hidden = true;
