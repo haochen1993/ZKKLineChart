@@ -23,8 +23,9 @@
 @interface MCStockHeaderView : UIView
 
 + (instancetype)stockHeaderView;
-
 - (void)updateWithHeaderModel:(MCStockHeaderViewModel *)model;
+- (void)hide;
+- (void)show;
 
 @end
 

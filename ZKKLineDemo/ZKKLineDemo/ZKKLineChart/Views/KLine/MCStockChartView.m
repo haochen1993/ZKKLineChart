@@ -121,7 +121,11 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 - (void)setupHeader {
     _headerView = [MCStockHeaderView stockHeaderView];
     [self addSubview:_headerView];
-    _headerView.frame = (CGRect){CGPointZero, SCREEN_WIDTH, MCStockHeaderViewHeight};
+    
+    [_headerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(SCREEN_WIDTH, MCStockHeaderViewHeight));
+        make.left.top.mas_equalTo(0);
+    }];
 }
 
 - (void)setupBottomSegmentView {
@@ -1026,13 +1030,16 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         bounds = CGRectMake(0, 0, CGRectGetHeight(self.superview.bounds) - 64.f, CGRectGetWidth(self.superview.bounds));
         center = CGPointMake(CGRectGetMidX(self.superview.bounds), CGRectGetMidY(self.superview.bounds) + 32.f);
         _bottomSegmentViewHeight = 2;
-        
+        self.topMargin = 8.f;
+        [_headerView hide];
     }
     else {
         angle = 0;
         bounds = CGRectMake(0, 0, CGRectGetWidth(self.superview.bounds), CGRectGetHeight(self.superview.bounds) - 64.f);
         center = CGPointMake(CGRectGetMidX(self.superview.bounds), CGRectGetMidY(self.superview.bounds) + 32.f);
         _bottomSegmentViewHeight = MCStockSegmentViewHeight;
+        self.topMargin = MCStockHeaderViewHeight;
+        [_headerView show];
     }
     [UIView animateWithDuration:.35 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.transform = CGAffineTransformMakeRotation(angle);

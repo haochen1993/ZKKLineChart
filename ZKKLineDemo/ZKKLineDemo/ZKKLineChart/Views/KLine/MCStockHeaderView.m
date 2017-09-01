@@ -44,6 +44,18 @@ const CGFloat MCStockHeaderViewHeight = 60.f;
     
 }
 
+- (void)hide {
+    [UIView animateWithDuration:.12 animations:^{
+        self.alpha = 0;
+    }];
+}
+
+- (void)show {
+    [UIView animateWithDuration:.12 animations:^{
+        self.alpha = 1.f;
+    }];
+}
+
 @end
 
 
