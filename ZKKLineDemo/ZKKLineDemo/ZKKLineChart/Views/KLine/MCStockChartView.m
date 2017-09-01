@@ -108,7 +108,6 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 
 - (void)setup {
     self.backgroundColor = GlobalBGColor_Dark;
-    
     [self initDate];
     //添加手势
     [self addGestures];

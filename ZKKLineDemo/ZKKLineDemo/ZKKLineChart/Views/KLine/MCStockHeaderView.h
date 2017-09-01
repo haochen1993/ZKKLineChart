@@ -8,9 +8,23 @@
 
 #import <UIKit/UIKit.h>
 
+@interface MCStockHeaderViewModel : NSObject
+
+@property (nonatomic, assign) CGFloat currentPrice;
+@property (nonatomic, assign) CGFloat rate;
+@property (nonatomic, assign) CGFloat low;
+@property (nonatomic, assign) CGFloat high;
+@property (nonatomic, assign) CGFloat vol;
+
+@end
+
+// -------
+
 @interface MCStockHeaderView : UIView
 
 + (instancetype)stockHeaderView;
+
+- (void)updateWithHeaderModel:(MCStockHeaderViewModel *)model;
 
 @end
 
