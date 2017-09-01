@@ -213,9 +213,10 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     [self hideTipsWithAnimated:NO];
     [self removeCrossLine];
     
-    if (!self.dataSource || self.dataSource.count == 0) {
+    if (!self.dataSource.count) {
         return;
     }
+    
     self.xAxisWidth = rect.size.width - self.rightMargin - self.leftMargin;
     
     CGFloat accessoryViewTotalHeight = rect.size.height * kBarChartHeightRatio * 2;
@@ -620,7 +621,8 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         CGPoint highPoint = CGPointMake(xAxis + _kLineWidth/2.0 + self.leftMargin, highYAxis);
         CGPoint lowPoint = CGPointMake(xAxis + _kLineWidth/2.0 + self.leftMargin, lowYAxis);
         CGContextSetStrokeColorWithColor(context, fillColor.CGColor);
-        CGContextSetLineWidth(context, 1.f);
+        CGFloat shadowLineWidth = MAX(.7, MIN(4, _kLineWidth / 4));
+        CGContextSetLineWidth(context, shadowLineWidth);
         CGContextBeginPath(context);
         CGContextMoveToPoint(context, highPoint.x, highPoint.y);  //起点坐标
         CGContextAddLineToPoint(context, lowPoint.x, lowPoint.y);   //终点坐标
@@ -788,9 +790,11 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     self.lowestPriceOfAll = MAXFLOAT;
     NSInteger totalCount = [self.dataSource count];
     
-    NSRange subRange = NSMakeRange(self.startDrawIndex, MIN(self.kLineDrawNum, self.dataSource.count));
+    self.kLineDrawNum = MIN(self.kLineDrawNum, self.dataSource.count);
+    NSRange subRange = NSMakeRange(self.startDrawIndex, _kLineDrawNum);
     if (NSMaxRange(subRange) > totalCount) {
-        subRange = NSMakeRange(totalCount - self.kLineDrawNum, totalCount);
+        subRange = NSMakeRange(totalCount - self.kLineDrawNum, self.kLineDrawNum);
+        self.startDrawIndex = totalCount - self.kLineDrawNum;
     }
     NSArray *subChartValues = [self.dataSource subarrayWithRange:subRange];
     NSArray *drawContext = self.autoFit ? subChartValues : self.dataSource;
