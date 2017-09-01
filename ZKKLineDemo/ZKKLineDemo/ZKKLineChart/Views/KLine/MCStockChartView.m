@@ -134,6 +134,8 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     _segmentView = [MCStockSegmentView segmentView];
     [self addSubview:_segmentView];
     _segmentView.delegate = self;
+    
+    _segmentView.frame = CGRectMake(0, SelfHeight-MCStockSegmentTotalHeight, SelfWidth, MCStockSegmentTotalHeight);
 }
 
 - (void)initDate {
@@ -190,7 +192,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     self.leftMargin = 5.f;
     self.KLineTitleView.hidden = true;
     
-    _bottomSegmentViewHeight = MCStockSegmentViewHeight;
+    _bottomSegmentViewHeight = MCStockSegmentCellHeight;
     _mainChartType = MCStockMainChartTypeMA;
 }
 
@@ -412,7 +414,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 
 - (void)showTipBoardWithTouchPoint:(CGPoint)touchPoint isInMainView:(BOOL)inMainView {
     // 防止tap事件与segmentView的collectionView的点击冲突导致
-    if (touchPoint.y > SelfHeight - MCStockSegmentViewHeight) {
+    if (touchPoint.y > SelfHeight - MCStockSegmentCellHeight) {
         return;
     }
     
@@ -1047,7 +1049,6 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         angle = M_PI_2;
         bounds = CGRectMake(0, 0, CGRectGetHeight(self.superview.bounds), CGRectGetWidth(self.superview.bounds));
         center = CGPointMake(CGRectGetMidX(self.superview.bounds), CGRectGetMidY(self.superview.bounds));
-        _bottomSegmentViewHeight = 2;
         self.topMargin = 8.f;
         [_headerView hide];
         navTop = -_navBarHeight;
@@ -1057,7 +1058,6 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         angle = 0;
         bounds = CGRectMake(0, 0, CGRectGetWidth(self.superview.bounds), CGRectGetHeight(self.superview.bounds));
         center = CGPointMake(CGRectGetMidX(self.superview.bounds), CGRectGetMidY(self.superview.bounds));
-        _bottomSegmentViewHeight = MCStockSegmentViewHeight;
         self.topMargin = MCStockHeaderViewHeight + _navBarHeight;
         [_headerView show];
         navTop = 20;
@@ -1070,6 +1070,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         self.center = center;
         self.viewController.navigationController.navigationBar.us_top = navTop;
         [self rotateBtn];
+        _segmentView.frame = CGRectMake(0, SelfHeight-MCStockSegmentTotalHeight, SelfWidth, MCStockSegmentTotalHeight);
     } completion:nil];
     [self drawChartWithDataSource:_dataSource];
 }

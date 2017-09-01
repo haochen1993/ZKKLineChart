@@ -9,6 +9,7 @@
 #import "MCStockSegmentView.h"
 #import "UIView+Addition.h"
 #import "MacroToolHeader.h"
+#import <Masonry.h>
 
 #define TitleColor_Nor  HexColor(0x434b56)
 #define TitleColor_HL   HexColor(0x2187c9)
@@ -52,7 +53,7 @@ static NSString *cellID = @"MCStockSegmentViewCell";
 
 // ---------
 
-@interface MCStockSegmentView () <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface MCStockSegmentView () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UIButton *targetBtn;
@@ -61,12 +62,14 @@ static NSString *cellID = @"MCStockSegmentViewCell";
 @property (nonatomic, strong) MCStockSegmentSelectedModel *selectedModel;
 @property (nonatomic, strong) UIButton *selectedMainChartBtn;
 @property (nonatomic, strong) UIButton *selectedAccessoryChartBtn;
+@property (nonatomic, strong) MASConstraint *popupPanelTop;
 
 @end
 
 static const CGFloat kTargetBtnWidth = 60.f;
 static const CGFloat kPopupViewHeight = 150.f;
-const CGFloat MCStockSegmentViewHeight = 35.f;
+const CGFloat MCStockSegmentCellHeight = 35.f;
+const CGFloat MCStockSegmentTotalHeight = 200.f;
 
 @implementation MCStockSegmentView
 
@@ -90,13 +93,11 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.us_size = CGSizeMake(SCREEN_WIDTH, 200);
-    self.us_bottom = self.superview.us_height;
+    [_collectionView reloadData];
 }
 
 - (void)setup {
-    [self setNeedsLayout];
-    [self layoutIfNeeded];
+    self.us_width = SCREEN_WIDTH;
     
     _selectedModel = [MCStockSegmentSelectedModel new];
     _selectedModel.mainChartType = MCStockMainChartTypeMA;
@@ -114,23 +115,35 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     _popupPanel = [UIView new];
     _popupPanel.backgroundColor = BGColor;
     [self insertSubview:_popupPanel atIndex:0];
-    _popupPanel.us_size = CGSizeMake(SCREEN_WIDTH, kPopupViewHeight);
-    _popupPanel.us_top = self.us_height;
+    
+    [_popupPanel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.mas_equalTo(0);
+        make.height.mas_equalTo(kPopupViewHeight);
+        _popupPanelTop = make.top.mas_equalTo(MCStockSegmentTotalHeight);
+    }];
     
     CGFloat btnWidth = 60.f;
     
-    UIView *topView = [UIView new];
-    [_popupPanel addSubview:topView];
     UILabel *topTitleLabel = [self generateTitleLabel:@"主图"];
     [_popupPanel addSubview:topTitleLabel];
+    [topTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(100, 36));
+        make.top.mas_equalTo(6);
+        make.left.mas_equalTo(15);
+    }];
     
     NSArray *topBtnTitles = @[ @"MA", @"BOLL", @"关闭" ];
     for (int i = 0; i < topBtnTitles.count; i ++) {
         UIButton *btn = [self generateBtn:topBtnTitles[i]];
-        btn.us_top = CGRectGetMaxY(topTitleLabel.frame);
-        btn.us_left = i * btnWidth;
         [btn addTarget:self action:@selector(mainChartBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [_popupPanel addSubview:btn];
+        
+        [btn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(btnWidth, 35));
+            make.left.mas_equalTo(i * btnWidth);
+            make.top.mas_equalTo(topTitleLabel.mas_bottom);
+        }];
+        
         if (i == 0) {
             [self mainChartBtnClick:btn];
         }
@@ -138,23 +151,33 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     
     UIView *line = [UIView new];
     [_popupPanel addSubview:line];
-    line.us_top = _popupPanel.us_size.height * .5;
-    line.us_size = CGSizeMake(SCREEN_WIDTH, .5f);
+    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.mas_equalTo(0);
+        make.centerY.mas_equalTo(kPopupViewHeight * .5);
+        make.height.mas_equalTo(.5);
+    }];
     line.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:.4];
     
-    UIView *bottomView = [UIView new];
-    [_popupPanel addSubview:bottomView];
     UILabel *bottomTitleLabel = [self generateTitleLabel:@"副图"];
     [_popupPanel addSubview:bottomTitleLabel];
-    bottomTitleLabel.us_top = _popupPanel.us_size.height * .5;
+    [bottomTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(kPopupViewHeight * .5);
+        make.size.mas_equalTo(CGSizeMake(100, 36));
+        make.left.mas_equalTo(15);
+    }];
     
     NSArray *bottomBtnTitles = @[ @"MACD", @"KDJ", @"RSI", @"WR", @"关闭" ];
     for (int i = 0; i < bottomBtnTitles.count; i ++) {
         UIButton *btn = [self generateBtn:bottomBtnTitles[i]];
-        btn.us_top = CGRectGetMaxY(bottomTitleLabel.frame);
-        btn.us_left = i * btnWidth;
         [btn addTarget:self action:@selector(accessoryChartBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [_popupPanel addSubview:btn];
+        
+        [btn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(btnWidth, 35));
+            make.left.mas_equalTo(i * btnWidth);
+            make.top.mas_equalTo(bottomTitleLabel.mas_bottom);
+        }];
+        
         if (i == 0) {
             [self accessoryChartBtnClick:btn];
         }
@@ -166,7 +189,6 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     [btn setTitle:title forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:12];
-    btn.us_size = CGSizeMake(60, 35);
     [btn setTitleColor:TitleColor_HL forState:UIControlStateSelected];
     return btn;
 }
@@ -176,8 +198,6 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     label.text = title;
     label.font = [UIFont systemFontOfSize:12];
     label.textColor = [UIColor whiteColor];
-    label.us_size = CGSizeMake(100, 36);
-    label.us_left = 15.f;
     return label;
 }
 
@@ -187,10 +207,13 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     _targetBtn.backgroundColor = GlobalBGColor_Dark;
     [_targetBtn setTitle:@"指标" forState:UIControlStateNormal];
     _targetBtn.titleLabel.font = [UIFont systemFontOfSize:12];
-    _targetBtn.us_size = CGSizeMake(kTargetBtnWidth, MCStockSegmentViewHeight);
-    _targetBtn.us_bottom = self.us_height;
     
     [_targetBtn addTarget:self action:@selector(targetBtnClcik) forControlEvents:UIControlEventTouchUpInside];
+    [_targetBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kTargetBtnWidth, MCStockSegmentCellHeight));
+        make.left.mas_equalTo(0);
+        make.bottom.mas_equalTo(self.us_height);
+    }];
 }
 
 - (void)setupCollectionView {
@@ -198,16 +221,11 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     layout.minimumLineSpacing = 0;
     layout.minimumInteritemSpacing = 0;
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    CGFloat itemWidth = (SCREEN_WIDTH - kTargetBtnWidth) / _dataSource.count;
-    layout.itemSize = CGSizeMake(itemWidth, MCStockSegmentViewHeight);
     
     _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+    
     [self addSubview:_collectionView];
     _collectionView.backgroundColor = BGColor;
-    
-    _collectionView.us_size = CGSizeMake(SCREEN_WIDTH - kTargetBtnWidth, MCStockSegmentViewHeight);
-    _collectionView.us_left = kTargetBtnWidth;
-    _collectionView.us_bottom = self.us_height;
     
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
@@ -215,6 +233,12 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     _collectionView.showsHorizontalScrollIndicator = false;
     
     [_collectionView registerClass:[MCStockSegmentViewCell class] forCellWithReuseIdentifier:cellID];
+    [_collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(kTargetBtnWidth);
+        make.bottom.mas_equalTo(self.us_height);
+        make.right.mas_equalTo(0);
+        make.height.mas_equalTo(MCStockSegmentCellHeight);
+    }];
 }
 
 #pragma mark - Actions
@@ -224,14 +248,18 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     
     CGFloat topValue = 0;
     if (_isOpening) {
-        topValue = self.us_height - kPopupViewHeight - MCStockSegmentViewHeight;
+        topValue = MCStockSegmentTotalHeight - kPopupViewHeight - MCStockSegmentCellHeight;
     }
     else {
-        topValue = self.us_height;
+        topValue = MCStockSegmentTotalHeight;
     }
     
+    [_popupPanelTop uninstall];
+    [_popupPanel mas_updateConstraints:^(MASConstraintMaker *make) {
+        _popupPanelTop = make.top.mas_equalTo(topValue);
+    }];
     [UIView animateWithDuration:.2 delay:0 options:KeyboardAnimationCurve animations:^{
-        _popupPanel.us_top = topValue;
+        [self layoutIfNeeded];
     } completion:nil];
     
     if ([self.delegate respondsToSelector:@selector(stockSegmentView:showPopupView:)]) {
@@ -295,7 +323,7 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     [self targetBtnClcik];
 }
 
-#pragma mark - <UICollectionViewDelegate, UICollectionViewDataSource>
+#pragma mark - <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return [_dataSource count];
@@ -306,6 +334,14 @@ const CGFloat MCStockSegmentViewHeight = 35.f;
     [cell updateWithText:_dataSource[indexPath.item] selectedStyle:indexPath.item == _selectedModel.targetTimeType];
     
     return cell;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    CGSize size = CGSizeZero;
+    CGFloat itemWidth = (self.us_width - kTargetBtnWidth) / _dataSource.count;
+    size = CGSizeMake(itemWidth, MCStockSegmentCellHeight);
+    
+    return size;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {

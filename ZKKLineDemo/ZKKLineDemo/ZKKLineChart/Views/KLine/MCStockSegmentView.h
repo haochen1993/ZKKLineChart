@@ -29,4 +29,5 @@
 
 @end
 
-extern const CGFloat MCStockSegmentViewHeight;
+extern const CGFloat MCStockSegmentCellHeight;
+extern const CGFloat MCStockSegmentTotalHeight;
