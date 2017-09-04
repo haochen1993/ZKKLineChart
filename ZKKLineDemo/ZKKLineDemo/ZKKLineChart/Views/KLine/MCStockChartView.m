@@ -391,9 +391,10 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     self.KLineTitleView.hidden = false;
     [self.KLineTitleView updateWithHigh:item.highestPrice open:item.openingPrice close:item.closingPrice low:item.lowestPrice];
     [self getPricePerHeightUnit];
+    
     //时间，价额
     self.priceLabel.hidden = NO;
-    self.priceLabel.text = item.openingPrice > item.closingPrice ? [MCStockChartUtil decimalValue:item.openingPrice] : [MCStockChartUtil decimalValue:item.closingPrice];
+    self.priceLabel.text = [self finalPriceWithTouchPointY:point.y];
     
     CGFloat priceLabelHeight = [_priceLabel.text stringHeightWithFont:_priceLabel.font width:MAXFLOAT];
     CGFloat priceLabelY = point.y - priceLabelHeight / 2;
@@ -417,6 +418,15 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     }
     [self.volView showTitleView:item];
     [self.accessoryView showTitleView:item];
+}
+
+- (NSString *)finalPriceWithTouchPointY:(CGFloat)pointY {
+    CGFloat currentHeight = MaxYAxis - pointY;
+    CGFloat unit = [self getPricePerHeightUnit];
+    CGFloat oriPrice = unit * currentHeight;
+    CGFloat finalPrice = oriPrice + self.lowestPriceOfAll - kChartVerticalMargin * unit;
+    
+    return [MCStockChartUtil decimalValue:finalPrice];
 }
 
 - (void)hideTipsWithAnimated:(BOOL)animated {

@@ -113,7 +113,7 @@ const CGFloat MCStockSegmentTotalHeight = 200.f;
 
 - (void)setupPopupPanel {
     _popupPanel = [UIView new];
-    _popupPanel.backgroundColor = BGColor;
+    _popupPanel.backgroundColor = HexAlphaColor(0x20232b, .85);
     [self insertSubview:_popupPanel atIndex:0];
     
     [_popupPanel mas_makeConstraints:^(MASConstraintMaker *make) {
