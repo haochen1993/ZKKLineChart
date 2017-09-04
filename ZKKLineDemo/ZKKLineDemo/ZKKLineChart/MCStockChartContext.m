@@ -45,6 +45,8 @@
     _rightMargin = 2.f;
     _maxKLineWidth = 24;
     _minKLineWidth = 1.f;
+    _positiveLineColor = KLineColor_Green;
+    _negativeLineColor = KLineColor_Red;
 }
 
 - (void)setKLineWidth:(CGFloat)KLineWidth {

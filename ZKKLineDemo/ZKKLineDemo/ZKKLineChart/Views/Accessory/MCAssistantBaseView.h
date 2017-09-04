@@ -15,10 +15,6 @@
 
 @property (nonatomic, strong) MCStockTitleView *titleView;
 
-@property (nonatomic, strong) UIColor *positiveVolColor; //!< 交易量阳线颜色
-
-@property (nonatomic, strong) UIColor *negativeVolColor; //!< 交易量阴线颜色
-
 @property (nonatomic, assign) NSInteger startDrawIndex; //!< 取值位置
 
 @property (nonatomic, assign) NSInteger numberOfDrawCount; //!< 绘制个数

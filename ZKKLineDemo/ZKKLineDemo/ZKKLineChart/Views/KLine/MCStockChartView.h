@@ -22,10 +22,6 @@
 
 @property (nonatomic, assign) CGFloat topMargin; //!< 内容距离父试图顶部高度
 
-@property (nonatomic, strong) UIColor *positiveLineColor; //!< 阳线颜色(negative line)
-
-@property (nonatomic, strong) UIColor *negativeLineColor; //!< 阴线颜色
-
 @property (nonatomic, assign) BOOL zoomEnable; //!< 默认可以放大缩小
 
 @property (nonatomic, assign) BOOL showAvgLine; //!< 默认显示均线

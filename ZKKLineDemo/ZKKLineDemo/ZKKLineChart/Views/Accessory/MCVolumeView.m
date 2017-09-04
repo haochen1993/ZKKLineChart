@@ -147,8 +147,8 @@ static const CGFloat kVerticalMargin = 12.f;
 - (void)drawAxis {
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    CGContextSetLineWidth(context, axisShadowWidth);
-    CGContextSetStrokeColorWithColor(context, axisShadowColor.CGColor);
+    CGContextSetLineWidth(context, AxisLineWidth);
+    CGContextSetStrokeColorWithColor(context, AxisLineColor.CGColor);
     CGRect strokeRect = CGRectMake(_stockCtx.leftMargin, 0, self.bounds.size.width - _stockCtx.leftMargin - _stockCtx.rightMargin, self.bounds.size.height);
     CGContextStrokeRect(context, strokeRect);
 }
@@ -166,7 +166,7 @@ static const CGFloat kVerticalMargin = 12.f;
     
     CGFloat xAxis = _stockCtx.KLinePadding + _stockCtx.leftMargin;
     
-    CGFloat boxOriginY = axisShadowWidth;
+    CGFloat boxOriginY = AxisLineWidth;
     CGFloat boxHeight = rect.size.height - boxOriginY;
     CGFloat volumePerUnit = [self getVolumePerHeightUnit];
     
@@ -174,11 +174,11 @@ static const CGFloat kVerticalMargin = 12.f;
     for (MCKLineModel *item in contentValues) {
         CGFloat open = item.openingPrice;
         CGFloat close = item.closingPrice;
-        UIColor *fillColor = open > close ? self.positiveVolColor : self.negativeVolColor;
+        UIColor *fillColor = open > close ? _stockCtx.positiveLineColor : _stockCtx.negativeLineColor;
         CGContextSetFillColorWithColor(context, fillColor.CGColor);
         
         CGFloat height = item.volume/volumePerUnit ?: 1.f;
-        CGRect pathRect = CGRectMake(xAxis, boxOriginY + boxHeight - height, _stockCtx.KLineWidth, height - axisShadowWidth);
+        CGRect pathRect = CGRectMake(xAxis, boxOriginY + boxHeight - height, _stockCtx.KLineWidth, height - AxisLineWidth);
         CGContextAddRect(context, pathRect);
         CGContextFillPath(context);
         
@@ -187,7 +187,7 @@ static const CGFloat kVerticalMargin = 12.f;
 }
 
 - (CGFloat)getVolumePerHeightUnit {
-    return self.maxValue/(self.frame.size.height - axisShadowWidth - kVerticalMargin);
+    return self.maxValue/(self.frame.size.height - AxisLineWidth - kVerticalMargin);
 }
 
 - (void)showYAxisTitleWithTitles:(NSArray *)yAxis {
@@ -195,10 +195,10 @@ static const CGFloat kVerticalMargin = 12.f;
     
     CGRect rect = self.bounds;
     //交易量边框
-    CGContextSetLineWidth(context, axisShadowWidth);
-    CGContextSetStrokeColorWithColor(context, axisShadowColor.CGColor);
+    CGContextSetLineWidth(context, AxisLineWidth);
+    CGContextSetStrokeColorWithColor(context, AxisLineColor.CGColor);
     CGRect strokeRect = CGRectMake(_stockCtx.leftMargin,
-                                   axisShadowWidth/2.0,
+                                   AxisLineWidth/2.0,
                                    rect.size.width - _stockCtx.leftMargin - _stockCtx.rightMargin,
                                    rect.size.height);
     CGContextStrokeRect(context, strokeRect);
@@ -209,8 +209,8 @@ static const CGFloat kVerticalMargin = 12.f;
     CGContextSetLineDash(context, 0, 0, 0);
     
     for (int i = 0; i < yAxis.count; i ++) {
-        NSAttributedString *attString = [MCStockChartUtil attributeText:yAxis[i] textColor:yAxisTitleColor font:yAxisTitleFont];
-        CGSize size = [attString.string stringSizeWithFont:yAxisTitleFont];
+        NSAttributedString *attString = [MCStockChartUtil attributeText:yAxis[i] textColor:YAxisTitleColor font:YAxisTitleFont];
+        CGSize size = [attString.string stringSizeWithFont:YAxisTitleFont];
         
         [attString drawInRect:CGRectMake(rect.size.width - _stockCtx.rightMargin + 2.f,
                                          strokeRect.origin.y + i*strokeRect.size.height/2.0 - size.height/2.0*i - (i==0?2 : 0),
@@ -222,9 +222,9 @@ static const CGFloat kVerticalMargin = 12.f;
 
 - (void)drawDashLineInContext:(CGContextRef)context
                     movePoint:(CGPoint)mPoint toPoint:(CGPoint)toPoint {
-    CGContextSetLineWidth(context, separatorWidth);
+    CGContextSetLineWidth(context, SeparatorWidth);
     CGFloat lengths[] = {5,5};
-    CGContextSetStrokeColorWithColor(context, separatorColor.CGColor);
+    CGContextSetStrokeColorWithColor(context, SeparatorColor.CGColor);
     CGContextSetLineDash(context, 0, lengths, 2);  //画虚线
     
     CGContextBeginPath(context);

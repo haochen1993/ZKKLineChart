@@ -12,18 +12,18 @@
 #import "MacroToolHeader.h"
 
 #define _stockCtx [MCStockChartContext shareInstance]
-#define yAxisTitleFont  [UIFont systemFontOfSize:8.0]
-#define yAxisTitleColor [UIColor colorWithRed:(130/255.0f) green:(130/255.0f) blue:(130/255.0f) alpha:1.0]
-#define xAxisTitleFont  [UIFont systemFontOfSize:8.0]
-#define xAxisTitleColor [UIColor colorWithRed:(130/255.0f) green:(130/255.0f) blue:(130/255.0f) alpha:1.0]
-#define axisShadowColor HexRGB(0x535d69)
-#define axisShadowWidth (.5f)
-#define separatorWidth  (.5f)
-#define separatorColor  HexRGB(0x535d69)
-#define crossLineColor  HexRGB(0xC9C9C9)
-#define timeAndPriceTextColor HexRGB(0x333333)
+#define YAxisTitleFont  [UIFont systemFontOfSize:8.0]
+#define YAxisTitleColor [UIColor colorWithRed:(130/255.0f) green:(130/255.0f) blue:(130/255.0f) alpha:1.0]
+#define XAxisTitleFont  [UIFont systemFontOfSize:8.0]
+#define XAxisTitleColor [UIColor colorWithRed:(130/255.0f) green:(130/255.0f) blue:(130/255.0f) alpha:1.0]
+#define AxisLineColor HexRGB(0x535d69)
+#define AxisLineWidth (.5f)
+#define SeparatorWidth  (.5f)
+#define SeparatorColor  HexRGB(0x535d69)
+#define CrossLineColor  HexRGB(0xC9C9C9)
+#define TimeAndPriceTextColor HexRGB(0x333333)
 #define timeAndPriceTipsBackgroundColor HexRGBA(0xf6f6f6, .8)
-#define movingAvgLineWidth  1.f
+#define MALineWidth  1.f
 
 @interface MCStockSegmentSelectedModel: NSObject
 
@@ -45,6 +45,8 @@
 @property (nonatomic, assign) CGFloat rightMargin;
 @property (nonatomic, assign) CGFloat maxKLineWidth; //!< k线最大宽度
 @property (nonatomic, assign) CGFloat minKLineWidth; //!< k线最小宽度
+@property (nonatomic, strong) UIColor *positiveLineColor; //!< 阳线颜色(negative line)
+@property (nonatomic, strong) UIColor *negativeLineColor; //!< 阴线颜色
 
 @property (nonatomic, strong) MCStockSegmentSelectedModel *selectedModel;
 
