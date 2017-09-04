@@ -11,13 +11,13 @@
 #import "MCStockHeader.h"
 #import "MacroToolHeader.h"
 
-#define _stockCtx [MCStockChartContext shareInstance]
+#define _stockCtx       [MCStockChartContext shareInstance]
 #define YAxisTitleFont  [UIFont systemFontOfSize:8.0]
 #define YAxisTitleColor [UIColor colorWithRed:(130/255.0f) green:(130/255.0f) blue:(130/255.0f) alpha:1.0]
 #define XAxisTitleFont  [UIFont systemFontOfSize:8.0]
 #define XAxisTitleColor [UIColor colorWithRed:(130/255.0f) green:(130/255.0f) blue:(130/255.0f) alpha:1.0]
-#define AxisLineColor HexRGB(0x535d69)
-#define AxisLineWidth (.5f)
+#define AxisLineColor   HexRGB(0x535d69)
+#define AxisLineWidth   (.5f)
 #define SeparatorWidth  (.5f)
 #define SeparatorColor  HexRGB(0x535d69)
 #define CrossLineColor  HexRGB(0xC9C9C9)

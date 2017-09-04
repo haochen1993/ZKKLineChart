@@ -131,17 +131,11 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
                        [UIColor greenColor], ];
     
     self.zoomEnable = YES;
-    
     self.showAvgLine = YES;
-    
     self.showBarChart = YES;
-    
     self.autoFit = YES;
-    
     self.lastPanScale = 1.0;
-    
     self.xAxisMapper = [NSMutableDictionary dictionary];
-    
     self.topMargin = MCStockHeaderViewHeight + _navBarHeight;
     self.KLineTitleView.hidden = true;
     
@@ -194,16 +188,12 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     // 纵轴的分割线
     [self drawYAxisInRect:rect];
     [self drawYAxisTitle];
-    
     //时间轴
     [self drawXAxis];
-    
     //k线
     [self drawKLine];
-    
     //均线
     [self drawMALine];
-    
     [self drawVolAndMACD];
 }
 
@@ -216,10 +206,8 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         self.volView.data = dataSource;
         self.accessoryView.data = dataSource;
     }
-    
     // 设置
     [self drawSetting];
-    
     [self update];
 }
 
@@ -262,7 +250,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     item.date = date;
     
     if (isNew) {
-        self.dataSource = self.dataSource.count != 0 ? [self.dataSource arrayByAddingObject:item] : @[item];
+        self.dataSource = self.dataSource.count ? [self.dataSource arrayByAddingObject:item] : @[item];
     }
     else {
         if (item.closingPrice == self.dataSource.lastObject.closingPrice) {
@@ -371,15 +359,12 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     if (touchPoint.y > SelfHeight - MCStockSegmentCellHeight) {
         return;
     }
-    
     CGFloat relativeTouchX = touchPoint.x - _stockCtx.leftMargin;
     // 如果是来自外部的点击事件，Y坐标防止跨到其他图层
     if (!inMainView) {
         touchPoint.y = _topMargin + _yAxisHeight;
     }
-    
     touchPoint.y = MIN(_topMargin + _yAxisHeight, touchPoint.y);
-    
     // 注意在_xAxisMapper的xAxisKey值是仅仅是坐标原点开始的横坐标值，不是从视图最左开始计算的。即完整的在视图上的坐标需加上_stockCtx.leftMargin
     [self.xAxisMapper enumerateKeysAndObjectsUsingBlock:^(NSNumber *xAxisKey, NSNumber *indexObject, BOOL *stop) {
         CGFloat xAxisValue = [xAxisKey floatValue];

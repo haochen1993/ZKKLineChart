@@ -28,7 +28,7 @@
 
 @property (nonatomic, assign) BOOL showBarChart; //!< 显示柱形图，默认显示
 
-@property (nonatomic, assign) BOOL autoFit; //!< YES表示：Y坐标的值根据视图中呈现的k线图的最大值最小值变化而变化；NO表示：Y坐标是所有数据中的最大值最小值，不管k线图呈现如何都不会变化。默认YES
+@property (nonatomic, assign) BOOL autoFit; 
 
 @property (nonatomic, strong) NSArray <NSNumber *> *MAValues; //!< 均线个数（默认ma5, ma10, ma20）
 
