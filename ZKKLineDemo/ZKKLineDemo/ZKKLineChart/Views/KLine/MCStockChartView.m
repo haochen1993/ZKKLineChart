@@ -62,20 +62,18 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 //实时数据提示按钮
 @property (nonatomic, strong) UIButton *realDataTipBtn;
 
-@property (nonatomic, assign) CGFloat maxKLineWidth; //!< k线最大宽度
-@property (nonatomic, assign) CGFloat minKLineWidth; //!< k线最小宽度
-@property (nonatomic, strong) UIFont *yAxisTitleFont; //!< y坐标轴字体
-@property (nonatomic, strong) UIColor *yAxisTitleColor; //!< y坐标轴标题颜色
-@property (nonatomic, strong) UIFont *xAxisTitleFont; //!< x坐标轴字体
-@property (nonatomic, strong) UIColor *xAxisTitleColor; //!< x坐标轴标题颜色
-@property (nonatomic, strong) UIColor *axisShadowColor; //!< 坐标轴边框颜色
-@property (nonatomic, assign) CGFloat axisShadowWidth; //!< 坐标轴边框宽度
-@property (nonatomic, assign) CGFloat separatorWidth; //!< 分割线宽度
-@property (nonatomic, strong) UIColor *separatorColor; //!< 分割线颜色
-@property (nonatomic, strong) UIColor *crossLineColor; //!< 十字线颜色
-@property (nonatomic, strong) UIColor *timeAndPriceTextColor; //!< 时间和价格提示的字体颜色
-@property (nonatomic, strong) UIColor *timeAndPriceTipsBackgroundColor; //!< 时间和价格提示背景颜色
-@property (nonatomic, assign) CGFloat movingAvgLineWidth; //!< 均线宽度
+//@property (nonatomic, strong) UIFont *yAxisTitleFont; //!< y坐标轴字体
+//@property (nonatomic, strong) UIColor *yAxisTitleColor; //!< y坐标轴标题颜色
+//@property (nonatomic, strong) UIFont *xAxisTitleFont; //!< x坐标轴字体
+//@property (nonatomic, strong) UIColor *xAxisTitleColor; //!< x坐标轴标题颜色
+//@property (nonatomic, strong) UIColor *axisShadowColor; //!< 坐标轴边框颜色
+//@property (nonatomic, assign) CGFloat axisShadowWidth; //!< 坐标轴边框宽度
+//@property (nonatomic, assign) CGFloat separatorWidth; //!< 分割线宽度
+//@property (nonatomic, strong) UIColor *separatorColor; //!< 分割线颜色
+//@property (nonatomic, strong) UIColor *crossLineColor; //!< 十字线颜色
+//@property (nonatomic, strong) UIColor *timeAndPriceTextColor; //!< 时间和价格提示的字体颜色
+//@property (nonatomic, strong) UIColor *timeAndPriceTipsBackgroundColor; //!< 时间和价格提示背景颜色
+//@property (nonatomic, assign) CGFloat movingAvgLineWidth; //!< 均线宽度
 @property (nonatomic, assign) NSInteger lastDrawNum; //!< 缩放手势 记录上次的绘制个数
 @property (nonatomic, strong) MCStockTitleView *KLineTitleView;
 @property (nonatomic, strong) MCStockSegmentView *segmentView;
@@ -141,27 +139,13 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     self.positiveLineColor = KLineColor_Green;
     self.negativeLineColor = KLineColor_Red;
     
-    self.movingAvgLineWidth = 1.f;
+    
     
     self.MAValues = @[ @7, @12, @26, @30 ];
     self.MAColors = @[ [UIColor lightGrayColor],
                        [UIColor yellowColor],
                        [UIColor purpleColor],
                        [UIColor greenColor], ];
-    
-    self.axisShadowColor = HexRGB(0x535d69);
-    self.axisShadowWidth = 0.5;
-    
-    self.separatorColor = HexRGB(0x535d69);
-    self.separatorWidth = 0.5;
-    
-    self.yAxisTitleFont = [UIFont systemFontOfSize:8.0];
-    self.yAxisTitleColor = [UIColor colorWithRed:(130/255.0f) green:(130/255.0f) blue:(130/255.0f) alpha:1.0];
-    
-    self.xAxisTitleFont = [UIFont systemFontOfSize:8.0];
-    self.xAxisTitleColor = [UIColor colorWithRed:(130/255.0f) green:(130/255.0f) blue:(130/255.0f) alpha:1.0];
-    
-    self.crossLineColor = HexRGB(0xC9C9C9);
     
     self.zoomEnable = YES;
     
@@ -170,12 +154,6 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     self.showBarChart = YES;
     
     self.autoFit = YES;
-    
-    self.timeAndPriceTipsBackgroundColor = HexRGBA(0xf6f6f6, .8);
-    self.timeAndPriceTextColor = HexRGB(0x333333);
-    
-    self.maxKLineWidth = 24;
-    self.minKLineWidth = 1.f;
     
     self.lastPanScale = 1.0;
     
@@ -264,7 +242,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 
 - (void)drawSetting {
     NSString *priceTitle = [NSString stringWithFormat:@"%.2f", self.highestItem.highestPrice];
-    CGSize size = [priceTitle stringSizeWithFont:self.yAxisTitleFont];
+    CGSize size = [priceTitle stringSizeWithFont:yAxisTitleFont];
     
     _stockCtx.rightMargin = size.width + 4.f;
     [self resetDrawNumAndIndex];
@@ -352,7 +330,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         return;
     }
     CGFloat scale = pinchEvent.scale - self.lastPanScale + 1;
-    if ((scale < 1 && _stockCtx.KLineWidth <= _minKLineWidth) || (scale > 1 && _stockCtx.KLineWidth >= _maxKLineWidth)) {
+    if ((scale < 1 && _stockCtx.KLineWidth <= _stockCtx.minKLineWidth) || (scale > 1 && _stockCtx.KLineWidth >= _stockCtx.maxKLineWidth)) {
         return;
     }
     _stockCtx.KLineWidth = _stockCtx.KLineWidth * scale;
@@ -453,7 +431,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     CGFloat priceLabelY = point.y - priceLabelHeight / 2;
     self.priceLabel.frame = CGRectMake(SelfWidth-_stockCtx.rightMargin,
                                        priceLabelY,
-                                       _stockCtx.rightMargin - self.separatorWidth,
+                                       _stockCtx.rightMargin - separatorWidth,
                                        priceLabelHeight);
     [self bringSubviewToFront:self.priceLabel];
     
@@ -462,12 +440,12 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     self.timeLabel.hidden = !date.length;
     [self bringSubviewToFront:self.timeLabel];
     if (date.length > 0) {
-        CGFloat textWidth = [date stringWidthWithFont:self.xAxisTitleFont height:MAXFLOAT];
+        CGFloat textWidth = [date stringWidthWithFont:xAxisTitleFont height:MAXFLOAT];
         CGFloat originX = MIN(MAX(0, point.x - textWidth/2.0 - 2), SelfWidth - _stockCtx.rightMargin - textWidth - 4);
         self.timeLabel.frame = CGRectMake(originX,
-                                          MaxYAxis + self.separatorWidth,
+                                          MaxYAxis + separatorWidth,
                                           textWidth + 4,
-                                          kTimeAxisHeight - self.separatorWidth*2);
+                                          kTimeAxisHeight - separatorWidth*2);
     }
     [self.volView showTitleView:item];
     [self.accessoryView showTitleView:item];
@@ -489,8 +467,8 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     
     //k线边框
     CGRect strokeRect = CGRectMake(_stockCtx.leftMargin, self.topMargin, self.xAxisWidth, self.yAxisHeight);
-    CGContextSetLineWidth(context, self.axisShadowWidth);
-    CGContextSetStrokeColorWithColor(context, self.axisShadowColor.CGColor);
+    CGContextSetLineWidth(context, axisShadowWidth);
+    CGContextSetStrokeColorWithColor(context, axisShadowColor.CGColor);
     CGContextStrokeRect(context, strokeRect);
     
     //k线分割线
@@ -514,8 +492,8 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     
     for (int i = 0; i < cutNum+1; i ++) {
         CGFloat yAxisValue = (i == cutNum) ? lowest : (highetst - avgValue * i);
-        NSAttributedString *attString = [MCStockChartUtil attributeText:[MCStockChartUtil decimalValue:yAxisValue] textColor:self.yAxisTitleColor font:self.yAxisTitleFont];
-        CGSize size = [attString.string stringSizeWithFont:self.yAxisTitleFont];
+        NSAttributedString *attString = [MCStockChartUtil attributeText:[MCStockChartUtil decimalValue:yAxisValue] textColor:yAxisTitleColor font:yAxisTitleFont];
+        CGSize size = [attString.string stringSizeWithFont:yAxisTitleFont];
         
         CGFloat diffHeight = 0;
         if (i == cutNum) {
@@ -536,9 +514,9 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 
 - (void)drawDashLineInContext:(CGContextRef)context
                     movePoint:(CGPoint)mPoint toPoint:(CGPoint)toPoint {
-    CGContextSetLineWidth(context, self.separatorWidth);
+    CGContextSetLineWidth(context, separatorWidth);
     CGFloat lengths[] = {5,5};
-    CGContextSetStrokeColorWithColor(context, self.separatorColor.CGColor);
+    CGContextSetStrokeColorWithColor(context, separatorColor.CGColor);
     CGContextSetLineDash(context, 0, lengths, 2);  //画虚线
     
     CGContextBeginPath(context);
@@ -568,11 +546,11 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
             continue;
         }
         CGContextSetFillColorWithColor(context, self.backgroundColor.CGColor);
-        CGRect textBgRect = CGRectMake(xAxisValue - 5, MaxYAxis + _separatorWidth, 10, kTimeAxisHeight - 2 * _separatorWidth);
+        CGRect textBgRect = CGRectMake(xAxisValue - 5, MaxYAxis + separatorWidth, 10, kTimeAxisHeight - 2 * separatorWidth);
         CGContextAddRect(context, textBgRect);
         CGContextFillPath(context);
         
-        NSAttributedString *attString = [MCStockChartUtil attributeText:self.dataSource[timeIndex].date textColor:self.xAxisTitleColor font:self.xAxisTitleFont lineSpacing:2];
+        NSAttributedString *attString = [MCStockChartUtil attributeText:self.dataSource[timeIndex].date textColor:xAxisTitleColor font:xAxisTitleFont lineSpacing:2];
         CGSize size = [MCStockChartUtil attributeString:attString boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
         CGFloat originX = MAX(MIN(xAxisValue - size.width/2.0, SelfWidth - _stockCtx.rightMargin - size.width), 0);
         [attString drawInRect:CGRectMake(originX, MaxYAxis + 2.0, size.width, size.height)];
@@ -668,7 +646,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         titleX = point.x;
     }
     CGFloat titleY = isMax ? point.y - titleSize.height : point.y;
-    NSAttributedString *attString = [MCStockChartUtil attributeText:hintTitle textColor:_xAxisTitleColor font:titleFont];
+    NSAttributedString *attString = [MCStockChartUtil attributeText:hintTitle textColor:xAxisTitleColor font:titleFont];
     [attString drawInRect:(CGRect){titleX, titleY, titleSize}];
 }
 
@@ -681,7 +659,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     }
     
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(context, self.movingAvgLineWidth);
+    CGContextSetLineWidth(context, movingAvgLineWidth);
     
     for (int i = 0; i < self.MAValues.count; i ++) {
         CGContextSetStrokeColorWithColor(context, self.MAColors[i].CGColor);
@@ -772,20 +750,14 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     
     CGFloat boxOriginY = MaxYAxis + kTimeAxisHeight;
     self.volView.frame = CGRectMake(0, boxOriginY, rect.size.width, rect.size.height * kBarChartHeightRatio);
-    self.volView.kLineWidth = _stockCtx.KLineWidth;
-    self.volView.linePadding = _stockCtx.KLinePadding;
-    self.volView.boxOriginX = _stockCtx.leftMargin;
+    
     self.volView.startDrawIndex = self.startDrawIndex;
-    self.volView.boxRightMargin = _stockCtx.rightMargin;
     self.volView.numberOfDrawCount = self.kLineDrawNum;
     self.volView.autoFit = _autoFit;
     [self.volView update];
     
     self.accessoryView.frame = CGRectMake(0, CGRectGetMaxY(self.volView.frame) + kAccessoryMargin, rect.size.width, rect.size.height * kBarChartHeightRatio);
-    self.accessoryView.kLineWidth = _stockCtx.KLineWidth;
-    self.accessoryView.linePadding = _stockCtx.KLinePadding;
-    self.accessoryView.boxOriginX = _stockCtx.leftMargin;
-    self.accessoryView.boxRightMargin = _stockCtx.rightMargin;
+    
     self.accessoryView.startDrawIndex = self.startDrawIndex;
     self.accessoryView.numberOfDrawCount = self.kLineDrawNum;
     self.accessoryView.autoFit = _autoFit;
@@ -843,15 +815,8 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     if (!_volView) {
         _volView = [MCVolumeView new];
         _volView.backgroundColor  = [UIColor clearColor];
-        _volView.boxRightMargin = _stockCtx.rightMargin;
-        _volView.axisShadowColor = self.axisShadowColor;
-        _volView.axisShadowWidth = self.axisShadowWidth;
         _volView.negativeVolColor = self.negativeLineColor;
         _volView.positiveVolColor = self.positiveLineColor;
-        _volView.yAxisTitleFont = self.yAxisTitleFont;
-        _volView.yAxisTitleColor = self.yAxisTitleColor;
-        _volView.separatorWidth = self.separatorWidth;
-        _volView.separatorColor = self.separatorColor;
         _volView.baseChartView = self;
         [self addSubview:_volView];
     }
@@ -862,15 +827,8 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     if (!_accessoryView) {
         _accessoryView = [MCAccessoryView new];
         _accessoryView.backgroundColor  = [UIColor clearColor];
-        _accessoryView.boxRightMargin = _stockCtx.rightMargin;
-        _accessoryView.axisShadowColor = self.axisShadowColor;
-        _accessoryView.axisShadowWidth = self.axisShadowWidth;
         _accessoryView.negativeVolColor = self.negativeLineColor;
         _accessoryView.positiveVolColor = self.positiveLineColor;
-        _accessoryView.yAxisTitleFont = self.yAxisTitleFont;
-        _accessoryView.yAxisTitleColor = self.yAxisTitleColor;
-        _accessoryView.separatorWidth = self.separatorWidth;
-        _accessoryView.separatorColor = self.separatorColor;
         _accessoryView.baseChartView = self;
         [self addSubview:_accessoryView];
     }
@@ -880,7 +838,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 - (UIView *)verticalCrossLine {
     if (!_verticalCrossLine) {
         _verticalCrossLine = [[UIView alloc] initWithFrame:CGRectMake(_stockCtx.leftMargin, self.topMargin, 0.5, self.yAxisHeight)];
-        _verticalCrossLine.backgroundColor = self.crossLineColor;
+        _verticalCrossLine.backgroundColor = crossLineColor;
         [self insertSubview:_verticalCrossLine belowSubview:self.segmentView];
     }
     return _verticalCrossLine;
@@ -889,7 +847,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 - (UIView *)horizontalCrossLine {
     if (!_horizontalCrossLine) {
         _horizontalCrossLine = [[UIView alloc] initWithFrame:CGRectMake(_stockCtx.leftMargin, self.topMargin, self.xAxisWidth, 0.5)];
-        _horizontalCrossLine.backgroundColor = self.crossLineColor;
+        _horizontalCrossLine.backgroundColor = crossLineColor;
         [self addSubview:_horizontalCrossLine];
     }
     return _horizontalCrossLine;
@@ -914,10 +872,10 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 - (UILabel *)timeLabel {
     if (!_timeLabel) {
         _timeLabel = [UILabel new];
-        _timeLabel.backgroundColor = self.timeAndPriceTipsBackgroundColor;
+        _timeLabel.backgroundColor = timeAndPriceTipsBackgroundColor;
         _timeLabel.textAlignment = NSTextAlignmentCenter;
-        _timeLabel.font = self.yAxisTitleFont;
-        _timeLabel.textColor = self.timeAndPriceTextColor;
+        _timeLabel.font = yAxisTitleFont;
+        _timeLabel.textColor = timeAndPriceTextColor;
         _timeLabel.numberOfLines = 0;
         [self addSubview:_timeLabel];
     }
@@ -927,10 +885,10 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 - (UILabel *)priceLabel {
     if (!_priceLabel) {
         _priceLabel = [UILabel new];
-        _priceLabel.backgroundColor = self.timeAndPriceTipsBackgroundColor;
+        _priceLabel.backgroundColor = timeAndPriceTipsBackgroundColor;
         _priceLabel.textAlignment = NSTextAlignmentCenter;
-        _priceLabel.font = [UIFont systemFontOfSize:self.xAxisTitleFont.pointSize];
-        _priceLabel.textColor = self.timeAndPriceTextColor;
+        _priceLabel.font = [UIFont systemFontOfSize:xAxisTitleFont.pointSize];
+        _priceLabel.textColor = timeAndPriceTextColor;
         [self addSubview:_priceLabel];
     }
     return _priceLabel;
@@ -1006,18 +964,6 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     if (_kLineDrawNum != 0) {
         _stockCtx.KLineWidth = (SelfWidth - _stockCtx.leftMargin - _stockCtx.rightMargin - _stockCtx.KLinePadding)/_kLineDrawNum - _stockCtx.KLinePadding;
     }
-}
-
-- (void)setMaxKLineWidth:(CGFloat)maxKLineWidth {
-    if (maxKLineWidth < _minKLineWidth) {
-        maxKLineWidth = _minKLineWidth;
-    }
-    
-    CGFloat realAxisWidth = (SelfWidth - _stockCtx.leftMargin - _stockCtx.rightMargin - _stockCtx.KLinePadding);
-    NSInteger maxKLineCount = floor(realAxisWidth)/(maxKLineWidth + _stockCtx.KLinePadding);
-    maxKLineWidth = realAxisWidth/maxKLineCount - _stockCtx.KLinePadding;
-    
-    _maxKLineWidth = maxKLineWidth;
 }
 
 - (void)setLandscapeMode:(BOOL)landscapeMode {

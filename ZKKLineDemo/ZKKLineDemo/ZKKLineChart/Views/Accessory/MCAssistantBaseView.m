@@ -49,7 +49,7 @@
         _titleView.hidden = true;
         [self addSubview:_titleView];
     }
-    _titleView.frame = CGRectMake(self.boxOriginX + 8, 0, self.bounds.size.width, 16);
+    _titleView.frame = CGRectMake(_stockCtx.leftMargin + 8, 0, self.bounds.size.width, 16);
     return _titleView;
 }
 

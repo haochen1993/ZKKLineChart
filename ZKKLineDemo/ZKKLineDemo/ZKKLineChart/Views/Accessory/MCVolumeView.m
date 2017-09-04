@@ -77,7 +77,7 @@ static const CGFloat kVerticalMargin = 12.f;
  */
 - (CGPathRef)movingAvgGraphPathForContextAtIndex:(NSInteger)index {
     UIBezierPath *path = nil;
-    CGFloat xAxisValue = self.boxOriginX + 0.5*self.kLineWidth + self.linePadding;
+    CGFloat xAxisValue = _stockCtx.leftMargin + 0.5*_stockCtx.KLineWidth + _stockCtx.KLinePadding;
     CGFloat volumePerHeightUnit = [self getVolumePerHeightUnit];
     if (volumePerHeightUnit == 0) {
         volumePerHeightUnit = 1.0f;
@@ -98,7 +98,7 @@ static const CGFloat kVerticalMargin = 12.f;
         }
         // 不足均线个数，则不需要获取该段均线数据(例如: 均5，个数小于5个，则不需要绘制前四均线，...)
         if ([self.data indexOfObject:item] < maLength - 1) {
-            xAxisValue += self.kLineWidth + self.linePadding;
+            xAxisValue += _stockCtx.KLineWidth + _stockCtx.KLinePadding;
             continue;
         }
         CGFloat deltaToBottomAxis = MAValue / volumePerHeightUnit;
@@ -111,7 +111,7 @@ static const CGFloat kVerticalMargin = 12.f;
         else {
             [path addLineToPoint:maPoint];
         }
-        xAxisValue += self.kLineWidth + self.linePadding;
+        xAxisValue += _stockCtx.KLineWidth + _stockCtx.KLinePadding;
     }
     //圆滑
     path = [path mc_smoothedPathWithGranularity:15];
@@ -147,9 +147,9 @@ static const CGFloat kVerticalMargin = 12.f;
 - (void)drawAxis {
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    CGContextSetLineWidth(context, self.axisShadowWidth);
-    CGContextSetStrokeColorWithColor(context, self.axisShadowColor.CGColor);
-    CGRect strokeRect = CGRectMake(self.boxOriginX, 0, self.bounds.size.width - self.boxOriginX - self.boxRightMargin, self.bounds.size.height);
+    CGContextSetLineWidth(context, axisShadowWidth);
+    CGContextSetStrokeColorWithColor(context, axisShadowColor.CGColor);
+    CGRect strokeRect = CGRectMake(_stockCtx.leftMargin, 0, self.bounds.size.width - _stockCtx.leftMargin - _stockCtx.rightMargin, self.bounds.size.height);
     CGContextStrokeRect(context, strokeRect);
 }
 
@@ -160,13 +160,13 @@ static const CGFloat kVerticalMargin = 12.f;
 
 - (void)drawVolView {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(context, self.kLineWidth);
+    CGContextSetLineWidth(context, _stockCtx.KLineWidth);
     
     CGRect rect = self.bounds;
     
-    CGFloat xAxis = self.linePadding + self.boxOriginX;
+    CGFloat xAxis = _stockCtx.KLinePadding + _stockCtx.leftMargin;
     
-    CGFloat boxOriginY = self.axisShadowWidth;
+    CGFloat boxOriginY = axisShadowWidth;
     CGFloat boxHeight = rect.size.height - boxOriginY;
     CGFloat volumePerUnit = [self getVolumePerHeightUnit];
     
@@ -178,16 +178,16 @@ static const CGFloat kVerticalMargin = 12.f;
         CGContextSetFillColorWithColor(context, fillColor.CGColor);
         
         CGFloat height = item.volume/volumePerUnit ?: 1.f;
-        CGRect pathRect = CGRectMake(xAxis, boxOriginY + boxHeight - height, self.kLineWidth, height - self.axisShadowWidth);
+        CGRect pathRect = CGRectMake(xAxis, boxOriginY + boxHeight - height, _stockCtx.KLineWidth, height - axisShadowWidth);
         CGContextAddRect(context, pathRect);
         CGContextFillPath(context);
         
-        xAxis += self.kLineWidth + self.linePadding;
+        xAxis += _stockCtx.KLineWidth + _stockCtx.KLinePadding;
     }
 }
 
 - (CGFloat)getVolumePerHeightUnit {
-    return self.maxValue/(self.frame.size.height - self.axisShadowWidth - kVerticalMargin);
+    return self.maxValue/(self.frame.size.height - axisShadowWidth - kVerticalMargin);
 }
 
 - (void)showYAxisTitleWithTitles:(NSArray *)yAxis {
@@ -195,24 +195,24 @@ static const CGFloat kVerticalMargin = 12.f;
     
     CGRect rect = self.bounds;
     //交易量边框
-    CGContextSetLineWidth(context, self.axisShadowWidth);
-    CGContextSetStrokeColorWithColor(context, self.axisShadowColor.CGColor);
-    CGRect strokeRect = CGRectMake(self.boxOriginX,
-                                   self.axisShadowWidth/2.0,
-                                   rect.size.width - self.boxOriginX - self.boxRightMargin,
+    CGContextSetLineWidth(context, axisShadowWidth);
+    CGContextSetStrokeColorWithColor(context, axisShadowColor.CGColor);
+    CGRect strokeRect = CGRectMake(_stockCtx.leftMargin,
+                                   axisShadowWidth/2.0,
+                                   rect.size.width - _stockCtx.leftMargin - _stockCtx.rightMargin,
                                    rect.size.height);
     CGContextStrokeRect(context, strokeRect);
     
-    [self drawDashLineInContext:context movePoint:CGPointMake(self.boxOriginX + 1.25, rect.size.height/2.0)
-                        toPoint:CGPointMake(rect.size.width  - self.boxRightMargin - 0.8, rect.size.height/2.0)];
+    [self drawDashLineInContext:context movePoint:CGPointMake(_stockCtx.leftMargin + 1.25, rect.size.height/2.0)
+                        toPoint:CGPointMake(rect.size.width  - _stockCtx.rightMargin - 0.8, rect.size.height/2.0)];
     
     CGContextSetLineDash(context, 0, 0, 0);
     
     for (int i = 0; i < yAxis.count; i ++) {
-        NSAttributedString *attString = [MCStockChartUtil attributeText:yAxis[i] textColor:self.yAxisTitleColor font:self.yAxisTitleFont];
-        CGSize size = [attString.string stringSizeWithFont:self.yAxisTitleFont];
+        NSAttributedString *attString = [MCStockChartUtil attributeText:yAxis[i] textColor:yAxisTitleColor font:yAxisTitleFont];
+        CGSize size = [attString.string stringSizeWithFont:yAxisTitleFont];
         
-        [attString drawInRect:CGRectMake(rect.size.width - self.boxRightMargin + 2.f,
+        [attString drawInRect:CGRectMake(rect.size.width - _stockCtx.rightMargin + 2.f,
                                          strokeRect.origin.y + i*strokeRect.size.height/2.0 - size.height/2.0*i - (i==0?2 : 0),
                                          size.width,
                                          size.height)];
@@ -222,9 +222,9 @@ static const CGFloat kVerticalMargin = 12.f;
 
 - (void)drawDashLineInContext:(CGContextRef)context
                     movePoint:(CGPoint)mPoint toPoint:(CGPoint)toPoint {
-    CGContextSetLineWidth(context, self.separatorWidth);
+    CGContextSetLineWidth(context, separatorWidth);
     CGFloat lengths[] = {5,5};
-    CGContextSetStrokeColorWithColor(context, self.separatorColor.CGColor);
+    CGContextSetStrokeColorWithColor(context, separatorColor.CGColor);
     CGContextSetLineDash(context, 0, lengths, 2);  //画虚线
     
     CGContextBeginPath(context);

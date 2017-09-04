@@ -43,8 +43,12 @@
     _KLinePadding = 2.f;
     _leftMargin = 5.f;
     _rightMargin = 2.f;
+    _maxKLineWidth = 24;
+    _minKLineWidth = 1.f;
 }
 
-//_stockCtx.KLineWidth = MIN(MAX(kLineWidth, self.minKLineWidth), self.maxKLineWidth);
+- (void)setKLineWidth:(CGFloat)KLineWidth {
+    _KLineWidth = MIN(MAX(KLineWidth, _minKLineWidth), _maxKLineWidth);
+}
 
 @end
