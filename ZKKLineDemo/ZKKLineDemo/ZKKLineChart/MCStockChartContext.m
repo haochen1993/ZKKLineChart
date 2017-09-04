@@ -27,6 +27,7 @@
 }
 
 - (void)setup {
+    [self initData];
     [self setupSelectedModel];
 }
 
@@ -36,5 +37,14 @@
     _selectedModel.accessoryChartType = MCStockAccessoryChartTypeMACD;
     _selectedModel.targetTimeType = MCStockTargetTimeTypeMin_30;
 }
+
+- (void)initData {
+    _KLineWidth = 4.f;
+    _KLinePadding = 2.f;
+    _leftMargin = 5.f;
+    _rightMargin = 2.f;
+}
+
+//_stockCtx.KLineWidth = MIN(MAX(kLineWidth, self.minKLineWidth), self.maxKLineWidth);
 
 @end

@@ -10,7 +10,7 @@
 #import "MCStockChartUtil.h"
 #import "MCStockHeader.h"
 
-#define _stockContext [MCStockChartContext shareInstance]
+#define _stockCtx [MCStockChartContext shareInstance]
 
 @interface MCStockSegmentSelectedModel: NSObject
 
@@ -26,6 +26,11 @@
 @interface MCStockChartContext : NSObject
 
 + (instancetype)shareInstance;
+@property (nonatomic, assign) CGFloat KLineWidth;
+@property (nonatomic, assign) CGFloat KLinePadding;
+@property (nonatomic, assign) CGFloat leftMargin;
+@property (nonatomic, assign) CGFloat rightMargin;
+
 @property (nonatomic, strong) MCStockSegmentSelectedModel *selectedModel;
 
 @end
