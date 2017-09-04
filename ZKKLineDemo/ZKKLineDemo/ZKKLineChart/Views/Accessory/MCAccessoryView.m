@@ -34,6 +34,37 @@ static const CGFloat kVerticalMargin = 12.f;
     return self;
 }
 
+#pragma mark - public methods
+
+- (void)update {
+    [self resetMaxAndMin];
+    [self setNeedsDisplay];
+}
+
+- (void)showModelInfo:(MCKLineModel *)model type:(MCStockAccessoryChartType)type {
+    self.titleView.hidden = false;
+    switch (type) {
+        case MCStockAccessoryChartTypeMACD: {
+            [self.titleView updateWithMACD:model.MACD DIF:model.DIF DEA:model.DEA];
+        } break;
+            
+        case MCStockAccessoryChartTypeKDJ: {
+            [self.titleView updateKDJWithK:model.KDJ_K D:model.KDJ_D J:model.KDJ_J];
+        } break;
+        case MCStockAccessoryChartTypeRSI: {
+            [self.titleView updateRSIWithRSI6:model.RSI_6 RSI12:model.RSI_12 RSI24:model.RSI_24];
+        } break;
+        default:
+            break;
+    }
+}
+
+- (void)showTitleView:(MCKLineModel *)model {
+    self.titleView.hidden = false;
+    [self.titleView updateWithMACD:model.MACD DIF:model.DIF DEA:model.DEA];
+}
+
+
 - (void)setup {
     _MAValues = [NSArray array];
     _MAColors = [NSArray array];
@@ -164,18 +195,6 @@ static const CGFloat kVerticalMargin = 12.f;
     //圆滑
     path = [path mc_smoothedPathWithGranularity:15];
     return path.CGPath;
-}
-
-#pragma mark - public methods
-
-- (void)update {
-    [self resetMaxAndMin];
-    [self setNeedsDisplay];
-}
-
-- (void)showTitleView:(MCKLineModel *)model {
-    self.titleView.hidden = false;
-    [self.titleView updateWithMACD:model.MACD DIF:model.DIF DEA:model.DEA];
 }
 
 #pragma mark - private methods

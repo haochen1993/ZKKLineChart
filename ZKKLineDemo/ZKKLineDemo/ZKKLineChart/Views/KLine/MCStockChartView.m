@@ -275,7 +275,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         return;
     }
     CGPoint touchPoint = [tapGesture locationInView:self];
-    [self showTipBoardWithTouchPoint:touchPoint];
+    [self showTipsViewWithPoint:touchPoint];
 }
 
 - (void)panEvent:(UIPanGestureRecognizer *)panGesture {
@@ -342,19 +342,19 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     }
     else {
         CGPoint touchPoint = [longGesture locationInView:self];
-        [self showTipBoardWithTouchPoint:touchPoint];
+        [self showTipsViewWithPoint:touchPoint];
     }
 }
 
 - (void)showTipBoardWithOuterViewTouchPoint:(CGPoint)touchPoint {
-    [self showTipBoardWithTouchPoint:touchPoint isInMainView:false];
+    [self showTipsViewWithPoint:touchPoint isInMainView:false];
 }
 
-- (void)showTipBoardWithTouchPoint:(CGPoint)point {
-    [self showTipBoardWithTouchPoint:point isInMainView:true];
+- (void)showTipsViewWithPoint:(CGPoint)point {
+    [self showTipsViewWithPoint:point isInMainView:true];
 }
 
-- (void)showTipBoardWithTouchPoint:(CGPoint)touchPoint isInMainView:(BOOL)inMainView {
+- (void)showTipsViewWithPoint:(CGPoint)touchPoint isInMainView:(BOOL)inMainView {
     // 防止tap事件与segmentView的collectionView的点击冲突导致
     if (touchPoint.y > SelfHeight - MCStockSegmentCellHeight) {
         return;
@@ -373,13 +373,13 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
             // 获取对应的k线数据
             MCKLineModel *item = self.dataSource[index];
             CGFloat xAxis = xAxisValue - _stockCtx.KLineWidth / 2.0 + _stockCtx.leftMargin;
-            [self configUIWithLineItem:item atPoint:CGPointMake(xAxis, touchPoint.y)];
+            [self showItemInfo:item atPoint:CGPointMake(xAxis, touchPoint.y)];
             *stop = YES;
         }
     }];
 }
 
-- (void)configUIWithLineItem:(MCKLineModel *)item atPoint:(CGPoint)point {
+- (void)showItemInfo:(MCKLineModel *)item atPoint:(CGPoint)point {
     //十字线
     self.verticalCrossLine.hidden = NO;
     self.verticalCrossLine.us_height = SelfHeight - self.topMargin;
@@ -390,7 +390,6 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 
     self.KLineTitleView.hidden = false;
     [self.KLineTitleView updateWithHigh:item.highestPrice open:item.openingPrice close:item.closingPrice low:item.lowestPrice];
-    [self getPricePerHeightUnit];
     
     //时间，价额
     self.priceLabel.hidden = NO;
@@ -417,7 +416,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
                                           kTimeAxisHeight - SeparatorWidth*2);
     }
     [self.volView showTitleView:item];
-    [self.accessoryView showTitleView:item];
+    [self.accessoryView showModelInfo:item type:_stockCtx.selectedModel.accessoryChartType];
 }
 
 - (NSString *)finalPriceWithTouchPointY:(CGFloat)pointY {

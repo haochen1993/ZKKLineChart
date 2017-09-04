@@ -13,5 +13,7 @@
 
 @property (nonatomic, assign) MCStockAccessoryChartType accessoryChartType;
 
+- (void)showModelInfo:(MCKLineModel *)model type:(MCStockAccessoryChartType)type;
+
 @end
 
