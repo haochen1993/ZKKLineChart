@@ -549,7 +549,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     CGPoint maxPoint = CGPointZero;
     CGPoint minPoint = CGPointZero;
     
-    NSArray *items = [self.dataSource subarrayWithRange:NSMakeRange(self.startDrawIndex, self.kLineDrawNum)];
+    NSArray *items = [self safeDrawItems];
     for (MCKLineModel *item in items) {
         self.xAxisMapper[@(xAxis + _stockCtx.KLineWidth)] = @([self.dataSource indexOfObject:item]);
         //通过开盘价、收盘价判断颜色
@@ -649,7 +649,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     // 均线个数
     NSInteger maLength = [self.MAValues[index] integerValue];
     
-    NSArray *drawArrays = [self.dataSource subarrayWithRange:NSMakeRange(self.startDrawIndex, self.kLineDrawNum)];
+    NSArray *drawArrays = [self safeDrawItems];
     for (int i = 0; i < drawArrays.count; i ++) {
         MCKLineModel *item = drawArrays[i];
         
@@ -735,15 +735,8 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
 - (void)resetMaxAndMin {
     self.highestPriceOfAll = -MAXFLOAT;
     self.lowestPriceOfAll = MAXFLOAT;
-    NSInteger totalCount = [self.dataSource count];
     
-    self.kLineDrawNum = MIN(self.kLineDrawNum, self.dataSource.count);
-    NSRange subRange = NSMakeRange(self.startDrawIndex, _kLineDrawNum);
-    if (NSMaxRange(subRange) > totalCount) {
-        subRange = NSMakeRange(totalCount - self.kLineDrawNum, self.kLineDrawNum);
-        self.startDrawIndex = totalCount - self.kLineDrawNum;
-    }
-    NSArray *subChartValues = [self.dataSource subarrayWithRange:subRange];
+    NSArray *subChartValues = [self safeDrawItems];
     NSArray *drawContext = self.autoFit ? subChartValues : self.dataSource;
     for (int i = 0; i < drawContext.count; i++) {
         MCKLineModel *model = drawContext[i];
@@ -762,6 +755,18 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
             }
         }
     }
+}
+
+- (NSArray <MCKLineModel *> *)safeDrawItems {
+    NSInteger totalCount = [self.dataSource count];
+    self.kLineDrawNum = MIN(self.kLineDrawNum, self.dataSource.count);
+    NSRange subRange = NSMakeRange(self.startDrawIndex, _kLineDrawNum);
+    if (NSMaxRange(subRange) > totalCount) {
+        subRange = NSMakeRange(totalCount - self.kLineDrawNum, self.kLineDrawNum);
+        self.startDrawIndex = totalCount - self.kLineDrawNum;
+    }
+    NSArray *drawItems = [self.dataSource subarrayWithRange:subRange];
+    return drawItems;
 }
 
 #pragma mark -  public methods
