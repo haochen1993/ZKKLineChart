@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		583950511F5FB85900D9925D /* 5min.plist in Resources */ = {isa = PBXBuildFile; fileRef = 583950501F5FB84E00D9925D /* 5min.plist */; };
+		583950521F5FB85C00D9925D /* 30min.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5839504F1F5FB84E00D9925D /* 30min.plist */; };
+		583950531F5FB85E00D9925D /* 1min.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5839504E1F5FB84E00D9925D /* 1min.plist */; };
+		583950541F5FB86100D9925D /* 1hour.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5839504D1F5FB84E00D9925D /* 1hour.plist */; };
+		583950551F5FB86300D9925D /* 1day.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5839504C1F5FB84E00D9925D /* 1day.plist */; };
 		586C736A1F5900AD009814F9 /* MCStockHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 586C73691F5900AD009814F9 /* MCStockHeaderView.m */; };
 		586C736C1F5900BE009814F9 /* MCStockHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 586C736B1F5900BE009814F9 /* MCStockHeaderView.xib */; };
 		5888BBFD1F4FF8020033737C /* MCStockTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5888BBFC1F4FF8020033737C /* MCStockTitleView.m */; };
@@ -42,6 +47,11 @@
 /* Begin PBXFileReference section */
 		07F17BE73EFFA96CC6DB34EA /* Pods-ZKKLineDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZKKLineDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZKKLineDemo/Pods-ZKKLineDemo.release.xcconfig"; sourceTree = "<group>"; };
 		52B09A0CC9BE963C75FB1DC0 /* libPods-ZKKLineDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ZKKLineDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5839504C1F5FB84E00D9925D /* 1day.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = 1day.plist; sourceTree = "<group>"; };
+		5839504D1F5FB84E00D9925D /* 1hour.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = 1hour.plist; sourceTree = "<group>"; };
+		5839504E1F5FB84E00D9925D /* 1min.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = 1min.plist; sourceTree = "<group>"; };
+		5839504F1F5FB84E00D9925D /* 30min.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = 30min.plist; sourceTree = "<group>"; };
+		583950501F5FB84E00D9925D /* 5min.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = 5min.plist; sourceTree = "<group>"; };
 		586C73681F5900AD009814F9 /* MCStockHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCStockHeaderView.h; sourceTree = "<group>"; };
 		586C73691F5900AD009814F9 /* MCStockHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCStockHeaderView.m; sourceTree = "<group>"; };
 		586C736B1F5900BE009814F9 /* MCStockHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MCStockHeaderView.xib; sourceTree = "<group>"; };
@@ -119,6 +129,18 @@
 				07F17BE73EFFA96CC6DB34EA /* Pods-ZKKLineDemo.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		5839504B1F5FB84E00D9925D /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				5839504C1F5FB84E00D9925D /* 1day.plist */,
+				5839504D1F5FB84E00D9925D /* 1hour.plist */,
+				5839504E1F5FB84E00D9925D /* 1min.plist */,
+				5839504F1F5FB84E00D9925D /* 30min.plist */,
+				583950501F5FB84E00D9925D /* 5min.plist */,
+			);
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		5894C94E1F57DEC800BEC3F2 /* Accessory */ = {
@@ -235,6 +257,7 @@
 		58F9791B1F38302800C756E4 /* ZKKLineChart */ = {
 			isa = PBXGroup;
 			children = (
+				5839504B1F5FB84E00D9925D /* Sources */,
 				58D64D541F54083700B4A0F8 /* Utils */,
 				58DEA0C91F4C0154008199F0 /* Config */,
 				58B5F5A71F3ADBB9008DED7E /* Categories */,
@@ -358,12 +381,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				583950541F5FB86100D9925D /* 1hour.plist in Resources */,
+				583950551F5FB86300D9925D /* 1day.plist in Resources */,
 				58B5F5BE1F3AEF6C008DED7E /* source.json in Resources */,
 				58F9796B1F38304000C756E4 /* data.plist in Resources */,
 				5894C9411F56891600BEC3F2 /* 指标算法及释义.h in Resources */,
 				58F978B31F38182000C756E4 /* LaunchScreen.storyboard in Resources */,
+				583950531F5FB85E00D9925D /* 1min.plist in Resources */,
+				583950521F5FB85C00D9925D /* 30min.plist in Resources */,
 				586C736C1F5900BE009814F9 /* MCStockHeaderView.xib in Resources */,
 				58F978B01F38182000C756E4 /* Assets.xcassets in Resources */,
+				583950511F5FB85900D9925D /* 5min.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
