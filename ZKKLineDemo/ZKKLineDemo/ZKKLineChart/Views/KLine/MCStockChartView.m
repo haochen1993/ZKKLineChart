@@ -949,7 +949,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
     CGFloat angle = 0;
     CGRect bounds = CGRectZero;
     CGPoint center = CGPointZero;
-    CGFloat navTop = 0;
+    CGFloat navAlpha = 0;
     
     if (landscapeMode) {
         angle = M_PI_2;
@@ -957,7 +957,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         center = CGPointMake(CGRectGetMidX(self.superview.bounds), CGRectGetMidY(self.superview.bounds));
         self.topMargin = 8.f;
         [_headerView hide];
-        navTop = -_navBarHeight;
+        navAlpha = 0;
         [[UIApplication sharedApplication] setStatusBarHidden:true withAnimation:UIStatusBarAnimationSlide];
     }
     else {
@@ -966,7 +966,7 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         center = CGPointMake(CGRectGetMidX(self.superview.bounds), CGRectGetMidY(self.superview.bounds));
         self.topMargin = MCStockHeaderViewHeight + _navBarHeight;
         [_headerView show];
-        navTop = 20;
+        navAlpha = 1.f;
         [[UIApplication sharedApplication] setStatusBarHidden:false withAnimation:UIStatusBarAnimationSlide];
     }
     
@@ -974,7 +974,9 @@ static const CGFloat kAccessoryMargin = 6.f; //!< 两个副图的间距
         self.transform = CGAffineTransformMakeRotation(angle);
         self.bounds = bounds;
         self.center = center;
-        self.viewController.navigationController.navigationBar.us_top = navTop;
+       
+        self.viewController.navigationController.navigationBar.alpha = navAlpha;
+       
         [self rotateBtn];
         _segmentView.frame = CGRectMake(0, SelfHeight-MCStockSegmentTotalHeight, SelfWidth, MCStockSegmentTotalHeight);
     } completion:nil];
